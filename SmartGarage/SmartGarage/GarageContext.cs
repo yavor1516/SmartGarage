@@ -16,7 +16,7 @@ namespace SmartGarage
         public DbSet<LinkedVehicles>? LinkedVehicles{ get; set; }
         public DbSet<Manufacturer>? Manufacturers { get; set; }
         public DbSet<Service>? Services{ get; set; }
-        public DbSet<User>? Users{ get; set; }
+        public virtual DbSet<User>? Users{ get; set; }
         public DbSet<Vehicle>? Vehicles{ get; set; }
  
 
