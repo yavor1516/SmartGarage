@@ -1,22 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class CarModel
-{
+    public class CarModel
+    {
 
-    [Key]
+        [Key]
 
-    public int CarModelID { get; set; }
+        public int CarModelID { get; set; }
 
-    [Required]
+        [Required]
 
-    public string? Model { get; set; }
+        public string? Model { get; set; }
 
-    [ForeignKey("ManufacturerID")]
+        [ForeignKey("ManufacturerID")]
 
-    public int? ManufacturerID { get; set; } // Foreign Key
+        public int? ManufacturerID { get; set; } // Foreign Key
 
-    public Manufacturer Manufacturer { get; set; }
+        public Manufacturer Manufacturer { get; set; }
 
-}
+    }
+
 

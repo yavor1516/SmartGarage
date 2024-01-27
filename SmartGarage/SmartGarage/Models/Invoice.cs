@@ -1,21 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Invoice
-{
 
-    [Key]
-    public int InvoiceId { get; set; }
+    public class Invoice
+    {
 
-    [ForeignKey("UserID")]
-    public int? UserID { get; set; }
-    public User User { get; set; }
+        [Key]
+        public int InvoiceId { get; set; }
 
-    [ForeignKey("EmployeeID")]
-    public int? EmployeeID { get; set; }
-    public Employee Employee { get; set; }
+        [ForeignKey("UserID")]
+        public int? UserID { get; set; }
+        public User User { get; set; }
 
-    public ICollection<LinkedVehicles>? LinkedVehicles { get; set; }
+        [ForeignKey("EmployeeID")]
+        public int? EmployeeID { get; set; }
+        public Employee Employee { get; set; }
 
-}
+        public ICollection<LinkedVehicles>? LinkedVehicles { get; set; }
+
+    }
 

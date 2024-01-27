@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-public class Manufacturer
-{
+    public class Manufacturer
+    {
 
-    [Key]
+        [Key]
 
-    public int ManufacturerID { get; set; }
+        public int ManufacturerID { get; set; }
 
-    [Required]
+        [Required]
 
-    public string? BrandNamel { get; set; }
+        public string? BrandName { get; set; }
 
-    public ICollection<CarModel>? CarModels { get; set; }
+        public ICollection<CarModel>? CarModels { get; set; }
 
-}
+    }
