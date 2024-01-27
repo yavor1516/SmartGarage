@@ -1,4 +1,4 @@
-﻿using SmartGarage.Models
+﻿
 namespace SmartGarage.Repositories.Contracts;
 
 public interface IVehicleRepository
