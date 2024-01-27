@@ -1,5 +1,6 @@
-﻿using SmartGarage.Services.TokenGenerator;
-using System;
+﻿using System;
+using SmartGarage.Services.TokenGenerator;
+
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;

@@ -5,6 +5,11 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartGarage", "SmartGarage\SmartGarage.csproj", "{91C52FBB-07F1-434E-9F8D-7E3091C2F57F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartGarage.Tests", "SmartGarage.Testss\SmartGarage.Tests.csproj", "{CB8280B3-87B3-480F-91C1-F23774AC2483}"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartGarage.Tests", "SmartGarage.Testss\SmartGarage.Tests.csproj", "{CB8280B3-87B3-480F-91C1-F23774AC2483}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
