@@ -17,8 +17,8 @@ namespace SmartGarage.DataFeeder
             // Create Manufacturers
             var manufacturers = new[]
             {
-                new Manufacturer { BrandNamel = "Toyota" },
-                new Manufacturer { BrandNamel = "Honda" },
+                new Manufacturer { BrandName = "Toyota" },
+                new Manufacturer { BrandName = "Honda" },
                 // Add more manufacturers as needed
             };
             context.Manufacturers.AddRange(manufacturers);
