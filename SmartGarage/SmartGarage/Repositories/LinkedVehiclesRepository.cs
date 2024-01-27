@@ -56,7 +56,7 @@ namespace SmartGarage.Repositories
             return _dbcontext.LinkedVehicles.Where(x=>x.LinkedVehiclelID==id).ToList();
         }
 
-        public void UpdateLinkedVehicle(LinkedVehicles linkedVehicle)
+        public void UpdateLinkedVehicles(LinkedVehicles linkedVehicles)
         {
             _dbcontext.SaveChanges();
         }

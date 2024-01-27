@@ -3,7 +3,6 @@
     public interface ILinkedVehiclesRepository
     {
         public LinkedVehicles CreateLinkedVehicle(LinkedVehicles linkedVehicles);
-        public void UpdateLinkedVehicle(LinkedVehicles linkedVehicles);
         public LinkedVehicles GetLinkedVehiclesById(int id);
         public LinkedVehicles GetLinkedVehiclesByEmployeeId(int employeeId);
         public LinkedVehicles GetLinkedVehiclesByEmployeeName(string employeeName);
