@@ -73,5 +73,10 @@ namespace SmartGarage.Services
 
             _vehicleRepository.UpdateVehicle(existingVehicle);
         }
+
+        public ICollection<Vehicle> GetVehicles()
+        {
+            return _vehicleRepository.GetAllVehicles();
+        }
     }
 }

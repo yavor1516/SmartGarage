@@ -47,6 +47,11 @@ namespace SmartGarage.Repositories
         {
             _dbcontext.SaveChanges();
         }
+
+        public ICollection<Vehicle> GetAllVehicles()
+        {
+            return _dbcontext.Vehicles.Include(m => m.Manufacturer).Include(n => n.CarModel).ToList();
+        }
     }
 
     

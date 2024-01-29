@@ -32,7 +32,7 @@ namespace SmartGarage.Controllers.API
             });
         }
 
-        //TODO
+
         [HttpPost("CreateVehicle")]
         public IActionResult CreateVehicle([FromBody] VehicleDTO vehicleDTO)
         {
