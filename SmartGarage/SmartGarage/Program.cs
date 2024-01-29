@@ -16,7 +16,7 @@ namespace SmartGarage
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<GarageContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -42,11 +42,11 @@ namespace SmartGarage
 
             //Momcheta tuka registrirame REpositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+            builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
             //Momcheta tuka registrirame Services
             builder.Services.AddTransient<IUserDataService, UserDataService>();
-
+            builder.Services.AddTransient<IVehicleDataService ,  VehicleDataService>();
 
             var app = builder.Build();
 
@@ -67,8 +67,9 @@ namespace SmartGarage
           /// vmesto exception controller ako prieme null da vrushta status - bad request , unAuth ,etc.. -- toaster library visuals
           /// axios
 
-            app.MapGet("/", () => "Hello World!");
-
+           // app.MapGet("/", () => "Hello World!");
+            app.MapDefaultControllerRoute();
+            app.UseRouting();
             app.Run();
         }
     }

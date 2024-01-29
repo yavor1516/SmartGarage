@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SmartGarage.Repositories.Contracts;
 
@@ -27,7 +28,9 @@ namespace SmartGarage.Repositories
 
         public Vehicle GetVehicleById(int id)
         {
-            return _dbcontext.Vehicles.FirstOrDefault(x=>x.VehicleID == id);    
+            var db = _dbcontext.Vehicles.Include(m=>m.Manufacturer).Include(n=>n.CarModel).ToList();
+            var vehicle = db.FirstOrDefault(x => x.VehicleID == id);
+            return vehicle;    
         }
 
         public ICollection<Vehicle> GetVehiclesByManufacturer(string Manufacturer)
