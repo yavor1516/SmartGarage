@@ -13,8 +13,18 @@ namespace SmartGarage.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public Vehicle CreateVehicle(Vehicle vehicle)
+        public Vehicle CreateVehicle(Vehicle vehicle)    //TODO VALIDATIONS!
         {
+            if (vehicle == null)
+            {
+                throw new ArgumentNullException(nameof(vehicle));
+            }
+
+            // Add more validation if needed!
+            if (string.IsNullOrWhiteSpace(vehicle.Manufacturer?.BrandName))
+            {
+                throw new ArgumentException("Manufacturer is required.");
+            }
             return _vehicleRepository.CreateVehicle(vehicle);
         }
 
@@ -57,7 +67,9 @@ namespace SmartGarage.Services
                 throw new EntityNotFoundException("Vehicle to update was not found.");
             }
 
-            // Update properties of existingVehicle with values from the input 'vehicle' object
+            existingVehicle.Manufacturer = vehicle.Manufacturer;
+            existingVehicle.CarModel = vehicle.CarModel;
+            existingVehicle.Employee = vehicle.Employee;
 
             _vehicleRepository.UpdateVehicle(existingVehicle);
         }

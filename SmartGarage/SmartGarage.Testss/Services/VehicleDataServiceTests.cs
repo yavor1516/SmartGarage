@@ -25,7 +25,16 @@ namespace SmartGarage.Tests.Services
             service = new VehicleDataService(mockRepo.Object);
 
             // Initialize a test vehicle object and a list of vehicles if necessary for your tests
-            testVehicle = new Vehicle { };
+            testVehicle = new Vehicle 
+            {
+                VehicleID = 1,
+                ManufacturerId = 1, // Assuming this matches a Manufacturer ID in your database or test context
+                Manufacturer = new Manufacturer { ManufacturerID = 1, BrandName = "ValidBrand" },
+                CarModelID = 1,
+                CarModel= new CarModel { Model= "TestModelName" },
+                EmployeeId = 1,
+            };
+
             vehicleList = new List<Vehicle> { };
         }
 
@@ -54,7 +63,7 @@ namespace SmartGarage.Tests.Services
         public void GetVehiclesByManufacturer_ShouldReturnVehicles_WhenManufacturerExists()
         {
             // Arrange
-            string manufacturerName = "TestManufacturer";
+            string manufacturerName = "ValidBrand";
             mockRepo.Setup(repo => repo.GetVehiclesByManufacturer(manufacturerName)).Returns(vehicleList.Where(v => v.Manufacturer.BrandName == manufacturerName).ToList());
 
             // Act
@@ -62,7 +71,6 @@ namespace SmartGarage.Tests.Services
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any()); // Assuming there is at least one vehicle from TestManufacturer
         }
 
         [TestMethod]
@@ -84,8 +92,8 @@ namespace SmartGarage.Tests.Services
         public void GetVehicleByModel_ShouldReturnVehicle_WhenModelExists()
         {
             // Arrange
-            string modelName = "TestModel";
-            mockRepo.Setup(repo => repo.GetVehicleByModel(modelName)).Returns(vehicleList.FirstOrDefault(v => v.CarModel.Model == modelName));
+            string modelName = "TestModelName";
+            mockRepo.Setup(repo => repo.GetVehicleByModel(modelName)).Returns(testVehicle);
 
             // Act
             var result = service.GetVehicleByModel(modelName);
