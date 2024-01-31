@@ -1,6 +1,7 @@
 ﻿using ForumSystem.Exceptions;
 using ForumSystem.Responses;
 using Microsoft.AspNetCore.Mvc;
+using SmartGarage.Helpers;
 using SmartGarage.Models.DTO;
 using SmartGarage.Responses;
 using SmartGarage.Services.Contracts;
@@ -23,7 +24,10 @@ namespace SmartGarage.Controllers.API
         {
             Vehicle vehicle = _vehicleDataService.GetVehicleById(1);
 
-
+            RandomPasswordGenerator randomPasswordGenerator = new RandomPasswordGenerator();
+            
+            EmailSender emailSender = new EmailSender();
+            emailSender.SendEmail("milen316@gmail.com", randomPasswordGenerator.GeneratePassword(9));
 
             return Ok(new VehicleResponse()
             {
