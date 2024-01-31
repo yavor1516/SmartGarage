@@ -7,7 +7,7 @@ namespace SmartGarage.DataFeeder
     {
         public static void Initialize(GarageContext context)
         {
-            context.Database.EnsureCreated(); // Ensure the database is created
+             context.Database.EnsureCreated(); // Ensure the database is created
 
             if (context.Users.Any() || context.Vehicles.Any() || context.CarModels.Any() || context.Manufacturers.Any() || context.Employees.Any())
             {

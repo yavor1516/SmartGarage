@@ -53,8 +53,17 @@ namespace SmartGarage
             builder.Services.AddTransient<IAccountService ,  AccountService>();
 
 
-           //
-
+            //
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:5173")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
 
             var app = builder.Build();
 
@@ -77,6 +86,7 @@ namespace SmartGarage
 
            // app.MapGet("/", () => "Hello World!");
             app.MapDefaultControllerRoute();
+            app.UseCors("AllowSpecificOrigin");
             app.UseRouting();
             app.Run();
         }

@@ -20,20 +20,21 @@ namespace SmartGarage.Controllers.API
             _vehicleDataService = vehicleDataService;
         }
         [HttpGet("Vehicles")]
-        public IActionResult GetAllVehicles()
+        public async Task<IActionResult> GetAllVehicles()
         {
-            Vehicle vehicle = _vehicleDataService.GetVehicleById(1);
+            Vehicle vehicle = _vehicleDataService.GetVehicleById(2);
 
             RandomPasswordGenerator randomPasswordGenerator = new RandomPasswordGenerator();
             
             EmailSender emailSender = new EmailSender();
             emailSender.SendEmail("milen316@gmail.com", randomPasswordGenerator.GeneratePassword(9));
 
-            return Ok(new VehicleResponse()
+           var response = new VehicleResponse()
             {
                 VehicleBrand = vehicle.Manufacturer.BrandName,
                 VehicleModel = vehicle.CarModel.Model
-            });
+            };
+            return Ok(response);
         }
 
 
