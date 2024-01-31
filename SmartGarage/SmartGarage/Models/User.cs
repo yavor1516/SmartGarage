@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
-    public class User
+public class User
     {
 
         [Key]
@@ -15,15 +16,15 @@
         [EmailAddress]
         public string? Email { get; set; }
 
-        [Required]
         [MinLength(4)]
         [MaxLength(32)]
+        [AllowNull]
         public string? FirstName { get; set; }
 
-        [Required]
         [MinLength(4)]
         [MaxLength(32)]
-        public string? LastName { get; set; }
+        [AllowNull]
+    public string? LastName { get; set; }
 
 
 
@@ -31,8 +32,9 @@
 
         public bool isOnline { get; set; }
 
-        [Required]
+        
         [StringLength(10)]
+        [AllowNull]
         public string? phoneNumber { get; set; } // This property allows nulls
         public DateTime RegistrationDate { get; set; }
 

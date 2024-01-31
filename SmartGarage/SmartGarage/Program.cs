@@ -1,7 +1,9 @@
+using ForumSystem.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SmartGarage.Helpers.Contracts;
 using SmartGarage.Repositories;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services;
@@ -46,7 +48,13 @@ namespace SmartGarage
 
             //Momcheta tuka registrirame Services
             builder.Services.AddTransient<IUserDataService, UserDataService>();
+            builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
             builder.Services.AddTransient<IVehicleDataService ,  VehicleDataService>();
+            builder.Services.AddTransient<IAccountService ,  AccountService>();
+
+
+           //
+
 
             var app = builder.Build();
 

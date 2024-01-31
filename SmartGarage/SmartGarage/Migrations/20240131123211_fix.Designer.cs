@@ -12,8 +12,8 @@ using SmartGarage;
 namespace SmartGarage.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20240129134115_fixBrandName")]
-    partial class fixBrandName
+    [Migration("20240131123211_fix")]
+    partial class fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -212,12 +212,10 @@ namespace SmartGarage.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
@@ -236,7 +234,6 @@ namespace SmartGarage.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
