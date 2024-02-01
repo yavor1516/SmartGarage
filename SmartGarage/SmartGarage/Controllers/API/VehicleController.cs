@@ -22,7 +22,7 @@ namespace SmartGarage.Controllers.API
         [HttpGet("Vehicles")]
         public async Task<IActionResult> GetAllVehicles()
         {
-            Vehicle vehicle = _vehicleDataService.GetVehicleById(2);
+            Vehicle vehicle = _vehicleDataService.GetVehicleByID(2);
 
             RandomPasswordGenerator randomPasswordGenerator = new RandomPasswordGenerator();
             

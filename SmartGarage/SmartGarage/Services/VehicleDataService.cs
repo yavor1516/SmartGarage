@@ -33,7 +33,7 @@ namespace SmartGarage.Services
             return _vehicleRepository.GetAllVehiclesByEmployeeID(employeeId);
         }
 
-        public Vehicle GetVehicleById(int vehicleId)
+        public Vehicle GetVehicleByID(int vehicleId)
         {
             var vehicle = _vehicleRepository.GetVehicleById(vehicleId);
             if (vehicle == null)
@@ -74,7 +74,7 @@ namespace SmartGarage.Services
             _vehicleRepository.UpdateVehicle(existingVehicle);
         }
 
-        public ICollection<Vehicle> GetVehicles()
+        public ICollection<Vehicle> GetAllVehicles()
         {
             return _vehicleRepository.GetAllVehicles();
         }
