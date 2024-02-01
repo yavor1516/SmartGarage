@@ -3,9 +3,9 @@
     public interface IVehicleDataService
     {
         Vehicle CreateVehicle(Vehicle vehicle);
-        ICollection<Vehicle> GetVehicles();
+        ICollection<Vehicle> GetAllVehicles();
         ICollection<Vehicle> GetAllVehiclesByEmployeeID(int employeeId);
-        Vehicle GetVehicleById(int vehicleId);
+        Vehicle GetVehicleByID(int vehicleId);
         ICollection<Vehicle> GetVehiclesByManufacturer(string manufacturer);
         Vehicle GetVehicleByModel(string model);
         void UpdateVehicle(Vehicle vehicle);
