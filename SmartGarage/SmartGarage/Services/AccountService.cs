@@ -16,6 +16,20 @@ namespace SmartGarage.Services
             _userDataService = userDataService;
             _passwordHasher = passwordHasher;
         }
+        public User LoginUser(UserLoginDTO userLoginDTO)
+        {
+            User user = _userDataService.GetByUsername(userLoginDTO.Username);
+            if (user == null)
+            {
+                throw new Exception($"Wrong credentials!!");
+            }
+            bool isCorrectPassword = _passwordHasher.VerifyPassword(userLoginDTO.Password, Encoding.UTF8.GetString(user.PasswordHash));
+            if (!isCorrectPassword)
+            {
+                throw new Exception($"Wrong credentials!!");
+            }
+            return user;
+        }
         public User RegisterUser(RegisterUserDTO registerUserDTO)
         {
             User existingUserByEmail = _userDataService.GetByEmail(registerUserDTO.Email);
