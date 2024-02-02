@@ -8,6 +8,7 @@ namespace SmartGarage.Repositories.Contracts
         public Service GetServiceByName(string Name);
         public Service GetServiceByPrice(decimal Price);
         public ICollection<Service> GetAllServicesById(int id);
+        public ICollection<Service> GetAllServices();
         public Service CreateService(Service service);
         public void UpdateService(Service service);
 

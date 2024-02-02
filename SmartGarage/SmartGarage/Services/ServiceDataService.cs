@@ -1,9 +1,10 @@
-﻿using SmartGarage.Repositories.Contracts;
+﻿using SmartGarage.Repositories;
+using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Services
 {
-    public class ServiceDataService : IServiceService
+    public class ServiceDataService : IServiceDataService
     {
         private readonly IServiceRepository _serviceRepository;
 
@@ -42,6 +43,10 @@ namespace SmartGarage.Services
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
             return _serviceRepository.GetAllServicesById(id);
+        }
+        public ICollection<Service> GetAllServices()
+        {
+            return _serviceRepository.GetAllServices();
         }
 
         public Service CreateService(Service service)
