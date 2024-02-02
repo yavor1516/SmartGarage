@@ -12,10 +12,10 @@ namespace SmartGarage.Controllers.API
 {
    
     [ApiController]
-    public class VehicleController : ControllerBase
+    public class CreateVehicleController : ControllerBase
     {
         private readonly IVehicleDataService _vehicleDataService;
-        public VehicleController(IVehicleDataService vehicleDataService)
+        public CreateVehicleController(IVehicleDataService vehicleDataService)
         {
             _vehicleDataService = vehicleDataService;
         }

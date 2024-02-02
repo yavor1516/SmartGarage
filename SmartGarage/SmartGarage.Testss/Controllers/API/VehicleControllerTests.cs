@@ -16,13 +16,13 @@ namespace SmartGarage.Tests.Controllers.API
     public class VehicleControllerTests
     {
         private Mock<IVehicleDataService> _mockVehicleDataService;
-        private VehicleController _controller;
+        private CreateVehicleController _controller;
 
         [TestInitialize]
         public void SetUp()
         {
             _mockVehicleDataService = new Mock<IVehicleDataService>();
-            _controller = new VehicleController(_mockVehicleDataService.Object);
+            _controller = new CreateVehicleController(_mockVehicleDataService.Object);
         }
 
         //[TestMethod]
