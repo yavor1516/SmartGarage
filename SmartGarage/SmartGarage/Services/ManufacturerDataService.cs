@@ -47,9 +47,9 @@ namespace SmartGarage.Services
             return _manufacturerRepository.GetManufacturerByName(name);
         }
 
-        public ICollection<CarModel> GetAllCarModels()
+        public ICollection<Manufacturer> GetAllManufacturers()
         {
-            return _manufacturerRepository.GetAllCarModels();
+            return _manufacturerRepository.GetAllManufacturers();
         }
 
         public void UpdateManufacturer(Manufacturer manufacturer)

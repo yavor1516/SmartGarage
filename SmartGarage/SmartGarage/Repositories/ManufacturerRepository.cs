@@ -24,9 +24,9 @@ namespace SmartGarage.Repositories
         {
             return _dbcontext.Manufacturers.FirstOrDefault(x => x.BrandName == name);
         }
-        public ICollection<CarModel> GetAllCarModels()
+        public ICollection<Manufacturer> GetAllManufacturers()
         {
-            return _dbcontext.CarModels.ToList();
+            return _dbcontext.Manufacturers.ToList();
         }
         public void UpdateManufacturer(Manufacturer manufacturer)
         {

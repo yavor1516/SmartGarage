@@ -5,7 +5,7 @@
         Manufacturer CreateManufacturer(Manufacturer manufacturer);
         Manufacturer GetManufacturerById(int id);
         Manufacturer GetManufacturerByName(string name);
-        ICollection<CarModel> GetAllCarModels();
+        ICollection<Manufacturer> GetAllManufacturers();
         void UpdateManufacturer(Manufacturer manufacturer);
     }
 }
