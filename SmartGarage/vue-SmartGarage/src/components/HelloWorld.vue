@@ -26,7 +26,6 @@
                 fetch('https://localhost:7156/Vehicles', {
                     method: "GET"
                 })
-
                     .then((response) => {
                         response.json().then((data) => {
 

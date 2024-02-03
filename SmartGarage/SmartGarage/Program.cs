@@ -59,7 +59,7 @@ namespace SmartGarage
                 options.AddPolicy("AllowSpecificOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:5173")
+                        builder.WithOrigins("http://localhost:5175")
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                     });
@@ -83,11 +83,13 @@ namespace SmartGarage
           ///
           /// vmesto exception controller ako prieme null da vrushta status - bad request , unAuth ,etc.. -- toaster library visuals
           /// axios
-
+          //Background service class build in library
            // app.MapGet("/", () => "Hello World!");
             app.MapDefaultControllerRoute();
             app.UseCors("AllowSpecificOrigin");
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.Run();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using ForumSystem.Exceptions;
 using ForumSystem.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartGarage.Helpers;
 using SmartGarage.Models.DTO;
@@ -22,7 +23,7 @@ namespace SmartGarage.Controllers.API
         [HttpGet("Vehicles")]
         public async Task<IActionResult> GetAllVehicles()
         {
-            Vehicle vehicle = _vehicleDataService.GetVehicleById(2);
+            Vehicle vehicle = _vehicleDataService.GetVehicleById(1);
 
             RandomPasswordGenerator randomPasswordGenerator = new RandomPasswordGenerator();
             
@@ -37,7 +38,7 @@ namespace SmartGarage.Controllers.API
             return Ok(response);
         }
 
-
+        
         [HttpPost("CreateVehicle")]
         public IActionResult CreateVehicle([FromBody] VehicleDTO vehicleDTO)
         {

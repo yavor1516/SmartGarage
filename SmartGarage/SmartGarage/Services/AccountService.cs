@@ -3,6 +3,7 @@ using SmartGarage.Helpers;
 using SmartGarage.Helpers.Contracts;
 using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
+using SmartGarage.Services.TokenGenerator;
 using System.Text;
 
 namespace SmartGarage.Services
@@ -11,11 +12,35 @@ namespace SmartGarage.Services
     {
         private readonly IUserDataService _userDataService;
         private readonly IPasswordHasher _passwordHasher;
-        public AccountService(IUserDataService userDataService, IPasswordHasher passwordHasher)
+        private readonly AccessTokenGenerator _tokenGenerator;
+        public AccountService(IUserDataService userDataService, IPasswordHasher passwordHasher, AccessTokenGenerator tokenGenerator)
         {
             _userDataService = userDataService;
             _passwordHasher = passwordHasher;
+            _tokenGenerator = tokenGenerator;
         }
+
+        public string GenerateToken(User user)
+        {
+            string accessToken = _tokenGenerator.GenerateToken(user);
+            return accessToken;
+        }
+
+        public User LoginUser(LoginUserDTO loginUserDTO)
+        {
+            User user = _userDataService.GetByEmail(loginUserDTO.Email);
+            if (user == null)
+            {
+                throw new Exception($"Wrong credentials!!");
+            }
+            bool isCorrectPassword = _passwordHasher.VerifyPassword(loginUserDTO.Password, Encoding.UTF8.GetString(user.PasswordHash));
+            if (!isCorrectPassword)
+            {
+                throw new Exception($"Wrong credentials!!");
+            }
+            return user;
+        }
+
         public User RegisterUser(RegisterUserDTO registerUserDTO)
         {
             User existingUserByEmail = _userDataService.GetByEmail(registerUserDTO.Email);
