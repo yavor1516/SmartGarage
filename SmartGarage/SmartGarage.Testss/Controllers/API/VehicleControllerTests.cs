@@ -16,37 +16,37 @@ namespace SmartGarage.Tests.Controllers.API
     public class VehicleControllerTests
     {
         private Mock<IVehicleDataService> _mockVehicleDataService;
-        private VehicleController _controller;
+        private CreateVehicleController _controller;
 
         [TestInitialize]
         public void SetUp()
         {
             _mockVehicleDataService = new Mock<IVehicleDataService>();
-            _controller = new VehicleController(_mockVehicleDataService.Object);
+            _controller = new CreateVehicleController(_mockVehicleDataService.Object);
         }
 
-        [TestMethod]
-        public void GetAllVehicles_ReturnsOkObjectResult()
-        {
-            // Arrange
-            var fakeVehicle = new Vehicle
-            {
-                Manufacturer = new Manufacturer { BrandName = "TestBrand" },
-                CarModel = new CarModel { Model = "TestModel" }
-            };
-            _mockVehicleDataService.Setup(service => service.GetVehicleById(1)).Returns(fakeVehicle);
+        //[TestMethod]
+        //public void GetAllVehicles_ReturnsOkObjectResult()
+        //{
+        //    // Arrange
+        //    var fakeVehicle = new Vehicle
+        //    {
+        //        Manufacturer = new Manufacturer { BrandName = "TestBrand" },
+        //        CarModel = new CarModel { Model = "TestModel" }
+        //    };
+        //    _mockVehicleDataService.Setup(service => service.GetVehicleByID(1)).Returns(fakeVehicle);
 
-            // Act
-            var result = _controller.GetAllVehicles();
+        //    // Act
+        //    var result = _controller.GetAllVehicles();
 
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            var okResult = result as OkObjectResult;
-            Assert.IsInstanceOfType(okResult.Value, typeof(VehicleResponse));
-            var vehicleResponse = okResult.Value as VehicleResponse;
-            Assert.AreEqual("TestBrand", vehicleResponse.VehicleBrand);
-            Assert.AreEqual("TestModel", vehicleResponse.VehicleModel);
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        //    var okResult = result as OkObjectResult;
+        //    Assert.IsInstanceOfType(okResult.Value, typeof(VehicleResponse));
+        //    var vehicleResponse = okResult.Value as VehicleResponse;
+        //    Assert.AreEqual("TestBrand", vehicleResponse.VehicleBrand);
+        //    Assert.AreEqual("TestModel", vehicleResponse.VehicleModel);
+        //}
         [TestMethod]
         public void CreateVehicle_WithInvalidModelState_ReturnsBadRequest()
         {

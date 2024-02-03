@@ -20,20 +20,27 @@ namespace SmartGarage.Services
             _tokenGenerator = tokenGenerator;
         }
 
+
         public string GenerateToken(User user)
         {
             string accessToken = _tokenGenerator.GenerateToken(user);
             return accessToken;
         }
 
-        public User LoginUser(LoginUserDTO loginUserDTO)
+      
+        public User LoginUser(LoginUserDTO userLoginDTO)
         {
-            User user = _userDataService.GetByEmail(loginUserDTO.Email);
-            if (user == null)
+                User user = _userDataService.GetByEmail(userLoginDTO.Email);
+
+                if (user == null)
             {
                 throw new Exception($"Wrong credentials!!");
             }
-            bool isCorrectPassword = _passwordHasher.VerifyPassword(loginUserDTO.Password, Encoding.UTF8.GetString(user.PasswordHash));
+
+            bool isCorrectPassword = _passwordHasher.VerifyPassword(userLoginDTO.Password, Encoding.UTF8.GetString(user.PasswordHash));
+
+          
+
             if (!isCorrectPassword)
             {
                 throw new Exception($"Wrong credentials!!");

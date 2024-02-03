@@ -13,17 +13,21 @@ namespace SmartGarage.Controllers.API
 {
    
     [ApiController]
-    public class VehicleController : ControllerBase
+    public class CreateVehicleController : ControllerBase
     {
         private readonly IVehicleDataService _vehicleDataService;
-        public VehicleController(IVehicleDataService vehicleDataService)
+        public CreateVehicleController(IVehicleDataService vehicleDataService)
         {
             _vehicleDataService = vehicleDataService;
         }
         [HttpGet("Vehicles")]
         public async Task<IActionResult> GetAllVehicles()
         {
+<<<<<<< HEAD:SmartGarage/SmartGarage/Controllers/API/VehicleController.cs
             Vehicle vehicle = _vehicleDataService.GetVehicleById(1);
+=======
+            Vehicle vehicle = _vehicleDataService.GetVehicleByID(2);
+>>>>>>> 014f3cb8f8c5eb88b6ab7dfc0649dc0f28592768:SmartGarage/SmartGarage/Controllers/API/CreateVehicleController.cs
 
             RandomPasswordGenerator randomPasswordGenerator = new RandomPasswordGenerator();
             

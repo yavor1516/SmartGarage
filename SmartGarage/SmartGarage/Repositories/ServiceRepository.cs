@@ -26,6 +26,10 @@ namespace SmartGarage.Repositories
         {
             return _dbcontext.Services.Where(x=>x.ServiceId == id).ToList();
         }
+        public ICollection<Service> GetAllServices()
+        {
+            return _dbcontext.Services.ToList();
+        }
         public Service CreateService(Service service)
         {
             _dbcontext.Services.Add(service);
