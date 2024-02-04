@@ -17,13 +17,13 @@ namespace SmartGarage.Tests.Services
         {
             // Arrange
             var mockRepository = new Mock<IServiceRepository>();
-            mockRepository.Setup(r => r.GetServiceById(It.IsAny<int>()))
+            mockRepository.Setup(r => r.GetServiceByID(It.IsAny<int>()))
                 .Returns(new Service { /* Initialize with valid properties */ });
             var serviceService = new ServiceDataService(mockRepository.Object);
             var validId = 1; // Valid service ID
 
             // Act
-            var service = serviceService.GetServiceById(validId);
+            var service = serviceService.GetServiceByID(validId);
 
             // Assert
             // Ensure the returned service is not null and has the expected properties
@@ -40,7 +40,7 @@ namespace SmartGarage.Tests.Services
             var invalidId = 0; // Invalid ID
 
             // Act
-            serviceService.GetServiceById(invalidId);
+            serviceService.GetServiceByID(invalidId);
 
             // Assert
             // Exception is expected

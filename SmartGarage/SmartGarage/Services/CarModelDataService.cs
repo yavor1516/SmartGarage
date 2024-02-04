@@ -1,4 +1,5 @@
-﻿using SmartGarage.Repositories.Contracts;
+﻿using SmartGarage.Models.DTO;
+using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Services
@@ -12,74 +13,152 @@ namespace SmartGarage.Services
             _carModelRepository = carModelRepository;
         }
 
-        public CarModel CreateCarModel(CarModel carModel)
+        public CarModelDTO CreateCarModel(CarModelDTO carModelDTO)
         {
-            if (carModel == null)
+            if (carModelDTO == null)
             {
-                throw new ArgumentNullException(nameof(carModel));
+                throw new ArgumentNullException(nameof(carModelDTO));
             }
 
-             if (_carModelRepository.GetCarModelByModel(carModel.Model) != null)
-             {
-                 throw new InvalidOperationException("Car model already exists.");
-             }
+            // Check if the car model already exists (you can implement this logic)
+            if (_carModelRepository.GetCarModelByModel(carModelDTO.Model) != null)
+            {
+                throw new InvalidOperationException("Car model already exists.");
+            }
 
-            return _carModelRepository.CreateCarModel(carModel);
+            // Map the DTO to the entity
+            var carModel = new CarModel
+            {
+                Model = carModelDTO.Model,
+                ManufacturerID = carModelDTO.ManufacturerID
+            };
+
+            var createdCarModel = _carModelRepository.CreateCarModel(carModel);
+
+            // Map the created entity back to DTO
+            return MapCarModelToDTO(createdCarModel);
         }
 
-        public ICollection<CarModel> GetAllCarModels()
+        public ICollection<CarModelDTO> GetAllCarModels()
         {
-            return _carModelRepository.GetAllCarModels();
+            var carModels = _carModelRepository.GetAllCarModels();
+
+            // Map the list of entities to DTOs
+            return carModels.Select(MapCarModelToDTO).ToList();
         }
 
-        public CarModel GetCarModelById(int id)
+        public CarModelDTO GetCarModelById(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            return _carModelRepository.GetCarModelById(id);
+
+            var carModel = _carModelRepository.GetCarModelById(id);
+
+            // Map the entity to DTO
+            return MapCarModelToDTO(carModel);
         }
 
-        public CarModel GetCarModelByManufacturerID(int manufacturerID)
+        public CarModelDTO GetCarModelByManufacturerID(int manufacturerID)
         {
-            return _carModelRepository.GetCarModelByManufacturerID(manufacturerID);
+            var carModel = _carModelRepository.GetCarModelByManufacturerID(manufacturerID);
+
+            // Map the entity to DTO
+            return MapCarModelToDTO(carModel);
         }
 
-        public CarModel GetCarModelByModel(string model)
+        public CarModelDTO GetCarModelByModel(string model)
         {
             if (string.IsNullOrWhiteSpace(model))
             {
                 throw new ArgumentException("Model cannot be null or whitespace.", nameof(model));
             }
-            return _carModelRepository.GetCarModelByModel(model);
+
+            var carModel = _carModelRepository.GetCarModelByModel(model);
+
+            // Map the entity to DTO
+            return MapCarModelToDTO(carModel);
         }
 
-        public CarModel GetCarModelByManufacturer(Manufacturer manufacturer)
+        public CarModelDTO GetCarModelByManufacturer(ManufacturerDTO manufacturerDTO)
         {
-            if (manufacturer == null)
+            if (manufacturerDTO == null)
             {
-                throw new ArgumentNullException(nameof(manufacturer));
+                throw new ArgumentNullException(nameof(manufacturerDTO));
             }
-            return _carModelRepository.GetCarModelByManufacturer(manufacturer);
+
+            // Map the ManufacturerDTO to the entity (you'll need to implement this mapping)
+            var manufacturerEntity = MapManufacturerDTOToEntity(manufacturerDTO);
+
+            var carModel = _carModelRepository.GetCarModelByManufacturer(manufacturerEntity);
+
+            // Map the entity to DTO
+            return MapCarModelToDTO(carModel);
         }
 
-        public void UpdateCarModel(CarModel carModel)
+        public void UpdateCarModel(CarModelDTO carModelDTO)
         {
             // Add any pre-update business logic or validation here
-            if (carModel == null)
+            if (carModelDTO == null)
             {
-                throw new ArgumentNullException(nameof(carModel));
+                throw new ArgumentNullException(nameof(carModelDTO));
             }
 
-            // For example, ensure the car model exists
-             var existingCarModel = _carModelRepository.GetCarModelById(carModel.CarModelID);
-             if (existingCarModel == null)
-             {
-                 throw new InvalidOperationException("Car model does not exist.");
-             }
+            // Map the DTO to the entity
+            var carModel = new CarModel
+            {
+                CarModelID = carModelDTO.CarModelID,
+                Model = carModelDTO.Model,
+                ManufacturerID = carModelDTO.ManufacturerID
+            };
+
+            var existingCarModel = _carModelRepository.GetCarModelById(carModel.CarModelID);
+            if (existingCarModel == null)
+            {
+                throw new InvalidOperationException("Car model does not exist.");
+            }
 
             _carModelRepository.UpdateCarModel(carModel);
+        }
+
+        private CarModelDTO MapCarModelToDTO(CarModel carModel)
+        {
+            if (carModel == null)
+            {
+                return null;
+            }
+
+            return new CarModelDTO
+            {
+                CarModelID = carModel.CarModelID,
+                Model = carModel.Model,
+                ManufacturerID = carModel.ManufacturerID
+            };
+        }
+
+        private Manufacturer MapManufacturerDTOToEntity(ManufacturerDTO manufacturerDTO)
+        {
+            if (manufacturerDTO == null)
+            {
+                return null;
+            }
+
+            return new Manufacturer
+            {
+                ManufacturerID = manufacturerDTO.ManufacturerID,
+                BrandName = manufacturerDTO.BrandName,
+                CarModels = manufacturerDTO.CarModels?.Select(MapCarModelDTOToEntity).ToList(),
+            };
+        }
+        private CarModel MapCarModelDTOToEntity(CarModelDTO carModelDTO)
+        {
+            return new CarModel
+            {
+                CarModelID = carModelDTO.CarModelID,
+                Model = carModelDTO.Model,
+                ManufacturerID = carModelDTO.ManufacturerID
+            };
         }
     }
 }

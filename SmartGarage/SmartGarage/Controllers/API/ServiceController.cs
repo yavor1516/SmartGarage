@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Controllers.API
@@ -24,9 +25,9 @@ namespace SmartGarage.Controllers.API
 
         // api/Service/5
         [HttpGet("{id}")]
-        public ActionResult<Service> GetServiceById(int id)
+        public ActionResult<Service> GetServiceByID(int id)
         {
-            var service = _serviceService.GetServiceById(id);
+            var service = _serviceService.GetServiceByID(id);
             if (service == null)
             {
                 return NotFound();
@@ -37,17 +38,17 @@ namespace SmartGarage.Controllers.API
 
         // api/Service
         [HttpPost]
-        public ActionResult<Service> CreateService([FromBody] Service service)
+        public ActionResult<Service> CreateService([FromBody] ServiceDTO serviceDTO)
         {
-            if (service == null)
+            if (serviceDTO == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                var createdService = _serviceService.CreateService(service);
-                return CreatedAtAction(nameof(GetServiceById), new { id = createdService.ServiceId }, createdService);
+                var createdService = _serviceService.CreateService(serviceDTO);
+                return CreatedAtAction(nameof(GetServiceByID), new { id = createdService.ServiceID }, createdService);
             }
             catch (Exception ex)
             {
@@ -57,16 +58,16 @@ namespace SmartGarage.Controllers.API
 
         // api/Service/5
         [HttpPut("{id}")]
-        public IActionResult UpdateService(int id, [FromBody] Service service)
+        public IActionResult UpdateService(int id, [FromBody] ServiceDTO serviceDTO)
         {
-            if (service == null || id != service.ServiceId)
+            if (serviceDTO == null || id != serviceDTO.ServiceID)
             {
                 return BadRequest();
             }
 
             try
             {
-                _serviceService.UpdateService(service);
+                _serviceService.UpdateService(serviceDTO);
                 return NoContent();
             }
             catch (Exception ex)

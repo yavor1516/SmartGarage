@@ -1,13 +1,15 @@
-﻿namespace SmartGarage.Services.Contracts
+﻿using SmartGarage.Models.DTO;
+
+namespace SmartGarage.Services.Contracts
 {
     public interface ICarModelDataService
     {
-        CarModel CreateCarModel(CarModel carModel);
-        ICollection<CarModel> GetAllCarModels();
-        CarModel GetCarModelById(int id);
-        CarModel GetCarModelByManufacturerID(int manufacturerID);
-        CarModel GetCarModelByModel(string model);
-        CarModel GetCarModelByManufacturer(Manufacturer manufacturer);
-        void UpdateCarModel(CarModel carModel);
+        CarModelDTO CreateCarModel(CarModelDTO carModelDTO);
+        ICollection<CarModelDTO> GetAllCarModels();
+        CarModelDTO GetCarModelById(int id);
+        CarModelDTO GetCarModelByManufacturerID(int manufacturerID);
+        CarModelDTO GetCarModelByModel(string model);
+        CarModelDTO GetCarModelByManufacturer(ManufacturerDTO manufacturerDTO);
+        void UpdateCarModel(CarModelDTO carModelDTO);
     }
 }

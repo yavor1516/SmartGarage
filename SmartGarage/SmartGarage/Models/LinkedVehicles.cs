@@ -41,7 +41,7 @@ using System.ComponentModel.DataAnnotations.Schema;
         [Range(1887, int.MaxValue, ErrorMessage = "Year must be greater than or equal to 1887.")]
         public int YearOfCreation { get; set; }
 
-        public ICollection<Service>? Survices { get; set; }
+        public ICollection<Service>? Services { get; set; }
 
 
     }

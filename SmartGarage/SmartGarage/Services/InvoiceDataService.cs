@@ -1,4 +1,5 @@
 ﻿using SmartGarage.Exceptions;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
@@ -13,58 +14,107 @@ namespace SmartGarage.Services
             _invoiceRepository = invoiceRepository;
         }
 
-        public Invoice CreateInvoice(Invoice invoice)
+        public InvoiceDTO CreateInvoice(InvoiceDTO invoiceDTO)
         {
-            if (invoice == null)
+            if (invoiceDTO == null)
             {
-                throw new ArgumentNullException(nameof(invoice));
+                throw new ArgumentNullException(nameof(invoiceDTO));
             }
-            return _invoiceRepository.CreateInvoice(invoice);
+
+            // Manually map properties from InvoiceDTO to Invoice
+            var invoice = new Invoice
+            {
+                UserID = invoiceDTO.UserID,
+                EmployeeID = invoiceDTO.EmployeeID,
+                // Map other properties as needed
+            };
+
+            var createdInvoice = _invoiceRepository.CreateInvoice(invoice);
+
+            // Map the created Invoice entity to InvoiceDTO
+            return MapInvoiceToDTO(createdInvoice);
         }
 
-        public ICollection<Invoice> GetAllInvoices()
+        public ICollection<InvoiceDTO> GetAllInvoices()
         {
-            return _invoiceRepository.GetAllInvoices();
+            var invoices = _invoiceRepository.GetAllInvoices();
+
+            // Manually map list of Invoice to list of InvoiceDTO
+            return invoices.Select(MapInvoiceToDTO).ToList();
         }
 
-        public Invoice GetInvoiceByEmail(string email)
+        public InvoiceDTO GetInvoiceByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
             {
                 throw new ArgumentException("Email cannot be null or empty.", nameof(email));
             }
 
-            return _invoiceRepository.GetInvoiceByEmail(email);
+            var invoice = _invoiceRepository.GetInvoiceByEmail(email);
+
+            // Map the Invoice entity to InvoiceDTO
+            return MapInvoiceToDTO(invoice);
         }
 
-        public Invoice GetInvoiceByEmployeeID(int employeeId)
+        public InvoiceDTO GetInvoiceByEmployeeID(int employeeId)
         {
-            return _invoiceRepository.GetInvoiceByEmployeeID(employeeId);
+            var invoice = _invoiceRepository.GetInvoiceByEmployeeID(employeeId);
+
+            // Map the Invoice entity to InvoiceDTO
+            return MapInvoiceToDTO(invoice);
         }
 
-        public Invoice GetInvoiceById(int invoiceId)
+        public InvoiceDTO GetInvoiceById(int invoiceId)
         {
-            return _invoiceRepository.GetInvoiceById(invoiceId);
+            var invoice = _invoiceRepository.GetInvoiceById(invoiceId);
+
+            // Map the Invoice entity to InvoiceDTO
+            return MapInvoiceToDTO(invoice);
         }
 
-        public Invoice GetInvoiceByUserID(int userId)
+        public InvoiceDTO GetInvoiceByUserID(int userId)
         {
-            return _invoiceRepository.GetInvoiceByUserID(userId);
+            var invoice = _invoiceRepository.GetInvoiceByUserID(userId);
+
+            // Map the Invoice entity to InvoiceDTO
+            return MapInvoiceToDTO(invoice);
         }
 
-        public void UpdateInvoice(Invoice invoice)
+        public void UpdateInvoice(InvoiceDTO invoiceDTO)
         {
-            if (invoice == null)
+            if (invoiceDTO == null)
             {
-                throw new ArgumentNullException(nameof(invoice));
+                throw new ArgumentNullException(nameof(invoiceDTO));
             }
+
+            // Manually map properties from InvoiceDTO to Invoice
+            var invoice = new Invoice
+            {
+                InvoiceId = invoiceDTO.InvoiceID,
+                UserID = invoiceDTO.UserID,
+                EmployeeID = invoiceDTO.EmployeeID,
+                // Map other properties as needed
+            };
 
             var existingInvoice = _invoiceRepository.GetInvoiceById(invoice.InvoiceId);
             if (existingInvoice == null)
             {
                 throw new EntityNotFoundException("Invoice not found.");
             }
+
             _invoiceRepository.UpdateInvoice(invoice);
+        }
+
+        // Helper method for mapping Invoice to InvoiceDTO
+        private InvoiceDTO MapInvoiceToDTO(Invoice invoice)
+        {
+            return new InvoiceDTO
+            {
+                InvoiceID = invoice.InvoiceId,
+                UserID = invoice.UserID,
+                EmployeeID = invoice.EmployeeID,
+               // LinkedVehicles = invoice.LinkedVehicles?.Select(MapLinkedVehiclesToDTO).ToList()  //TODO
+            };
         }
     }
 }

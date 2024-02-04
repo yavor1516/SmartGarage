@@ -1,4 +1,5 @@
-﻿using SmartGarage.Repositories;
+﻿using SmartGarage.Models.DTO;
+using SmartGarage.Repositories;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
@@ -13,76 +14,124 @@ namespace SmartGarage.Services
             _serviceRepository = serviceRepository;
         }
 
-        public Service GetServiceById(int id)
+        public ServiceDTO GetServiceByID(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            return _serviceRepository.GetServiceById(id);
+
+            var service = _serviceRepository.GetServiceByID(id);
+
+            // Manually map Service to ServiceDTO
+            return MapServiceToDTO(service);
         }
 
-        public Service GetServiceByName(string name)
+        public ServiceDTO GetServiceByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
             }
-            return _serviceRepository.GetServiceByName(name);
+
+            var service = _serviceRepository.GetServiceByName(name);
+
+            // Manually map Service to ServiceDTO
+            return MapServiceToDTO(service);
         }
 
-        public Service GetServiceByPrice(decimal price)
+        public ServiceDTO GetServiceByPrice(decimal price)
         {
             if (price < 0)
             {
                 throw new ArgumentException("Price must be greater than zero.", nameof(price));
             }
-            return _serviceRepository.GetServiceByPrice(price);
+
+            var service = _serviceRepository.GetServiceByPrice(price);
+
+            // Manually map Service to ServiceDTO
+            return MapServiceToDTO(service);
         }
 
-        public ICollection<Service> GetAllServicesById(int id)
+        public ICollection<ServiceDTO> GetAllServicesByID(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            return _serviceRepository.GetAllServicesById(id);
-        }
-        public ICollection<Service> GetAllServices()
-        {
-            return _serviceRepository.GetAllServices();
+
+            var services = _serviceRepository.GetAllServicesById(id);
+
+            // Manually map list of Service to list of ServiceDTO
+            return services.Select(MapServiceToDTO).ToList();
         }
 
-        public Service CreateService(Service service)
+        public ICollection<ServiceDTO> GetAllServices()
         {
-            if (service == null)
+            var services = _serviceRepository.GetAllServices();
+
+            // Manually map list of Service to list of ServiceDTO
+            return services.Select(MapServiceToDTO).ToList();
+        }
+
+        public Service CreateService(ServiceDTO serviceDTO)
+        {
+            if (serviceDTO == null)
             {
-                throw new ArgumentNullException(nameof(service));
+                throw new ArgumentNullException(nameof(serviceDTO));
             }
 
-             var existingService = _serviceRepository.GetServiceByName(service.Name);
-             if (existingService != null)
-             {
-                 throw new InvalidOperationException("Service with the same name already exists.");
-             }
+            var service = new Service
+            {
+                // Map properties from serviceDTO to service
+                Name = serviceDTO.Name,
+                Price = serviceDTO.Price
+                // Add any other properties that need to be mapped
+            };
+
+            var existingService = _serviceRepository.GetServiceByName(serviceDTO.Name);
+            if (existingService != null)
+            {
+                throw new InvalidOperationException("Service with the same name already exists.");
+            }
 
             return _serviceRepository.CreateService(service);
         }
 
-        public void UpdateService(Service service)
+        public void UpdateService(ServiceDTO serviceDTO)
         {
-            if (service == null)
+            if (serviceDTO == null)
             {
-                throw new ArgumentNullException(nameof(service));
+                throw new ArgumentNullException(nameof(serviceDTO));
             }
 
-             var existingService = _serviceRepository.GetServiceById(service.ServiceId);
-             if (existingService == null)
-             {
-                 throw new InvalidOperationException("Service does not exist.");
-             }
+            // Manually map properties from ServiceDTO to Service
+            var service = new Service
+            {
+                ServiceID = serviceDTO.ServiceID,
+                Name = serviceDTO.Name,
+                Price = serviceDTO.Price
+                // Map other properties as needed
+            };
+
+            var existingService = _serviceRepository.GetServiceByID(service.ServiceID);
+            if (existingService == null)
+            {
+                throw new InvalidOperationException("Service does not exist.");
+            }
 
             _serviceRepository.UpdateService(service);
+        }
+
+        //Manual Mapper
+        public ServiceDTO MapServiceToDTO(Service service)
+        {
+            return new ServiceDTO
+            {
+                ServiceID = service.ServiceID,
+                Name = service.Name,
+                Price = service.Price
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Controllers.API
@@ -36,16 +37,16 @@ namespace SmartGarage.Controllers.API
 
         // api/CarModel
         [HttpPost]
-        public ActionResult<CarModel> CreateCarModel([FromBody] CarModel carModel)
+        public ActionResult<CarModel> CreateCarModel([FromBody] CarModelDTO carModelDTO)
         {
-            if (carModel == null)
+            if (carModelDTO == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                var createdCarModel = _carModelService.CreateCarModel(carModel);
+                var createdCarModel = _carModelService.CreateCarModel(carModelDTO);
                 return CreatedAtAction(nameof(GetCarModelById), new { id = createdCarModel.CarModelID }, createdCarModel);
             }
             catch (Exception ex)
@@ -56,16 +57,16 @@ namespace SmartGarage.Controllers.API
 
         // api/CarModel/5
         [HttpPut("{id}")]
-        public IActionResult UpdateCarModel(int id, [FromBody] CarModel carModel)
+        public IActionResult UpdateCarModel(int id, [FromBody] CarModelDTO carModelDTO)
         {
-            if (carModel == null || id != carModel.CarModelID)
+            if (carModelDTO == null || id != carModelDTO.CarModelID)
             {
                 return BadRequest();
             }
 
             try
             {
-                _carModelService.UpdateCarModel(carModel);
+                _carModelService.UpdateCarModel(carModelDTO);
                 return NoContent();
             }
             catch (Exception ex)

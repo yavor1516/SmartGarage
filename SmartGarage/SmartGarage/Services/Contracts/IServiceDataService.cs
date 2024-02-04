@@ -1,13 +1,15 @@
-﻿namespace SmartGarage.Services.Contracts
+﻿using SmartGarage.Models.DTO;
+
+namespace SmartGarage.Services.Contracts
 {
     public interface IServiceDataService
     {
-        Service GetServiceById(int id);
-        Service GetServiceByName(string name);
-        Service GetServiceByPrice(decimal price);
-        ICollection<Service> GetAllServicesById(int id);
-        ICollection<Service> GetAllServices();
-        Service CreateService(Service service);
-        void UpdateService(Service service);
+        ServiceDTO GetServiceByID(int id);
+        ServiceDTO GetServiceByName(string name);
+        ServiceDTO GetServiceByPrice(decimal price);
+        ICollection<ServiceDTO> GetAllServicesByID(int id);
+        ICollection<ServiceDTO> GetAllServices();
+        Service CreateService(ServiceDTO serviceDTO);
+        void UpdateService(ServiceDTO serviceDTO);
     }
 }

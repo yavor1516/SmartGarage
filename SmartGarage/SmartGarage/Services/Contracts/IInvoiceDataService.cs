@@ -1,13 +1,15 @@
-﻿namespace SmartGarage.Services.Contracts
+﻿using SmartGarage.Models.DTO;
+
+namespace SmartGarage.Services.Contracts
 {
     public interface IInvoiceDataService
     {
-        Invoice CreateInvoice(Invoice invoice);
-        ICollection<Invoice> GetAllInvoices();
-        Invoice GetInvoiceByEmail(string email);
-        Invoice GetInvoiceByEmployeeID(int employeeId);
-        Invoice GetInvoiceById(int invoiceId);
-        Invoice GetInvoiceByUserID(int userId);
-        void UpdateInvoice(Invoice invoice);
+        InvoiceDTO CreateInvoice(InvoiceDTO invoiceDTO);
+        ICollection<InvoiceDTO> GetAllInvoices();
+        InvoiceDTO GetInvoiceByEmail(string email);
+        InvoiceDTO GetInvoiceByEmployeeID(int employeeId);
+        InvoiceDTO GetInvoiceById(int invoiceId);
+        InvoiceDTO GetInvoiceByUserID(int userId);
+        void UpdateInvoice(InvoiceDTO invoiceDTO);
     }
 }

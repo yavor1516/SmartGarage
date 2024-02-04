@@ -3,7 +3,7 @@
     public class Service
     {
         [Key]
-        public int ServiceId { get; set; }
+        public int ServiceID { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

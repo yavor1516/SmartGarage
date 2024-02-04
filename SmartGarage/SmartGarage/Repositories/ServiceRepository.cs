@@ -10,9 +10,9 @@ namespace SmartGarage.Repositories
         {            
             _dbcontext = dbcontext;
         }
-        public Service GetServiceById(int id)
+        public Service GetServiceByID(int id)
         {
-            return _dbcontext.Services.FirstOrDefault(x=>x.ServiceId == id);
+            return _dbcontext.Services.FirstOrDefault(x=>x.ServiceID == id);
         }
         public Service GetServiceByName(string name)
         {
@@ -24,7 +24,7 @@ namespace SmartGarage.Repositories
         }
         public ICollection<Service> GetAllServicesById(int id) 
         {
-            return _dbcontext.Services.Where(x=>x.ServiceId == id).ToList();
+            return _dbcontext.Services.Where(x=>x.ServiceID == id).ToList();
         }
         public ICollection<Service> GetAllServices()
         {

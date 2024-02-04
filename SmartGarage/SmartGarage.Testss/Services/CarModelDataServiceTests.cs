@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services;
 using System;
@@ -18,10 +19,13 @@ namespace SmartGarage.Tests.Services
             // Arrange
             var mockRepository = new Mock<ICarModelRepository>();
             var carModelService = new CarModelDataService(mockRepository.Object);
-            var validCarModel = new CarModel {Model = "Toyota" };
+            var validCarModelDTO = new CarModelDTO { Model = "Toyota" };
 
             // Act
-            var createdCarModel = carModelService.CreateCarModel(validCarModel);
+            var createdCarModelDTO = carModelService.CreateCarModel(validCarModelDTO);
+
+            // Assert
+            Assert.IsNotNull(createdCarModelDTO);
         }
 
         [TestMethod]
@@ -31,13 +35,14 @@ namespace SmartGarage.Tests.Services
             // Arrange
             var mockRepository = new Mock<ICarModelRepository>();
             mockRepository.Setup(r => r.GetCarModelByModel(It.IsAny<string>()))
-                .Returns(new CarModel { Model="Toyota" });
+                .Returns(new CarModel { Model = "Toyota" });
             var carModelService = new CarModelDataService(mockRepository.Object);
-            var duplicateCarModel = new CarModel { Model = "Toyota" };
+            var duplicateCarModelDTO = new CarModelDTO { Model = "Toyota" };
 
             // Act
-            carModelService.CreateCarModel(duplicateCarModel);
+            carModelService.CreateCarModel(duplicateCarModelDTO);
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void CreateCarModel_NullCarModel_ThrowsArgumentNullException()
@@ -45,10 +50,10 @@ namespace SmartGarage.Tests.Services
             // Arrange
             var mockRepository = new Mock<ICarModelRepository>();
             var carModelService = new CarModelDataService(mockRepository.Object);
-            CarModel nullCarModel = null;
+            CarModelDTO nullCarModelDTO = null;
 
             // Act
-            carModelService.CreateCarModel(nullCarModel);
+            carModelService.CreateCarModel(nullCarModelDTO);
         }
 
         [TestMethod]
@@ -61,8 +66,13 @@ namespace SmartGarage.Tests.Services
             var carModelService = new CarModelDataService(mockRepository.Object);
 
             // Act
-            var carModels = carModelService.GetAllCarModels();
+            var carModelsDTO = carModelService.GetAllCarModels();
+
+            // Assert
+            Assert.IsNotNull(carModelsDTO);
+            Assert.IsTrue(carModelsDTO.Count > 0);
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void GetCarModelById_InvalidId_ThrowsArgumentException()

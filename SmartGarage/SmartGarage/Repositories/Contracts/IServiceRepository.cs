@@ -4,7 +4,7 @@ namespace SmartGarage.Repositories.Contracts
 {
     public interface IServiceRepository
     {
-        public Service GetServiceById(int id);
+        public Service GetServiceByID(int id);
         public Service GetServiceByName(string Name);
         public Service GetServiceByPrice(decimal Price);
         public ICollection<Service> GetAllServicesById(int id);
