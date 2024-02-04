@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using SmartGarage.Repositories.Contracts;
 
 namespace SmartGarage.Repositories
@@ -38,7 +39,15 @@ namespace SmartGarage.Repositories
         }
         public void UpdateService(Service service)
         {
-            _dbcontext.SaveChanges();
+            var existingService = _dbcontext.Services.FirstOrDefault(s => s.ServiceID == service.ServiceID);
+            if (existingService != null)
+            {
+                existingService.Name = service.Name;
+                existingService.Price = service.Price;
+                // Update other fields as necessary
+
+                _dbcontext.SaveChanges(); // This is crucial to persist changes
+            }
         }
 
 

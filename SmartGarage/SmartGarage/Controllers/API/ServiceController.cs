@@ -68,7 +68,8 @@ namespace SmartGarage.Controllers.API
             try
             {
                 _serviceService.UpdateService(serviceDTO);
-                return NoContent();
+                var updatedService = _serviceService.GetServiceByID(id);
+                return Ok(updatedService);
             }
             catch (Exception ex)
             {
