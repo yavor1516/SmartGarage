@@ -67,7 +67,8 @@ namespace SmartGarage.Controllers.API
             try
             {
                 _carModelService.UpdateCarModel(carModelDTO);
-                return NoContent();
+                var updatedCarModel = _carModelService.GetCarModelById(id);
+                return Ok(updatedCarModel);
             }
             catch (Exception ex)
             {

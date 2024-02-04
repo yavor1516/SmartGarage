@@ -49,7 +49,13 @@ namespace SmartGarage.Repositories
 
         public void UpdateCarModel(CarModel carModel)
         {
-            _dbcontext.SaveChanges();
+            var existingService = _dbcontext.CarModels.FirstOrDefault(s => s.CarModelID == carModel.CarModelID);
+            if (existingService != null)
+            {
+                existingService.Model = carModel.Model;
+                existingService.ManufacturerID = carModel.ManufacturerID;
+                _dbcontext.SaveChanges(); 
+            }
         }
     }
 }

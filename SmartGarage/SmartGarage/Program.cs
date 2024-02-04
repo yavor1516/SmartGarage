@@ -46,8 +46,10 @@ namespace SmartGarage
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+            builder.Services.AddScoped<ICarModelRepository, CarModelRepository>();
 
             //Momcheta tuka registrirame Services
+            builder.Services.AddTransient<ICarModelDataService, CarModelDataService>();
             builder.Services.AddTransient<IServiceDataService, ServiceDataService>();
             builder.Services.AddTransient<IUserDataService, UserDataService>();
             builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
