@@ -45,18 +45,29 @@ namespace SmartGarage.Controllers.API
                 IEnumerable<string> errorMessages = ModelState.Values.SelectMany(u => u.Errors.Select(e => e.ErrorMessage));
                 return BadRequest(new ErrorResponse(errorMessages));
             }
+
             try
             {
                 var user = _accountService.LoginUser(loginRequest);
 
+                if (user == null)
+                {
+                    return Unauthorized(new ErrorResponse("Invalid credentials."));
+                }
+
                 return Ok(new AuthenticatedUserResponse()
                 {
                     accessToken = _accountService.GenerateToken(user)
-                }); ;
+                });
+            }
+            catch (DuplicateEntityException e)
+            {
+                return Conflict(new ErrorResponse(e.Message));
             }
             catch (Exception e)
             {
-                return Conflict(new ErrorResponse(e.Message));
+                // Handle unexpected exceptions here
+                return StatusCode(500, new ErrorResponse("An unexpected error occurred."));
             }
         }
     }
