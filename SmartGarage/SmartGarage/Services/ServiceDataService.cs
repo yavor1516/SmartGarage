@@ -33,6 +33,10 @@ namespace SmartGarage.Services
 
         public Service GetServiceByPrice(decimal price)
         {
+            if (price < 0)
+            {
+                throw new ArgumentException("Price must be greater than zero.", nameof(price));
+            }
             return _serviceRepository.GetServiceByPrice(price);
         }
 
