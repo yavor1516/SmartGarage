@@ -1,4 +1,5 @@
 ﻿using SmartGarage.Exceptions;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 using System.Text.RegularExpressions;
@@ -14,75 +15,116 @@ namespace SmartGarage.Services
             _customerRepository = customerRepository;
         }
 
-        public Customer CreateCustomer(Customer customer)
+        public CustomerDTO CreateCustomer(CustomerDTO customerDTO)
         {
-            if (customer == null)
+            if (customerDTO == null)
             {
-                throw new ArgumentNullException(nameof(customer));
+                throw new ArgumentNullException(nameof(customerDTO));
             }
 
-           
-            if (string.IsNullOrWhiteSpace(customer.User.Email) || !IsValidEmail(customer.User.Email)) //TODO  Email validation!!!!!!!!!!
+            var customerEntity = MapCustomerDTOToEntity(customerDTO);
+
+            var createdCustomer = _customerRepository.CreateCustomer(customerEntity);
+
+            return MapCustomerEntityToDTO(createdCustomer);
+        }
+
+        public ICollection<CustomerDTO> GetAllCustomers()
+        {
+            var customers = _customerRepository.GetAllCustomers();
+
+            return customers.Select(MapCustomerEntityToDTO).ToList();
+        }
+
+        public CustomerDTO GetCustomerByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
             {
-                throw new ArgumentException("Invalid email address.");
+                throw new ArgumentException("Email cannot be null or whitespace.", nameof(email));
             }
 
-            var existingCustomer = _customerRepository.GetCustomerByEmail(customer.User.Email);
-            if (existingCustomer != null)
+            var customerEntity = _customerRepository.GetCustomerByEmail(email);
+
+            return MapCustomerEntityToDTO(customerEntity);
+        }
+
+        public CustomerDTO GetCustomerByFirstName(string firstName)
+        {
+            if (string.IsNullOrWhiteSpace(firstName))
             {
-                throw new InvalidOperationException("A customer with this email already exists.");
+                throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
             }
 
-            customer.User.Email = customer.User.Email.Trim().ToLower();
-            return _customerRepository.CreateCustomer(customer);
-        }
-        private bool IsValidEmail(string email)
-        {
-            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-        }
-        public ICollection<Customer> GetAllCustomers()
-        {
-            return _customerRepository.GetAllCustomers();
+            var customerEntity = _customerRepository.GetCustomerByFirstName(firstName);
+
+            return MapCustomerEntityToDTO(customerEntity);
         }
 
-        public Customer GetCustomerByEmail(string email)
+        public CustomerDTO GetCustomerById(int id)
         {
-            return _customerRepository.GetCustomerByEmail(email);
-        }
-
-        public Customer GetCustomerByFirstName(string firstName)
-        {
-            return _customerRepository.GetCustomerByFirstName(firstName);
-        }
-
-        public Customer GetCustomerById(int id)
-        {
-            var customer = _customerRepository.GetCustomerById(id);
-            if (customer == null)
+            if (id <= 0)
             {
-                throw new EntityNotFoundException("Customer not found.");
+                throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            return customer;
+
+            var customerEntity = _customerRepository.GetCustomerById(id);
+
+            return MapCustomerEntityToDTO(customerEntity);
         }
 
-        public Customer GetCustomerByUsername(string username)
+        public CustomerDTO GetCustomerByUsername(string username)
         {
-            return _customerRepository.GetCustomerByUsername(username);
-        }
-
-        public void UpdateCustomer(Customer customer)
-        {
-            var existingCustomer = _customerRepository.GetCustomerById(customer.CustomerID);
-            if (existingCustomer == null)
+            if (string.IsNullOrWhiteSpace(username))
             {
-                throw new EntityNotFoundException("Customer to update was not found.");
+                throw new ArgumentException("Username cannot be null or whitespace.", nameof(username));
             }
-            existingCustomer.LinkedVehicles=customer.LinkedVehicles;
-           // existingCustomer.CustomerID=customer.CustomerID;               //TODO-not sure if we need to update this
 
-            _customerRepository.UpdateCustomer(existingCustomer);
+            var customerEntity = _customerRepository.GetCustomerByUsername(username);
+
+            return MapCustomerEntityToDTO(customerEntity);
         }
 
+        public void UpdateCustomer(CustomerDTO customerDTO)
+        {
+            if (customerDTO == null)
+            {
+                throw new ArgumentNullException(nameof(customerDTO));
+            }
 
+            var customerEntity = MapCustomerDTOToEntity(customerDTO);
+
+            _customerRepository.UpdateCustomer(customerEntity);
+        }
+
+        public Customer MapCustomerDTOToEntity(CustomerDTO customerDTO)
+        {
+            if (customerDTO == null)
+            {
+                return null;
+            }
+
+            return new Customer
+            {
+                CustomerID = customerDTO.CustomerID,
+                UserID = customerDTO.UserID,
+                LinkedVehicles = (ICollection<LinkedVehicles>)customerDTO.LinkedVehicles
+            };
+        }
+
+        // Helper method to map Customer entity to CustomerDTO
+        public CustomerDTO MapCustomerEntityToDTO(Customer customerEntity)
+        {
+            if (customerEntity == null)
+            {
+                return null;
+            }
+
+            return new CustomerDTO
+            {
+                CustomerID = customerEntity.CustomerID,
+                UserID = customerEntity.UserID,
+                LinkedVehicles = (ICollection<LinkedVehiclesDTO>)customerEntity.LinkedVehicles 
+            };
+        }
     }
 }

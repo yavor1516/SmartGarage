@@ -34,13 +34,13 @@ namespace SmartGarage.Repositories
             return employee;
         }
 
-        public Employee GetEmployeeById(int id)
+        public Employee GetEmployeeByID(int id)
         {
             Employee employee = _dbcontext.Employees.FirstOrDefault(x => x.EmployeeID == id);
             return employee;
         }
 
-        public Employee GetEmployeeByUserId(int id)
+        public Employee GetEmployeeByUserID(int id)
         {
             Employee employee = _dbcontext.Employees.FirstOrDefault(x => x.UserID == id);
             return employee;

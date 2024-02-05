@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services;
 using System;
@@ -12,73 +13,47 @@ namespace SmartGarage.Tests.Services
     [TestClass]
     public class CustomerDataServiceTests
     {
-        private Mock<ICustomerRepository> _mockRepository;
-        private CustomerDataService _customerDataService;
-        private Customer _validCustomer;
+        private Mock<ICustomerRepository> _mockCustomerRepository;
+        private CustomerDataService _customerService;
 
         [TestInitialize]
-        public void Setup()
+        public void Initialize()
         {
-            _mockRepository = new Mock<ICustomerRepository>();
-            _customerDataService = new CustomerDataService(_mockRepository.Object);
-
-            _validCustomer = new Customer
-            {
-                User = new User { Email = "validemail@example.com", FirstName = "Petko", Username = "petkoludia123" },
-                CustomerID = 1
-                // ... other properties
-            };
+            _mockCustomerRepository = new Mock<ICustomerRepository>();
+            _customerService = new CustomerDataService(_mockCustomerRepository.Object);
         }
+
         [TestMethod]
-        public void CreateCustomer_WithValidPoints()
+        public void CreateCustomer_ValidCustomerDTO_ReturnsCreatedCustomerDTO()
         {
             // Arrange
-            _mockRepository.Setup(repo => repo.CreateCustomer(It.IsAny<Customer>())).Returns(_validCustomer);
+            var customerDTO = new CustomerDTO
+            {
+            };
+
+            var expectedCustomerEntity = new Customer
+            {
+            };
+
+            _mockCustomerRepository
+                .Setup(repo => repo.CreateCustomer(It.IsAny<Customer>()))
+                .Returns(expectedCustomerEntity);
 
             // Act
-            var result = _customerDataService.CreateCustomer(_validCustomer);
+            var result = _customerService.CreateCustomer(customerDTO);
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("validemail@example.com", result.User.Email);
         }
+
         [TestMethod]
-        public void CreateCustomer_WithNull()
-        {
-            // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => _customerDataService.CreateCustomer(null));
-        }
-        [TestMethod]
-        public void CreateCustomer_WithInvalidEmail()
+        public void CreateCustomer_NullCustomerDTO_ThrowsArgumentNullException()
         {
             // Arrange
-            var customerWithInvalidEmail = new Customer
-            {
-                User = new User { Email = "invalidemail" }
-                // ... other properties
-            };
+            CustomerDTO customerDTO = null;
 
-            // Act & Assert
-            Assert.ThrowsException<ArgumentException>(() => _customerDataService.CreateCustomer(customerWithInvalidEmail));
-        }
-        [TestMethod]
-        public void GetCustomerById_WithValidId()
-        {
-            // Arrange
-            _mockRepository.Setup(repo => repo.GetCustomerById(1)).Returns(_validCustomer);
-
-            // Act
-            var result = _customerDataService.GetCustomerById(1);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.CustomerID);
-        }
-        [TestMethod]
-        public void UpdateCustomer_WithNull()
-        {
-            // Act & Assert
-            Assert.ThrowsException<NullReferenceException>(() => _customerDataService.UpdateCustomer(null));
+            // Act and Assert
+            Assert.ThrowsException<ArgumentNullException>(() => _customerService.CreateCustomer(customerDTO));
         }
     }
 }

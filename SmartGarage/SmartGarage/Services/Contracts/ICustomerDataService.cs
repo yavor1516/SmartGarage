@@ -1,13 +1,17 @@
-﻿namespace SmartGarage.Services.Contracts
+﻿using SmartGarage.Models.DTO;
+
+namespace SmartGarage.Services.Contracts
 {
     public interface ICustomerDataService
     {
-        Customer CreateCustomer(Customer customer);
-        ICollection<Customer> GetAllCustomers();
-        Customer GetCustomerByEmail(string email);
-        Customer GetCustomerByFirstName(string firstName);
-        Customer GetCustomerById(int id);
-        Customer GetCustomerByUsername(string username);
-        void UpdateCustomer(Customer customer);
+        CustomerDTO CreateCustomer(CustomerDTO customerDTO);
+        ICollection<CustomerDTO> GetAllCustomers();
+        CustomerDTO GetCustomerByEmail(string email);
+        CustomerDTO GetCustomerByFirstName(string firstName);
+        CustomerDTO GetCustomerById(int id);
+        CustomerDTO GetCustomerByUsername(string username);
+        void UpdateCustomer(CustomerDTO customerDTO);
+        CustomerDTO MapCustomerEntityToDTO(Customer customer);
+        Customer MapCustomerDTOToEntity(CustomerDTO customerDTO);
     }
 }

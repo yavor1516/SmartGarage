@@ -1,4 +1,5 @@
 ﻿using SmartGarage.Exceptions;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
@@ -13,70 +14,120 @@ namespace SmartGarage.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public Vehicle CreateVehicle(Vehicle vehicle)    //TODO VALIDATIONS!
+        public VehicleDTO CreateVehicle(VehicleDTO vehicleDTO)
         {
-            if (vehicle == null)
+            if (vehicleDTO == null)
             {
-                throw new ArgumentNullException(nameof(vehicle));
+                throw new ArgumentNullException(nameof(vehicleDTO));
             }
 
-            // Add more validation if needed!
-            if (string.IsNullOrWhiteSpace(vehicle.Manufacturer?.BrandName))
+            var vehicleEntity = MapVehicleDTOToEntity(vehicleDTO);
+
+            if (string.IsNullOrWhiteSpace(vehicleEntity.Manufacturer?.BrandName))
             {
                 throw new ArgumentException("Manufacturer is required.");
             }
-            return _vehicleRepository.CreateVehicle(vehicle);
+
+            var createdVehicle = _vehicleRepository.CreateVehicle(vehicleEntity);
+
+            return MapVehicleEntityToDTO(createdVehicle);
         }
 
-        public ICollection<Vehicle> GetAllVehiclesByEmployeeID(int employeeId)
+        public ICollection<VehicleDTO> GetAllVehiclesByEmployeeID(int employeeId)
         {
-            return _vehicleRepository.GetAllVehiclesByEmployeeID(employeeId);
+            var vehicles = _vehicleRepository.GetAllVehiclesByEmployeeID(employeeId);
+
+            return vehicles.Select(MapVehicleEntityToDTO).ToList();
         }
 
-        public Vehicle GetVehicleByID(int vehicleId)
+        public VehicleDTO GetVehicleByID(int vehicleId)
         {
-            var vehicle = _vehicleRepository.GetVehicleById(vehicleId);
-            if (vehicle == null)
+            var vehicleEntity = _vehicleRepository.GetVehicleById(vehicleId);
+            if (vehicleEntity == null)
             {
                 throw new EntityNotFoundException("Vehicle not found.");
             }
-            return vehicle;
+
+            return MapVehicleEntityToDTO(vehicleEntity);
         }
 
-        public ICollection<Vehicle> GetVehiclesByManufacturer(string manufacturer)
+        public ICollection<VehicleDTO> GetVehiclesByManufacturer(string manufacturer)
         {
-            return _vehicleRepository.GetVehiclesByManufacturer(manufacturer);
+            var vehicles = _vehicleRepository.GetVehiclesByManufacturer(manufacturer);
+
+            return vehicles.Select(MapVehicleEntityToDTO).ToList();
         }
 
-        public Vehicle GetVehicleByModel(string model)
+        public VehicleDTO GetVehicleByModel(string model)
         {
-            var vehicle = _vehicleRepository.GetVehicleByModel(model);
-            if (vehicle == null)
+            var vehicleEntity = _vehicleRepository.GetVehicleByModel(model);
+            if (vehicleEntity == null)
             {
                 throw new EntityNotFoundException("Vehicle with the specified model not found.");
             }
-            return vehicle;
+
+            return MapVehicleEntityToDTO(vehicleEntity);
         }
 
-        public void UpdateVehicle(Vehicle vehicle)
+        public void UpdateVehicle(VehicleDTO vehicleDTO)
         {
+            if (vehicleDTO == null)
+            {
+                throw new ArgumentNullException(nameof(vehicleDTO));
+            }
 
-            var existingVehicle = _vehicleRepository.GetVehicleById(vehicle.VehicleID);
+            var vehicleEntity = MapVehicleDTOToEntity(vehicleDTO);
+
+            var existingVehicle = _vehicleRepository.GetVehicleById(vehicleEntity.VehicleID);
             if (existingVehicle == null)
             {
                 throw new EntityNotFoundException("Vehicle to update was not found.");
             }
 
-            existingVehicle.Manufacturer = vehicle.Manufacturer;
-            existingVehicle.CarModel = vehicle.CarModel;
-            existingVehicle.Employee = vehicle.Employee;
+            existingVehicle.Manufacturer = vehicleEntity.Manufacturer;
+            existingVehicle.CarModel = vehicleEntity.CarModel;
+            existingVehicle.Employee = vehicleEntity.Employee;
 
             _vehicleRepository.UpdateVehicle(existingVehicle);
         }
 
-        public ICollection<Vehicle> GetAllVehicles()
+        public ICollection<VehicleDTO> GetAllVehicles()
         {
-            return _vehicleRepository.GetAllVehicles();
+            var vehicles = _vehicleRepository.GetAllVehicles();
+
+            return vehicles.Select(MapVehicleEntityToDTO).ToList();
+        }
+
+        public Vehicle MapVehicleDTOToEntity(VehicleDTO vehicleDTO)
+        {
+            if (vehicleDTO == null)
+            {
+                return null;
+            }
+
+            return new Vehicle
+            {
+                VehicleID = vehicleDTO.VehicleID,
+                Manufacturer = vehicleDTO.Manufacturer,
+                CarModel = vehicleDTO.CarModel,
+                Employee = vehicleDTO.Employee
+            };
+        }
+
+        public VehicleDTO MapVehicleEntityToDTO(Vehicle vehicleEntity)
+        {
+            if (vehicleEntity == null)
+            {
+                return null;
+            }
+
+            return new VehicleDTO
+            {
+                VehicleID = vehicleEntity.VehicleID,
+                Manufacturer = vehicleEntity.Manufacturer,
+                CarModel = vehicleEntity.CarModel,
+                Employee = vehicleEntity.Employee
+            };
         }
     }
 }

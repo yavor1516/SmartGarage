@@ -2,8 +2,8 @@
 {
     public interface IEmployeeRepository
     {
-        public Employee GetEmployeeById(int id);
-        public Employee GetEmployeeByUserId(int id);
+        public Employee GetEmployeeByID(int id);
+        public Employee GetEmployeeByUserID(int id);
         public Employee GetEmployeeByFirstName(string firstName);
         public Employee GetEmployeeByUsername(string username);
         public Employee GetEmployeeByEmail(string email);

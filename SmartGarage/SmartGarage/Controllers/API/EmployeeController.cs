@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Controllers.API
@@ -26,7 +27,7 @@ namespace SmartGarage.Controllers.API
         [HttpGet("{id}")]
         public ActionResult<Employee> GetEmployeeById(int id)
         {
-            var employee = _employeeService.GetEmployeeById(id);
+            var employee = _employeeService.GetEmployeeByID(id);
             if (employee == null)
             {
                 return NotFound();
@@ -37,16 +38,16 @@ namespace SmartGarage.Controllers.API
 
         // api/Employee
         [HttpPost]
-        public ActionResult<Employee> CreateEmployee([FromBody] Employee employee)
+        public ActionResult<Employee> CreateEmployee([FromBody] EmployeeDTO employeeDTO)
         {
-            if (employee == null)
+            if (employeeDTO == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                var createdEmployee = _employeeService.CreateEmployee(employee);
+                var createdEmployee = _employeeService.CreateEmployee(employeeDTO);
                 return CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployee.EmployeeID }, createdEmployee);
             }
             catch (Exception ex)
@@ -57,16 +58,16 @@ namespace SmartGarage.Controllers.API
 
         // api/Employee/5
         [HttpPut("{id}")]
-        public IActionResult UpdateEmployee(int id, [FromBody] Employee employee)
+        public IActionResult UpdateEmployee(int id, [FromBody] EmployeeDTO employeeDTO)
         {
-            if (employee == null || id != employee.EmployeeID)
+            if (employeeDTO == null || id != employeeDTO.EmployeeID)
             {
                 return BadRequest();
             }
 
             try
             {
-                _employeeService.UpdateEmployee(employee);
+                _employeeService.UpdateEmployee(employeeDTO);
                 return NoContent();
             }
             catch (Exception ex)

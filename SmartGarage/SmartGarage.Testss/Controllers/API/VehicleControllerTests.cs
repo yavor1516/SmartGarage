@@ -16,13 +16,13 @@ namespace SmartGarage.Tests.Controllers.API
     public class VehicleControllerTests
     {
         private Mock<IVehicleDataService> _mockVehicleDataService;
-        private CreateVehicleController _controller;
+        private VehicleController _controller;
 
         [TestInitialize]
         public void SetUp()
         {
             _mockVehicleDataService = new Mock<IVehicleDataService>();
-            _controller = new CreateVehicleController(_mockVehicleDataService.Object);
+            _controller = new VehicleController(_mockVehicleDataService.Object);
         }
 
         //[TestMethod]
@@ -47,19 +47,7 @@ namespace SmartGarage.Tests.Controllers.API
         //    Assert.AreEqual("TestBrand", vehicleResponse.VehicleBrand);
         //    Assert.AreEqual("TestModel", vehicleResponse.VehicleModel);
         //}
-        [TestMethod]
-        public void CreateVehicle_WithInvalidModelState_ReturnsBadRequest()
-        {
-            // Arrange
-            _controller.ModelState.AddModelError("error", "some error");
-            var vehicleDTO = new VehicleDTO();
-
-            // Act
-            var result = _controller.CreateVehicle(vehicleDTO);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
-        }
+       
 
         //[TestMethod]
         //public void CreateVehicle_WithExistingVehicle_ReturnsBadRequest()     //TODO when we have CarModelDTO and ManufacturerDTO

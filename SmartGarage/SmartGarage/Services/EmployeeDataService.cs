@@ -1,4 +1,5 @@
-﻿using SmartGarage.Repositories.Contracts;
+﻿using SmartGarage.Models.DTO;
+using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Services
@@ -12,78 +13,136 @@ namespace SmartGarage.Services
             _employeeRepository = employeeRepository;
         }
 
-        public Employee CreateEmployee(Employee employee)
+        public EmployeeDTO CreateEmployee(EmployeeDTO employeeDTO)
         {
-            if (employee == null)
+            if (employeeDTO == null)
             {
-                throw new ArgumentNullException(nameof(employee));
+                throw new ArgumentNullException(nameof(employeeDTO));
             }
 
-             var existingEmployee = _employeeRepository.GetEmployeeByEmail(employee.User.Email);
-             if (existingEmployee != null)
-             {
-                 throw new InvalidOperationException("Employee with the same email already exists.");
-             }
+            var existingEmployee = _employeeRepository.GetEmployeeByID(employeeDTO.EmployeeID);//TODO MUST BE EMAIL!!
+            if (existingEmployee != null)
+            {
+                throw new InvalidOperationException("Employee with the same email already exists.");
+            }
 
-            return _employeeRepository.CreateEmployee(employee);
+            var employeeEntity = MapEmployeeDTOToEntity(employeeDTO);
+            var createdEmployee = _employeeRepository.CreateEmployee(employeeEntity);
+
+            return MapEmployeeEntityToDTO(createdEmployee);
         }
 
-        public ICollection<Employee> GetAllEmployees()
+        public ICollection<EmployeeDTO> GetAllEmployees()
         {
-            return _employeeRepository.GetAllEmployees();
+            var employees = _employeeRepository.GetAllEmployees();
+
+            // Map the list of entities to DTOs
+            return employees.Select(MapEmployeeEntityToDTO).ToList();
         }
 
-        public Employee GetEmployeeByEmail(string email)
+        public EmployeeDTO GetEmployeeByEmail(string email)
         {
-            return _employeeRepository.GetEmployeeByEmail(email);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email cannot be null or whitespace.", nameof(email));
+            }
+
+            var employeeEntity = _employeeRepository.GetEmployeeByEmail(email);
+
+            // Map the Employee entity to DTO
+            return MapEmployeeEntityToDTO(employeeEntity);
         }
 
-        public Employee GetEmployeeByFirstName(string firstName)
+        public EmployeeDTO GetEmployeeByFirstName(string firstName)
         {
             if (string.IsNullOrWhiteSpace(firstName))
             {
                 throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
             }
-            return _employeeRepository.GetEmployeeByFirstName(firstName);
+
+            var employeeEntity = _employeeRepository.GetEmployeeByFirstName(firstName);
+
+            return MapEmployeeEntityToDTO(employeeEntity);
         }
 
-        public Employee GetEmployeeById(int id)
+        public EmployeeDTO GetEmployeeByID(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            return _employeeRepository.GetEmployeeById(id);
+
+            var employeeEntity = _employeeRepository.GetEmployeeByID(id);
+
+            return MapEmployeeEntityToDTO(employeeEntity);
         }
 
-        public Employee GetEmployeeByUserId(int id)
+        public EmployeeDTO GetEmployeeByUserID(int id)
         {
-            return _employeeRepository.GetEmployeeByUserId(id);
+            var employeeEntity = _employeeRepository.GetEmployeeByUserID(id);
+
+            return MapEmployeeEntityToDTO(employeeEntity);
         }
 
-        public Employee GetEmployeeByUsername(string username)
+        public EmployeeDTO GetEmployeeByUsername(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
                 throw new ArgumentException("Username cannot be null or whitespace.", nameof(username));
             }
-            return _employeeRepository.GetEmployeeByUsername(username);
+
+            var employeeEntity = _employeeRepository.GetEmployeeByUsername(username);
+
+            return MapEmployeeEntityToDTO(employeeEntity);
         }
 
-        public void UpdateEmployee(Employee employee)
+        public void UpdateEmployee(EmployeeDTO employeeDTO)
         {
-            if (employee == null)
+            if (employeeDTO == null)
             {
-                throw new ArgumentNullException(nameof(employee));
+                throw new ArgumentNullException(nameof(employeeDTO));
             }
 
-             var existingEmployee = _employeeRepository.GetEmployeeById(employee.EmployeeID);
-             if (existingEmployee == null)
-             {
-                 throw new InvalidOperationException("Employee does not exist.");
-             }
+            var employeeEntity = MapEmployeeDTOToEntity(employeeDTO);
 
-            _employeeRepository.UpdateEmployee(employee);
+            var existingEmployee = _employeeRepository.GetEmployeeByID(employeeEntity.EmployeeID);
+            if (existingEmployee == null)
+            {
+                throw new InvalidOperationException("Employee does not exist.");
+            }
+
+            _employeeRepository.UpdateEmployee(employeeEntity);
+        }
+        public Employee MapEmployeeDTOToEntity(EmployeeDTO employeeDTO)
+        {
+            if (employeeDTO == null)
+            {
+                return null;
+            }
+
+            return new Employee
+            {
+                EmployeeID = employeeDTO.EmployeeID,
+                UserID = employeeDTO.UserID,
+                VehiclesCreated = (ICollection<Vehicle>)employeeDTO.VehiclesCreated,
+                LinkedVehiclesCreated = (ICollection<LinkedVehicles>)employeeDTO.LinkedVehiclesCreated
+            };
+        }
+        public EmployeeDTO MapEmployeeEntityToDTO(Employee employeeEntity)
+        {
+            if (employeeEntity == null)
+            {
+                return null;
+            }
+
+            return new EmployeeDTO
+            {
+                EmployeeID = employeeEntity.EmployeeID,
+                UserID = employeeEntity.UserID,
+                VehiclesCreated = (ICollection<VehicleDTO>)employeeEntity.VehiclesCreated,
+                LinkedVehiclesCreated = (ICollection<LinkedVehiclesDTO>)employeeEntity.LinkedVehiclesCreated,
+                IsAdmin = employeeEntity.IsAdmin
+            };
         }
     }
 }

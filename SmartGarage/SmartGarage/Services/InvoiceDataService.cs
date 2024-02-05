@@ -21,17 +21,15 @@ namespace SmartGarage.Services
                 throw new ArgumentNullException(nameof(invoiceDTO));
             }
 
-            // Manually map properties from InvoiceDTO to Invoice
             var invoice = new Invoice
             {
                 UserID = invoiceDTO.UserID,
                 EmployeeID = invoiceDTO.EmployeeID,
-                // Map other properties as needed
+                LinkedVehicles = (ICollection<LinkedVehicles>)invoiceDTO.LinkedVehicles
             };
 
             var createdInvoice = _invoiceRepository.CreateInvoice(invoice);
 
-            // Map the created Invoice entity to InvoiceDTO
             return MapInvoiceToDTO(createdInvoice);
         }
 
@@ -39,7 +37,6 @@ namespace SmartGarage.Services
         {
             var invoices = _invoiceRepository.GetAllInvoices();
 
-            // Manually map list of Invoice to list of InvoiceDTO
             return invoices.Select(MapInvoiceToDTO).ToList();
         }
 
@@ -52,7 +49,6 @@ namespace SmartGarage.Services
 
             var invoice = _invoiceRepository.GetInvoiceByEmail(email);
 
-            // Map the Invoice entity to InvoiceDTO
             return MapInvoiceToDTO(invoice);
         }
 
@@ -60,7 +56,6 @@ namespace SmartGarage.Services
         {
             var invoice = _invoiceRepository.GetInvoiceByEmployeeID(employeeId);
 
-            // Map the Invoice entity to InvoiceDTO
             return MapInvoiceToDTO(invoice);
         }
 
@@ -68,7 +63,6 @@ namespace SmartGarage.Services
         {
             var invoice = _invoiceRepository.GetInvoiceById(invoiceId);
 
-            // Map the Invoice entity to InvoiceDTO
             return MapInvoiceToDTO(invoice);
         }
 
@@ -76,7 +70,6 @@ namespace SmartGarage.Services
         {
             var invoice = _invoiceRepository.GetInvoiceByUserID(userId);
 
-            // Map the Invoice entity to InvoiceDTO
             return MapInvoiceToDTO(invoice);
         }
 
@@ -87,13 +80,11 @@ namespace SmartGarage.Services
                 throw new ArgumentNullException(nameof(invoiceDTO));
             }
 
-            // Manually map properties from InvoiceDTO to Invoice
             var invoice = new Invoice
             {
                 InvoiceId = invoiceDTO.InvoiceID,
                 UserID = invoiceDTO.UserID,
                 EmployeeID = invoiceDTO.EmployeeID,
-                // Map other properties as needed
             };
 
             var existingInvoice = _invoiceRepository.GetInvoiceById(invoice.InvoiceId);
@@ -105,7 +96,6 @@ namespace SmartGarage.Services
             _invoiceRepository.UpdateInvoice(invoice);
         }
 
-        // Helper method for mapping Invoice to InvoiceDTO
         private InvoiceDTO MapInvoiceToDTO(Invoice invoice)
         {
             return new InvoiceDTO
@@ -113,7 +103,7 @@ namespace SmartGarage.Services
                 InvoiceID = invoice.InvoiceId,
                 UserID = invoice.UserID,
                 EmployeeID = invoice.EmployeeID,
-               // LinkedVehicles = invoice.LinkedVehicles?.Select(MapLinkedVehiclesToDTO).ToList()  //TODO
+                LinkedVehicles = (ICollection<LinkedVehiclesDTO>)invoice.LinkedVehicles
             };
         }
     }

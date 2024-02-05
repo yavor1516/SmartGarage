@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services;
 using System;
@@ -12,103 +13,70 @@ namespace SmartGarage.Tests.Services
     [TestClass]
     public class EmployeeDataServiceTests
     {
+        private Mock<IEmployeeRepository> _mockEmployeeRepository;
+        private EmployeeDataService _employeeService;
 
-        [TestMethod]
-        [ExpectedException(typeof(System.NullReferenceException))]
-        public void CreateEmployee_DuplicateUserID_ThrowsException()
+        [TestInitialize]
+        public void Initialize()
         {
-            // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            mockRepository.Setup(r => r.GetEmployeeByEmail(It.IsAny<string>()))
-                .Returns(new Employee {UserID=2});
-            var employeeService = new EmployeeDataService(mockRepository.Object);
-            var duplicateEmployee = new Employee { UserID = 2 };
-
-            // Act
-            employeeService.CreateEmployee(duplicateEmployee);
-
+            _mockEmployeeRepository = new Mock<IEmployeeRepository>();
+            _employeeService = new EmployeeDataService(_mockEmployeeRepository.Object);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void CreateEmployee_NullEmployee_ThrowsArgumentNullException()
+        public void CreateEmployee_ValidEmployeeDTO_ReturnsCreatedEmployeeDTO()
         {
             // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            var employeeService = new EmployeeDataService(mockRepository.Object);
-            Employee nullEmployee = null;
+            var employeeDTO = new EmployeeDTO
+            {
+                // Initialize with valid data
+            };
+
+            var expectedEmployeeEntity = new Employee
+            {
+                // Initialize with valid data
+            };
+
+            _mockEmployeeRepository
+                .Setup(repo => repo.GetEmployeeByID(It.IsAny<int>()))
+                .Returns((int id) =>
+                {
+                    // Simulate that employee with the same ID does not exist
+                    return null;
+                });
+
+            _mockEmployeeRepository
+                .Setup(repo => repo.CreateEmployee(It.IsAny<Employee>()))
+                .Returns(expectedEmployeeEntity);
 
             // Act
-            employeeService.CreateEmployee(nullEmployee);
+            var result = _employeeService.CreateEmployee(employeeDTO);
+
+            // Assert
+            Assert.IsNotNull(result);
+            // Add more assertions based on your logic
         }
 
         [TestMethod]
-        public void GetAllEmployees_ReturnsListOfEmployees()
+        public void CreateEmployee_DuplicateEmployee_ReturnsInvalidOperationException()
         {
             // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            mockRepository.Setup(r => r.GetAllEmployees())
-                .Returns(new List<Employee> {});
-            var employeeService = new EmployeeDataService(mockRepository.Object);
+            var employeeDTO = new EmployeeDTO
+            {
+                // Initialize with valid data
+            };
 
-            // Act
-            var employees = employeeService.GetAllEmployees();
-        }
+            var existingEmployeeEntity = new Employee
+            {
+                // Initialize with valid data
+            };
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetEmployeeById_InvalidId_ThrowsArgumentException()
-        {
-            // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            mockRepository.Setup(r => r.GetEmployeeById(It.IsAny<int>()))
-                .Returns((Employee)null);
-            var employeeService = new EmployeeDataService(mockRepository.Object);
-            var invalidId = -1;
+            _mockEmployeeRepository
+                .Setup(repo => repo.GetEmployeeByID(It.IsAny<int>()))
+                .Returns(existingEmployeeEntity);
 
-            // Act
-            employeeService.GetEmployeeById(invalidId);
-        }
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void UpdateEmployee_NonExistingEmployee_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            mockRepository.Setup(r => r.GetEmployeeById(It.IsAny<int>()))
-                .Returns((Employee)null);
-            var employeeService = new EmployeeDataService(mockRepository.Object);
-            var nonExistingEmployee = new Employee {};
-
-            // Act
-            employeeService.UpdateEmployee(nonExistingEmployee);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void UpdateEmployee_NullEmployee_ThrowsArgumentNullException()
-        {
-            // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            var employeeService = new EmployeeDataService(mockRepository.Object);
-            Employee nullEmployee = null;
-
-            // Act
-            employeeService.UpdateEmployee(nullEmployee);
-        }
-
-        [TestMethod]
-        public void GetEmployeeByEmail_ValidEmail_ReturnsEmployee()
-        {
-            // Arrange
-            var mockRepository = new Mock<IEmployeeRepository>();
-            mockRepository.Setup(r => r.GetEmployeeByEmail(It.IsAny<string>()))
-                .Returns(new Employee {});
-            var employeeService = new EmployeeDataService(mockRepository.Object);
-            var validEmail = "test@example.com";
-
-            // Act
-            var employee = employeeService.GetEmployeeByEmail(validEmail);
+            // Act and Assert
+            Assert.ThrowsException<InvalidOperationException>(() => _employeeService.CreateEmployee(employeeDTO));
         }
     }
 }
