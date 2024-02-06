@@ -107,10 +107,10 @@ namespace SmartGarage.Services
 
             return new Vehicle
             {
-                VehicleID = vehicleDTO.VehicleID,
-                Manufacturer = vehicleDTO.Manufacturer,
-                CarModel = vehicleDTO.CarModel,
-                Employee = vehicleDTO.Employee
+                //VehicleID = vehicleDTO.VehicleID,
+                //Manufacturer = vehicleDTO.Manufacturer.BrandName,
+                //CarModel = vehicleDTO.CarModel.Model,
+                //Employee = vehicleDTO.Employee.EmployeeID
             };
         }
 
@@ -124,9 +124,9 @@ namespace SmartGarage.Services
             return new VehicleDTO
             {
                 VehicleID = vehicleEntity.VehicleID,
-                Manufacturer = vehicleEntity.Manufacturer,
-                CarModel = vehicleEntity.CarModel,
-                Employee = vehicleEntity.Employee
+                Manufacturer = vehicleEntity.Manufacturer.BrandName,
+                CarModel = vehicleEntity.CarModel.Model,
+                EmployeeID = (int)vehicleEntity.EmployeeId
             };
         }
     }

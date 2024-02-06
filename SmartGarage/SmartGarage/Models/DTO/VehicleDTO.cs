@@ -8,12 +8,12 @@ namespace SmartGarage.Models.DTO
         public int VehicleID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public Manufacturer? Manufacturer { get; set; }
+        public string Manufacturer { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public CarModel? CarModel { get; set; }
+        public string CarModel { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public Employee? Employee { get; set; }
+        public int EmployeeID { get; set; }
     }
 }
