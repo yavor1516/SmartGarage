@@ -90,7 +90,7 @@ namespace SmartGarage.Controllers.API
             {
                 vehicleDTO.VehicleID = id; // Ensure the DTO has the correct ID
                 _vehicleDataService.UpdateVehicle(vehicleDTO);
-                return NoContent();
+                return Ok(vehicleDTO);
             }
             catch (ArgumentNullException ex)
             {

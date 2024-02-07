@@ -1,5 +1,7 @@
-﻿using SmartGarage.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartGarage.Exceptions;
 using SmartGarage.Models.DTO;
+using SmartGarage.Repositories;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
@@ -8,10 +10,12 @@ namespace SmartGarage.Services
     public class VehicleDataService : IVehicleDataService
     {
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly GarageContext _garageContext;
 
-        public VehicleDataService(IVehicleRepository vehicleRepository)
+        public VehicleDataService(IVehicleRepository vehicleRepository , GarageContext garageContext)
         {
             _vehicleRepository = vehicleRepository;
+            _garageContext = garageContext;
         }
 
         public VehicleDTO CreateVehicle(VehicleDTO vehicleDTO)
@@ -23,10 +27,10 @@ namespace SmartGarage.Services
 
             var vehicleEntity = MapVehicleDTOToEntity(vehicleDTO);
 
-            if (string.IsNullOrWhiteSpace(vehicleEntity.Manufacturer?.BrandName))
-            {
-                throw new ArgumentException("Manufacturer is required.");
-            }
+            //if (string.IsNullOrWhiteSpace(vehicleEntity.Manufacturer?.BrandName))
+            //{
+            //    throw new ArgumentException("Manufacturer is required.");
+            //}
 
             var createdVehicle = _vehicleRepository.CreateVehicle(vehicleEntity);
 
@@ -84,9 +88,11 @@ namespace SmartGarage.Services
                 throw new EntityNotFoundException("Vehicle to update was not found.");
             }
 
-            existingVehicle.Manufacturer = vehicleEntity.Manufacturer;
-            existingVehicle.CarModel = vehicleEntity.CarModel;
-            existingVehicle.Employee = vehicleEntity.Employee;
+            
+            
+            existingVehicle.ManufacturerId = vehicleEntity.ManufacturerId;
+            existingVehicle.CarModelID = vehicleEntity.CarModelID;
+            existingVehicle.EmployeeId = vehicleEntity.EmployeeId;
 
             _vehicleRepository.UpdateVehicle(existingVehicle);
         }
@@ -105,12 +111,15 @@ namespace SmartGarage.Services
                 return null;
             }
 
+            int? manufacturerId = GetManufacturerIdByName(vehicleDTO.Manufacturer);
+            int? carModelId = GetCarModelIdByName(vehicleDTO.CarModel);
+
             return new Vehicle
             {
-                //VehicleID = vehicleDTO.VehicleID,
-                //Manufacturer = vehicleDTO.Manufacturer.BrandName,
-                //CarModel = vehicleDTO.CarModel.Model,
-                //Employee = vehicleDTO.Employee.EmployeeID
+                VehicleID = vehicleDTO.VehicleID,
+                ManufacturerId = manufacturerId,
+                CarModelID = carModelId,
+                EmployeeId = vehicleDTO.EmployeeID
             };
         }
 
@@ -124,10 +133,24 @@ namespace SmartGarage.Services
             return new VehicleDTO
             {
                 VehicleID = vehicleEntity.VehicleID,
-                Manufacturer = vehicleEntity.Manufacturer.BrandName,
-                CarModel = vehicleEntity.CarModel.Model,
-                EmployeeID = (int)vehicleEntity.EmployeeId
+                Manufacturer = vehicleEntity.Manufacturer?.BrandName, 
+                CarModel = vehicleEntity.CarModel?.Model, 
+                EmployeeID = vehicleEntity.EmployeeId ?? 0
             };
+        }
+        public int? GetManufacturerIdByName(string name)
+        {
+            var manufacturer = _garageContext.Manufacturers
+                                       .FirstOrDefault(m => m.BrandName == name);
+
+            return manufacturer?.ManufacturerID;
+        }
+        public int? GetCarModelIdByName(string name)
+        {
+            var carModel = _garageContext.CarModels
+                                   .FirstOrDefault(cm => cm.Model == name);
+
+            return carModel?.CarModelID;
         }
     }
 }
