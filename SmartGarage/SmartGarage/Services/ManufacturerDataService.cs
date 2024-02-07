@@ -1,9 +1,10 @@
-﻿using SmartGarage.Repositories.Contracts;
+﻿using SmartGarage.Models.DTO;
+using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Services
 {
-    public class ManufacturerDataService : IManufacturerDataService 
+    public class ManufacturerDataService : IManufacturerDataService
     {
         private readonly IManufacturerRepository _manufacturerRepository;
 
@@ -12,60 +13,77 @@ namespace SmartGarage.Services
             _manufacturerRepository = manufacturerRepository;
         }
 
-        public Manufacturer CreateManufacturer(Manufacturer manufacturer)
+        public ManufacturerDTO CreateManufacturer(ManufacturerDTO manufacturerDTO)
         {
-            // Add any pre-creation business logic or validation here
-            if (manufacturer == null)
+            if (manufacturerDTO == null)
             {
-                throw new ArgumentNullException(nameof(manufacturer));
+                throw new ArgumentNullException(nameof(manufacturerDTO));
             }
 
-            // Check for any business rules, e.g., if the manufacturer already exists
-            // if (_manufacturerRepository.GetManufacturerByName(manufacturer.BrandName) != null)
-            // {
-            //     throw new InvalidOperationException("Manufacturer already exists.");
-            // }
+            var manufacturer = new Manufacturer
+            {
+                ManufacturerID = manufacturerDTO.ManufacturerID,
+                BrandName = manufacturerDTO.BrandName
+            };
 
-            return _manufacturerRepository.CreateManufacturer(manufacturer);
+            var createdManufacturer = _manufacturerRepository.CreateManufacturer(manufacturer);
+
+            return MapManufacturerToDTO(createdManufacturer);
         }
 
-        public Manufacturer GetManufacturerById(int id)
+        public ManufacturerDTO GetManufacturerById(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
-            return _manufacturerRepository.GetManufacturerById(id);
+
+            var manufacturer = _manufacturerRepository.GetManufacturerById(id);
+            return manufacturer == null ? null : MapManufacturerToDTO(manufacturer);
         }
 
-        public Manufacturer GetManufacturerByName(string name)
+        public ManufacturerDTO GetManufacturerByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
             }
-            return _manufacturerRepository.GetManufacturerByName(name);
+
+            var manufacturer = _manufacturerRepository.GetManufacturerByName(name);
+            return manufacturer == null ? null : MapManufacturerToDTO(manufacturer);
         }
 
-        public ICollection<Manufacturer> GetAllManufacturers()
+        public ICollection<ManufacturerDTO> GetAllManufacturers()
         {
-            return _manufacturerRepository.GetAllManufacturers();
+            var manufacturers = _manufacturerRepository.GetAllManufacturers();
+            return manufacturers.Select(m => MapManufacturerToDTO(m)).ToList();
         }
 
-        public void UpdateManufacturer(Manufacturer manufacturer)
+        public void UpdateManufacturer(ManufacturerDTO manufacturerDTO)
         {
-            if (manufacturer == null)
+            if (manufacturerDTO == null)
             {
-                throw new ArgumentNullException(nameof(manufacturer));
+                throw new ArgumentNullException(nameof(manufacturerDTO));
             }
 
-             var existingManufacturer = _manufacturerRepository.GetManufacturerById(manufacturer.ManufacturerID);
-             if (existingManufacturer == null)
-             {
-                 throw new InvalidOperationException("Manufacturer does not exist.");
-             }
+            var existingManufacturer = _manufacturerRepository.GetManufacturerById(manufacturerDTO.ManufacturerID);
+            if (existingManufacturer == null)
+            {
+                throw new InvalidOperationException("Manufacturer does not exist.");
+            }
 
-            _manufacturerRepository.UpdateManufacturer(manufacturer);
+            existingManufacturer.BrandName = manufacturerDTO.BrandName;
+
+            _manufacturerRepository.UpdateManufacturer(existingManufacturer);
+        }
+
+        private ManufacturerDTO MapManufacturerToDTO(Manufacturer manufacturer)
+        {
+            return new ManufacturerDTO
+            {
+                ManufacturerID = manufacturer.ManufacturerID,
+                BrandName = manufacturer.BrandName
+            };
         }
     }
 }

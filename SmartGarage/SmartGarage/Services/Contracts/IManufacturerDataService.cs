@@ -1,11 +1,13 @@
-﻿namespace SmartGarage.Services.Contracts
+﻿using SmartGarage.Models.DTO;
+
+namespace SmartGarage.Services.Contracts
 {
     public interface IManufacturerDataService
     {
-        Manufacturer CreateManufacturer(Manufacturer manufacturer);
-        Manufacturer GetManufacturerById(int id);
-        Manufacturer GetManufacturerByName(string name);
-        ICollection<Manufacturer> GetAllManufacturers();
-        void UpdateManufacturer(Manufacturer manufacturer);
+        ManufacturerDTO CreateManufacturer(ManufacturerDTO manufacturerDTO);
+        ManufacturerDTO GetManufacturerById(int id);
+        ManufacturerDTO GetManufacturerByName(string name);
+        ICollection<ManufacturerDTO> GetAllManufacturers();
+        void UpdateManufacturer(ManufacturerDTO manufacturerDTO);
     }
 }
