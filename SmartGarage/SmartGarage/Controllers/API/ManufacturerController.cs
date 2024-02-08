@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Controllers.API
@@ -34,16 +35,16 @@ namespace SmartGarage.Controllers.API
         }
 
         [HttpPost]
-        public ActionResult<Manufacturer> CreateManufacturer([FromBody] Manufacturer manufacturer)
+        public ActionResult<Manufacturer> CreateManufacturer([FromBody] ManufacturerDTO manufacturerDTO)
         {
-            if (manufacturer == null)
+            if (manufacturerDTO == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                var createdManufacturer = _manufacturerService.CreateManufacturer(manufacturer);
+                var createdManufacturer = _manufacturerService.CreateManufacturer(manufacturerDTO);
                 return CreatedAtAction(nameof(GetManufacturerById), new { id = createdManufacturer.ManufacturerID }, createdManufacturer);
             }
             catch (Exception ex)
@@ -55,16 +56,16 @@ namespace SmartGarage.Controllers.API
 
         //api/Manufacturer/5
         [HttpPut("{id}")]
-        public IActionResult UpdateManufacturer(int id, [FromBody] Manufacturer manufacturer)
+        public IActionResult UpdateManufacturer([FromBody] ManufacturerDTO manufacturerDTO)
         {
-            if (manufacturer == null || id != manufacturer.ManufacturerID)
+            if (manufacturerDTO == null)
             {
                 return BadRequest();
             }
 
             try
             {
-                _manufacturerService.UpdateManufacturer(manufacturer);
+                _manufacturerService.UpdateManufacturer(manufacturerDTO);
                 return NoContent();
             }
             catch (Exception ex)

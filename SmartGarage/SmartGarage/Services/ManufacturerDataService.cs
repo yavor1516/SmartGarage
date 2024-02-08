@@ -33,13 +33,13 @@ namespace SmartGarage.Services
 
         public ManufacturerDTO GetManufacturerById(int id)
         {
+            var manufacturer = _manufacturerRepository.GetManufacturerById(id);
             if (id <= 0)
             {
                 throw new ArgumentException("ID must be greater than zero.", nameof(id));
             }
 
-            var manufacturer = _manufacturerRepository.GetManufacturerById(id);
-            return manufacturer == null ? null : MapManufacturerToDTO(manufacturer);
+            return MapManufacturerToDTO(manufacturer);
         }
 
         public ManufacturerDTO GetManufacturerByName(string name)
@@ -66,15 +66,21 @@ namespace SmartGarage.Services
                 throw new ArgumentNullException(nameof(manufacturerDTO));
             }
 
-            var existingManufacturer = _manufacturerRepository.GetManufacturerById(manufacturerDTO.ManufacturerID);
+            var manufacturer = new Manufacturer
+            {
+                ManufacturerID = manufacturerDTO.ManufacturerID,
+                BrandName = manufacturerDTO.BrandName
+            };
+
+            var existingManufacturer = _manufacturerRepository.GetManufacturerById(manufacturer.ManufacturerID);
             if (existingManufacturer == null)
             {
                 throw new InvalidOperationException("Manufacturer does not exist.");
             }
+            existingManufacturer.ManufacturerID = manufacturer.ManufacturerID;
+            existingManufacturer.BrandName = manufacturer.BrandName;
 
-            existingManufacturer.BrandName = manufacturerDTO.BrandName;
-
-            _manufacturerRepository.UpdateManufacturer(existingManufacturer);
+            _manufacturerRepository.UpdateManufacturer(manufacturer);
         }
 
         private ManufacturerDTO MapManufacturerToDTO(Manufacturer manufacturer)

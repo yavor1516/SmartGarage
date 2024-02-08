@@ -36,7 +36,7 @@ namespace SmartGarage.Repositories
 
         public Customer GetCustomerById(int id)
         {
-            Customer customer = _dbcontext.Customers.FirstOrDefault(x => x.UserID == id);
+            Customer customer = _dbcontext.Customers.FirstOrDefault(x => x.CustomerID == id);
             return customer;
         }
 
