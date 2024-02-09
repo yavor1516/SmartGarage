@@ -55,22 +55,18 @@ namespace SmartGarage.Services
             return MapVehicleEntityToDTO(vehicleEntity);
         }
 
-        public ICollection<VehicleDTO> GetVehiclesByManufacturer(string manufacturer)
+        public ICollection<VehicleDTO> GetVehiclesByManufacturerName(string manufacturer)
         {
-            var vehicles = _vehicleRepository.GetVehiclesByManufacturer(manufacturer);
+            var vehicles = _vehicleRepository.GetVehiclesByManufacturerName(manufacturer);
 
             return vehicles.Select(MapVehicleEntityToDTO).ToList();
         }
 
-        public VehicleDTO GetVehicleByModel(string model)
+        public ICollection<VehicleDTO> GetVehicleByModel(string model)
         {
-            var vehicleEntity = _vehicleRepository.GetVehicleByModel(model);
-            if (vehicleEntity == null)
-            {
-                throw new EntityNotFoundException("Vehicle with the specified model not found.");
-            }
+            var vehicles = _vehicleRepository.GetVehicleByModel(model);
 
-            return MapVehicleEntityToDTO(vehicleEntity);
+            return vehicles.Select(MapVehicleEntityToDTO).ToList();
         }
 
         public void UpdateVehicle(VehicleDTO vehicleDTO)
@@ -81,15 +77,13 @@ namespace SmartGarage.Services
             }
 
             var vehicleEntity = MapVehicleDTOToEntity(vehicleDTO);
-
             var existingVehicle = _vehicleRepository.GetVehicleById(vehicleEntity.VehicleID);
+
             if (existingVehicle == null)
             {
                 throw new EntityNotFoundException("Vehicle to update was not found.");
             }
 
-            
-            
             existingVehicle.ManufacturerId = vehicleEntity.ManufacturerId;
             existingVehicle.CarModelID = vehicleEntity.CarModelID;
             existingVehicle.EmployeeId = vehicleEntity.EmployeeId;
@@ -115,7 +109,7 @@ namespace SmartGarage.Services
             int? carModelId = GetCarModelIdByName(vehicleDTO.CarModel);
 
             return new Vehicle
-            {
+            {   
                 VehicleID = vehicleDTO.VehicleID,
                 ManufacturerId = manufacturerId,
                 CarModelID = carModelId,

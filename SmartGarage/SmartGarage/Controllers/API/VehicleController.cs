@@ -63,9 +63,9 @@ namespace SmartGarage.Controllers.API
         }
 
         [HttpGet("manufacturer/{manufacturer}")]
-        public IActionResult GetVehiclesByManufacturer(string manufacturer)
+        public IActionResult GetVehiclesByManufacturerName(string manufacturer)
         {
-            var vehicles = _vehicleDataService.GetVehiclesByManufacturer(manufacturer);
+            var vehicles = _vehicleDataService.GetVehiclesByManufacturerName(manufacturer);
             return Ok(vehicles);
         }
 

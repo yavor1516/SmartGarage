@@ -23,7 +23,8 @@ namespace SmartGarage.Repositories
 
         public ICollection<Vehicle> GetAllVehiclesByEmployeeID(int id)
         {
-           return _dbcontext.Vehicles.Where(x=>x.EmployeeId == id).ToList();
+           return _dbcontext.Vehicles.Where(x=>x.EmployeeId == id)
+                .Include(m => m.Manufacturer).Include(n => n.CarModel).ToList();
         }
 
         public Vehicle GetVehicleById(int id)
@@ -33,14 +34,18 @@ namespace SmartGarage.Repositories
             return vehicle;    
         }
 
-        public ICollection<Vehicle> GetVehiclesByManufacturer(string Manufacturer)
+        public ICollection<Vehicle> GetVehiclesByManufacturerName(string Manufacturer)
         {
-            return _dbcontext.Vehicles.Where(x => x.Manufacturer.BrandName == Manufacturer).ToList();
+            return _dbcontext.Vehicles.Where(x => x.Manufacturer.BrandName == Manufacturer)
+                .Include(m => m.Manufacturer).Include(n => n.CarModel).ToList();
          }
 
-        public Vehicle GetVehicleByModel(string Model)
+        public ICollection<Vehicle> GetVehicleByModel(string Model)
         {
-            return _dbcontext.Vehicles.FirstOrDefault(x=>x.CarModel.Model == Model);
+            var vehicles = _dbcontext.Vehicles.Include(m => m.Manufacturer).Include(m => m.CarModel)
+                .Where(x => x.CarModel.Model == Model).ToList();
+
+            return vehicles;
         }
 
         public void UpdateVehicle(Vehicle vehicle)

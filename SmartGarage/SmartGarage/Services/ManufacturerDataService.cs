@@ -56,7 +56,7 @@ namespace SmartGarage.Services
         public ICollection<ManufacturerDTO> GetAllManufacturers()
         {
             var manufacturers = _manufacturerRepository.GetAllManufacturers();
-            return manufacturers.Select(m => MapManufacturerToDTO(m)).ToList();
+            return manufacturers.Select(MapManufacturerToDTO).ToList();
         }
 
         public void UpdateManufacturer(ManufacturerDTO manufacturerDTO)
@@ -66,21 +66,17 @@ namespace SmartGarage.Services
                 throw new ArgumentNullException(nameof(manufacturerDTO));
             }
 
-            var manufacturer = new Manufacturer
-            {
-                ManufacturerID = manufacturerDTO.ManufacturerID,
-                BrandName = manufacturerDTO.BrandName
-            };
-
+            var manufacturer = MapManufacturerDTOToEntity(manufacturerDTO);
             var existingManufacturer = _manufacturerRepository.GetManufacturerById(manufacturer.ManufacturerID);
+
             if (existingManufacturer == null)
             {
                 throw new InvalidOperationException("Manufacturer does not exist.");
             }
-            existingManufacturer.ManufacturerID = manufacturer.ManufacturerID;
-            existingManufacturer.BrandName = manufacturer.BrandName;
 
-            _manufacturerRepository.UpdateManufacturer(manufacturer);
+            existingManufacturer.BrandName = manufacturerDTO.BrandName;
+
+            _manufacturerRepository.UpdateManufacturer(existingManufacturer);
         }
 
         private ManufacturerDTO MapManufacturerToDTO(Manufacturer manufacturer)
@@ -89,6 +85,19 @@ namespace SmartGarage.Services
             {
                 ManufacturerID = manufacturer.ManufacturerID,
                 BrandName = manufacturer.BrandName
+            };
+        }
+        private Manufacturer MapManufacturerDTOToEntity(ManufacturerDTO manufacturerDTO)
+        {
+            if(manufacturerDTO == null)
+            {
+                return null;
+            }
+
+            return new Manufacturer
+            {
+                ManufacturerID = manufacturerDTO.ManufacturerID,
+                BrandName = manufacturerDTO.BrandName
             };
         }
     }

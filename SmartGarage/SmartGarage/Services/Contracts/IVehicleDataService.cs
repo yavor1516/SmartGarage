@@ -8,8 +8,8 @@ namespace SmartGarage.Services.Contracts
         ICollection<VehicleDTO> GetAllVehicles();
         ICollection<VehicleDTO> GetAllVehiclesByEmployeeID(int employeeId);
         VehicleDTO GetVehicleByID(int vehicleId);
-        ICollection<VehicleDTO> GetVehiclesByManufacturer(string manufacturer);
-        VehicleDTO GetVehicleByModel(string model);
+        ICollection<VehicleDTO> GetVehiclesByManufacturerName(string manufacturer);
+        ICollection<VehicleDTO> GetVehicleByModel(string model);
         void UpdateVehicle(VehicleDTO vehicleDTO);
         Vehicle MapVehicleDTOToEntity(VehicleDTO vehicleDTO);
         VehicleDTO MapVehicleEntityToDTO(Vehicle vehicle);

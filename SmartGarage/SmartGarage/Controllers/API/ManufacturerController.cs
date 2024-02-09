@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartGarage.Exceptions;
 using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
@@ -49,28 +50,27 @@ namespace SmartGarage.Controllers.API
             }
             catch (Exception ex)
             {
-                // Handle exceptions (e.g., validation errors) and return an appropriate response
                 return BadRequest(ex.Message);
             }
         }
 
         //api/Manufacturer/5
         [HttpPut("{id}")]
-        public IActionResult UpdateManufacturer([FromBody] ManufacturerDTO manufacturerDTO)
+        public IActionResult UpdateManufacturer(int id,[FromBody] ManufacturerDTO manufacturerDTO)
         {
-            if (manufacturerDTO == null)
-            {
-                return BadRequest();
-            }
-
             try
             {
+                manufacturerDTO.ManufacturerID = id;
                 _manufacturerService.UpdateManufacturer(manufacturerDTO);
-                return NoContent();
+                return Ok(manufacturerDTO);
             }
-            catch (Exception ex)
+            catch (ArgumentNullException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }
