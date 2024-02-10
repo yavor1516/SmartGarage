@@ -6,10 +6,10 @@ namespace SmartGarage.Services.Contracts
     {
         InvoiceDTO CreateInvoice(InvoiceDTO invoiceDTO);
         ICollection<InvoiceDTO> GetAllInvoices();
-        InvoiceDTO GetInvoiceByEmail(string email);
-        InvoiceDTO GetInvoiceByEmployeeID(int employeeId);
+        ICollection<InvoiceDTO> GetInvoiceByEmail(string email);
+        ICollection<InvoiceDTO> GetInvoiceByEmployeeID(int employeeId);
         InvoiceDTO GetInvoiceById(int invoiceId);
-        InvoiceDTO GetInvoiceByUserID(int userId);
+        ICollection<InvoiceDTO> GetInvoiceByUserID(int userId);
         void UpdateInvoice(InvoiceDTO invoiceDTO);
     }
 }

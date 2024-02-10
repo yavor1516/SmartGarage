@@ -23,15 +23,15 @@ namespace SmartGarage.Repositories
             return _dbcontext.Invoices.ToList();
         }
 
-        public Invoice GetInvoiceByEmail(string email)
+        public ICollection<Invoice> GetInvoiceByEmail(string email)
         {
-            Invoice invoice = _dbcontext.Invoices.FirstOrDefault(x => x.User.Email == email);
+            var invoice = _dbcontext.Invoices.Where(x => x.User.Email == email).ToList();
             return invoice;
         }
 
-        public Invoice GetInvoiceByEmployeeID(int id)
+        public ICollection<Invoice> GetInvoiceByEmployeeID(int id)
         {
-            Invoice invoice = _dbcontext.Invoices.FirstOrDefault(x => x.EmployeeID == id);
+            var invoice = _dbcontext.Invoices.Where(x => x.EmployeeID == id).ToList();
             return invoice;
         }
 
@@ -41,9 +41,9 @@ namespace SmartGarage.Repositories
             return invoice;
         }
 
-        public Invoice GetInvoiceByUserID(int id)
+        public ICollection<Invoice> GetInvoiceByUserID(int id)
         {
-            Invoice invoice = _dbcontext.Invoices.FirstOrDefault(x => x.UserID == id);
+            var invoice = _dbcontext.Invoices.Where(x => x.UserID == id).ToList();
             return invoice;
         }
 

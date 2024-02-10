@@ -40,7 +40,7 @@ namespace SmartGarage.Services
             return invoices.Select(MapInvoiceToDTO).ToList();
         }
 
-        public InvoiceDTO GetInvoiceByEmail(string email)
+        public ICollection<InvoiceDTO> GetInvoiceByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
             {
@@ -49,14 +49,15 @@ namespace SmartGarage.Services
 
             var invoice = _invoiceRepository.GetInvoiceByEmail(email);
 
-            return MapInvoiceToDTO(invoice);
+            return invoice.Select(MapInvoiceToDTO).ToList();
         }
 
-        public InvoiceDTO GetInvoiceByEmployeeID(int employeeId)
+        public ICollection<InvoiceDTO> GetInvoiceByEmployeeID(int employeeId)
         {
+            
             var invoice = _invoiceRepository.GetInvoiceByEmployeeID(employeeId);
 
-            return MapInvoiceToDTO(invoice);
+            return invoice.Select(MapInvoiceToDTO).ToList();
         }
 
         public InvoiceDTO GetInvoiceById(int invoiceId)
@@ -66,11 +67,11 @@ namespace SmartGarage.Services
             return MapInvoiceToDTO(invoice);
         }
 
-        public InvoiceDTO GetInvoiceByUserID(int userId)
+        public ICollection<InvoiceDTO> GetInvoiceByUserID(int userId)
         {
             var invoice = _invoiceRepository.GetInvoiceByUserID(userId);
 
-            return MapInvoiceToDTO(invoice);
+            return invoice.Select(MapInvoiceToDTO).ToList();
         }
 
         public void UpdateInvoice(InvoiceDTO invoiceDTO)
@@ -80,20 +81,19 @@ namespace SmartGarage.Services
                 throw new ArgumentNullException(nameof(invoiceDTO));
             }
 
-            var invoice = new Invoice
-            {
-                InvoiceId = invoiceDTO.InvoiceID,
-                UserID = invoiceDTO.UserID,
-                EmployeeID = invoiceDTO.EmployeeID,
-            };
+            var invoiceEntity = MapInvoiceDTOToEntity(invoiceDTO);
+            var existingInvoice = _invoiceRepository.GetInvoiceById(invoiceEntity.InvoiceId);
 
-            var existingInvoice = _invoiceRepository.GetInvoiceById(invoice.InvoiceId);
             if (existingInvoice == null)
             {
                 throw new EntityNotFoundException("Invoice not found.");
             }
 
-            _invoiceRepository.UpdateInvoice(invoice);
+            existingInvoice.InvoiceId=invoiceEntity.InvoiceId;
+            existingInvoice.UserID = invoiceEntity.UserID;
+            existingInvoice.EmployeeID=invoiceEntity.EmployeeID;
+
+            _invoiceRepository.UpdateInvoice(existingInvoice);
         }
 
         private InvoiceDTO MapInvoiceToDTO(Invoice invoice)
@@ -104,6 +104,16 @@ namespace SmartGarage.Services
                 UserID = invoice.UserID,
                 EmployeeID = invoice.EmployeeID,
                 LinkedVehicles = (ICollection<LinkedVehiclesDTO>)invoice.LinkedVehicles
+            };
+        }
+        private Invoice MapInvoiceDTOToEntity(InvoiceDTO invoiceDTO)
+        {
+            return new Invoice
+            {
+                InvoiceId = invoiceDTO.InvoiceID,
+                UserID = invoiceDTO.UserID,
+                EmployeeID = invoiceDTO.EmployeeID,
+                LinkedVehicles = (ICollection<LinkedVehicles>)invoiceDTO.LinkedVehicles
             };
         }
     }
