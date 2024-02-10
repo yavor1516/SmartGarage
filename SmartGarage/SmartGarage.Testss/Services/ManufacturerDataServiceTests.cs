@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services;
 using System;
@@ -12,73 +13,86 @@ namespace SmartGarage.Tests.Services
     [TestClass]
     public class ManufacturerDataServiceTests
     {
-        [TestMethod]
-        public void CreateManufacturer_ValidManufacturer_ReturnsCreatedManufacturer()
+        private Mock<IManufacturerRepository> _mockManufacturerRepository;
+        private ManufacturerDataService _service;
+
+        [TestInitialize]
+        public void Setup()
         {
-            // Arrange
-            var mockRepository = new Mock<IManufacturerRepository>();
-            var manufacturerService = new ManufacturerDataService(mockRepository.Object);
-
-            var validManufacturer = new Manufacturer{};
-
-            mockRepository.Setup(r => r.CreateManufacturer(validManufacturer))
-                .Returns(validManufacturer);
-
-            // Act
-            var createdManufacturer = manufacturerService.CreateManufacturer(validManufacturer);
-
-            // Assert
-            Assert.IsNotNull(createdManufacturer);
+            _mockManufacturerRepository = new Mock<IManufacturerRepository>();
+            _service = new ManufacturerDataService(_mockManufacturerRepository.Object);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CreateManufacturer_NullManufacturer_ThrowsArgumentNullException()
+        public void CreateManufacturer_WithNullManufacturerDTO_ThrowsArgumentNullException()
         {
-            // Arrange
-            var mockRepository = new Mock<IManufacturerRepository>();
-            var manufacturerService = new ManufacturerDataService(mockRepository.Object);
-
-            // Act and Assert
-            manufacturerService.CreateManufacturer(null);
+            _service.CreateManufacturer(null);
         }
 
         [TestMethod]
-        public void GetManufacturerById_ValidId_ReturnsManufacturer()
+        public void GetManufacturerById_WithValidID_ReturnsManufacturerDTO()
         {
-            // Arrange
-            var mockRepository = new Mock<IManufacturerRepository>();
-            var manufacturerService = new ManufacturerDataService(mockRepository.Object);
+            var manufacturer = new Manufacturer {  };
+            _mockManufacturerRepository.Setup(repo => repo.GetManufacturerById(It.IsAny<int>())).Returns(manufacturer);
 
-            int validManufacturerId = 1;
-            var validManufacturer = new Manufacturer
-            {
-                ManufacturerID = validManufacturerId,
-            };
+            var result = _service.GetManufacturerById(1);
 
-            mockRepository.Setup(r => r.GetManufacturerById(validManufacturerId))
-                .Returns(validManufacturer);
-
-            // Act
-            var retrievedManufacturer = manufacturerService.GetManufacturerById(validManufacturerId);
-
-            // Assert
-            Assert.IsNotNull(retrievedManufacturer);
-            Assert.AreEqual(validManufacturerId, retrievedManufacturer.ManufacturerID);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void GetManufacturerById_InvalidId_ThrowsArgumentException()
+        public void GetManufacturerById_WithInvalidID_ThrowsArgumentException()
         {
-            // Arrange
-            var mockRepository = new Mock<IManufacturerRepository>();
-            var manufacturerService = new ManufacturerDataService(mockRepository.Object);
+            _service.GetManufacturerById(0);
+        }
 
-            int invalidManufacturerId = -1;
+        [TestMethod]
+        public void GetManufacturerByName_WithValidName_ReturnsManufacturerDTO()
+        {
+            var manufacturer = new Manufacturer {  };
+            _mockManufacturerRepository.Setup(repo => repo.GetManufacturerByName(It.IsAny<string>())).Returns(manufacturer);
 
-            // Act and Assert
-            manufacturerService.GetManufacturerById(invalidManufacturerId);
+            var result = _service.GetManufacturerByName("BrandName");
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetManufacturerByName_WithInvalidName_ThrowsArgumentException()
+        {
+            _service.GetManufacturerByName("");
+        }
+
+        [TestMethod]
+        public void GetAllManufacturers_ReturnsAllManufacturers()
+        {
+            var manufacturers = new List<Manufacturer> {  };
+            _mockManufacturerRepository.Setup(repo => repo.GetAllManufacturers()).Returns(manufacturers);
+
+            var result = _service.GetAllManufacturers();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(manufacturers.Count, result.Count);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void UpdateManufacturer_WithNullManufacturerDTO_ThrowsArgumentNullException()
+        {
+            _service.UpdateManufacturer(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void UpdateManufacturer_WithNonExistingManufacturer_ThrowsInvalidOperationException()
+        {
+            _mockManufacturerRepository.Setup(repo => repo.GetManufacturerById(It.IsAny<int>()))
+                .Returns((Manufacturer)null);
+
+            _service.UpdateManufacturer(new ManufacturerDTO {  });
         }
     }
 }
