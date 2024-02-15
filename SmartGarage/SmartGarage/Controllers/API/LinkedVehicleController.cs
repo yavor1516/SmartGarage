@@ -14,85 +14,147 @@ namespace SmartGarage.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LinkedVehicleController : ControllerBase
+    public class LinkedVehiclesController : ControllerBase
     {
-        private readonly ILinkedVehiclesDataService _linkedVehicleService;
+        private readonly ILinkedVehiclesDataService _linkedVehiclesDataService;
 
-        public LinkedVehicleController(ILinkedVehiclesDataService linkedVehicleService)
+        public LinkedVehiclesController(ILinkedVehiclesDataService linkedVehiclesDataService)
         {
-            _linkedVehicleService = linkedVehicleService;
+            _linkedVehiclesDataService = linkedVehiclesDataService ?? throw new ArgumentNullException(nameof(linkedVehiclesDataService));
         }
 
-        // GET: api/LinkedVehicle/5
+        [HttpPost]
+        public ActionResult<LinkedVehiclesDTO> CreateLinkedVehicle([FromBody] LinkedVehiclesDTO linkedVehiclesDTO)
+        {
+            if (linkedVehiclesDTO == null)
+                return BadRequest();
+
+            var createdLinkedVehicle = _linkedVehiclesDataService.CreateLinkedVehicle(linkedVehiclesDTO);
+
+            return CreatedAtAction(nameof(GetLinkedVehicleById), new { id = createdLinkedVehicle.LinkedVehiclelID }
+            , createdLinkedVehicle);
+        }
+
         [HttpGet("{id}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleById(int id)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleById(id);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet("customer/{customerId}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByCustomerId(int customerId)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByCustomerId(customerId);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet("customer/name/{customerName}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByCustomerName(string customerName)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByCustomerName(customerName);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet("employee/{employeeId}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByEmployeeId(int employeeId)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByEmployeeId(employeeId);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet("employee/name/{employeeName}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByEmployeeName(string employeeName)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByEmployeeName(employeeName);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet("licenseplate/{licensePlate}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByLicensePlate(string licensePlate)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByLicensePlate(licensePlate);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet("model/{model}")]
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByModelName(string model)
+        {
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByModelName(model);
+
+            if (linkedVehicleDTO == null)
+                return NotFound();
+
+            return Ok(linkedVehicleDTO);
+        }
+
+        [HttpGet]
         public ActionResult<ICollection<LinkedVehiclesDTO>> GetAllLinkedVehiclesById(int id)
         {
-            var linkedVehicles = _linkedVehicleService.GetAllLinkedVehiclesById(id);
-            if (linkedVehicles == null || !linkedVehicles.Any())
-            {
-                return NotFound();
-            }
+            var linkedVehiclesDTOs = _linkedVehiclesDataService.GetAllLinkedVehiclesById(id);
 
-            return Ok(linkedVehicles);
+            if (linkedVehiclesDTOs == null || linkedVehiclesDTOs.Count == 0)
+                return NoContent();
+
+            return Ok(linkedVehiclesDTOs);
         }
 
-        // GET: api/LinkedVehicle/5
-        [HttpGet("{id}")]
-        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicle(int id)
+        [HttpPut]
+        public IActionResult UpdateLinkedVehicle([FromBody] LinkedVehiclesDTO linkedVehiclesDTO)
         {
-            var linkedVehicle = _linkedVehicleService.GetLinkedVehicleById(id);
-
-            if (linkedVehicle == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(linkedVehicle);
-        }
-
-        // POST: api/LinkedVehicle
-        [HttpPost]
-        public ActionResult<LinkedVehiclesDTO> CreateLinkedVehicle(LinkedVehiclesDTO linkedVehicleDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var createdLinkedVehicle = _linkedVehicleService.CreateLinkedVehicle(linkedVehicleDto);
-            return CreatedAtAction(nameof(GetLinkedVehicle), new { id = createdLinkedVehicle.LinkedVehiclelID }, createdLinkedVehicle);
-        }
-
-        // PUT: api/LinkedVehicle/5
-        [HttpPut("{id}")]
-        public IActionResult UpdateLinkedVehicle(int id, LinkedVehiclesDTO linkedVehicleDto)
-        {
-            if (id != linkedVehicleDto.LinkedVehiclelID)
-            {
+            if (linkedVehiclesDTO == null)
                 return BadRequest();
-            }
 
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                _linkedVehiclesDataService.UpdateLinkedVehicle(linkedVehiclesDTO);
+                return NoContent();
             }
-
-            _linkedVehicleService.UpdateLinkedVehicle(linkedVehicleDto);
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE: api/LinkedVehicle/5
-        /*[HttpDelete("{id}")]
-        public IActionResult DeleteLinkedVehicle(int id)
-        {
-            var linkedVehicle = _linkedVehicleService.GetLinkedVehicleById(id);
-            if (linkedVehicle == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public IActionResult DeleteLinkedVehicle(int id)
+        //{
+        //    if (id <= 0)
+        //        return BadRequest("Invalid ID");
 
-            _linkedVehicleService.DeleteLinkedVehicle(id);
-            return NoContent();
-        }*/
+        //    try
+        //    {
+        //        _linkedVehiclesDataService.DeleteLinkedVehicle(id);
+        //        return NoContent();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

@@ -98,7 +98,7 @@ namespace SmartGarage.Services
 
         public ICollection<LinkedVehiclesDTO> GetAllLinkedVehiclesById(int id)
         {
-            if (id <= 0) throw new ArgumentException("ID must be greater than zero.", nameof(id));
+           // if (id <= 0) throw new ArgumentException("ID must be greater than zero.", nameof(id));
 
             var linkedVehiclesEntities = _linkedVehiclesRepository.GetAllLinkedVehiclesById(id);
 
@@ -115,34 +115,22 @@ namespace SmartGarage.Services
         }
 
 
-        private Service MapServiceDTOToEntity(ServiceDTO serviceDTO)
-        {
-            return new Service
-            {
-                // Assuming Service has a similar structure to ServiceDTO
-                ServiceID = serviceDTO.ServiceID,
-                Name = serviceDTO.Name,
-                Price = serviceDTO.Price
-                // Map other properties as needed
-            };
-        }
-
-
         private LinkedVehicles MapLinkedVehicleDTOToEntity(LinkedVehiclesDTO linkedVehiclesDTO)
         {
             if (linkedVehiclesDTO == null)
             {
                 return null;
             }
+
             var servicesEntities = linkedVehiclesDTO.Services?.Select(MapServiceDTOToEntity).ToList();
 
             return new LinkedVehicles
             {
                 LinkedVehiclelID = linkedVehiclesDTO.LinkedVehiclelID,
                 Model = linkedVehiclesDTO.Model,
-                Vehicle = MapVehicleDTOToEntity(linkedVehiclesDTO.Vehicle),
-                Employee = MapEmployeeDTOToEntity(linkedVehiclesDTO.Employee),
-                Customer = MapCustomerDTOToEntity(linkedVehiclesDTO.Customer),
+                VehicleID = linkedVehiclesDTO.VehicleID,
+                EmployeeID = linkedVehiclesDTO.EmployeeID,
+                CustomerID = linkedVehiclesDTO.CustomerID,
                 LicensePlate = linkedVehiclesDTO.LicensePlate,
                 VIN = linkedVehiclesDTO.VIN,
                 YearOfCreation = linkedVehiclesDTO.YearOfCreation,
@@ -150,7 +138,6 @@ namespace SmartGarage.Services
             };
         }
 
-        // Helper method to map LinkedVehicles entity to LinkedVehiclesDTO
         private LinkedVehiclesDTO MapLinkedVehicleEntityToDTO(LinkedVehicles linkedVehicleEntity)
         {
             if (linkedVehicleEntity == null)
@@ -162,13 +149,32 @@ namespace SmartGarage.Services
             {
                 LinkedVehiclelID = linkedVehicleEntity.LinkedVehiclelID,
                 Model = linkedVehicleEntity.Model,
-                Vehicle = MapVehicleEntityToDTO(linkedVehicleEntity.Vehicle),
-                Employee = MapEmployeeEntityToDTO(linkedVehicleEntity.Employee),
-                Customer = MapCustomerEntityToDTO(linkedVehicleEntity.Customer),
+                VehicleID = (int)linkedVehicleEntity.VehicleID,
+                EmployeeID = (int)linkedVehicleEntity.EmployeeID,
+                CustomerID = (int)linkedVehicleEntity.CustomerID,
                 LicensePlate = linkedVehicleEntity.LicensePlate,
                 VIN = linkedVehicleEntity.VIN,
                 YearOfCreation = linkedVehicleEntity.YearOfCreation,
-                Services = (ICollection<ServiceDTO>)linkedVehicleEntity.Services
+                Services = linkedVehicleEntity.Services?.Select(MapServiceEntityToDTO).ToList()
+            };
+        }
+
+        private Service MapServiceDTOToEntity(ServiceDTO serviceDTO)
+        {
+            return new Service
+            {
+                ServiceID = serviceDTO.ServiceID,
+                Name = serviceDTO.Name,
+                Price = serviceDTO.Price
+            };
+        }
+        private ServiceDTO MapServiceEntityToDTO(Service serviceEntity)
+        {
+            return new ServiceDTO
+            {
+                ServiceID = serviceEntity.ServiceID,
+                Name = serviceEntity.Name,
+                Price = serviceEntity.Price
             };
         }
         private VehicleDTO MapVehicleEntityToDTO(Vehicle vehicleEntity)

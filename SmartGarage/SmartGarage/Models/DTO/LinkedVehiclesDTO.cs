@@ -10,13 +10,13 @@ namespace SmartGarage.Models.DTO
         public string? Model { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public VehicleDTO? Vehicle { get; set; }
+        public int VehicleID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public EmployeeDTO? Employee { get; set; }
+        public int EmployeeID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public CustomerDTO? Customer { get; set; }
+        public int CustomerID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
         [MinLength(6)]
