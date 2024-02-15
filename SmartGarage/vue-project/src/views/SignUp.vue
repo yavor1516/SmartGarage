@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import signinen from "@/components/sign-in-en.vue";
+    import signinen from "@/components/sign-up-en.vue";
     export default {
         name: "About",
         components: {
@@ -27,6 +27,4 @@
         transform: scale(2);
         transform-origin: top right;
     }
-   
-
 </style>

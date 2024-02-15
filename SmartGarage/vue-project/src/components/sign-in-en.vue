@@ -11,11 +11,6 @@
                 <input type="text" v-model="username" placeholder="E-mail" /><img v-if="username.length >= 4" src="../assets/ok.svg" alt="">
             </div>
 
-
-
-
-
-
         </div>
 
         <div class="in">
