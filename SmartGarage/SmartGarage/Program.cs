@@ -43,6 +43,7 @@ namespace SmartGarage
             ////////////////
 
             //Momcheta tuka registrirame REpositories
+            builder.Services.AddScoped<ILinkedVehiclesRepository, LinkedVehiclesRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
             builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
@@ -50,8 +51,11 @@ namespace SmartGarage
             builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
             builder.Services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
             builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             //Momcheta tuka registrirame Services
+            builder.Services.AddTransient<IEmployeeDataService, EmployeeDataService>();
+            builder.Services.AddTransient<ILinkedVehiclesDataService, LinkedVehiclesDataService>();
             builder.Services.AddTransient<IInvoiceDataService, InvoiceDataService>();
             builder.Services.AddTransient<IManufacturerDataService, ManufacturerDataService>();
             builder.Services.AddTransient<ICustomerDataService, CustomerDataService>();

@@ -114,12 +114,27 @@ namespace SmartGarage.Services
             _linkedVehiclesRepository.UpdateLinkedVehicles(linkedVehicleEntity);
         }
 
+
+        private Service MapServiceDTOToEntity(ServiceDTO serviceDTO)
+        {
+            return new Service
+            {
+                // Assuming Service has a similar structure to ServiceDTO
+                ServiceID = serviceDTO.ServiceID,
+                Name = serviceDTO.Name,
+                Price = serviceDTO.Price
+                // Map other properties as needed
+            };
+        }
+
+
         private LinkedVehicles MapLinkedVehicleDTOToEntity(LinkedVehiclesDTO linkedVehiclesDTO)
         {
             if (linkedVehiclesDTO == null)
             {
                 return null;
             }
+            var servicesEntities = linkedVehiclesDTO.Services?.Select(MapServiceDTOToEntity).ToList();
 
             return new LinkedVehicles
             {
@@ -131,7 +146,7 @@ namespace SmartGarage.Services
                 LicensePlate = linkedVehiclesDTO.LicensePlate,
                 VIN = linkedVehiclesDTO.VIN,
                 YearOfCreation = linkedVehiclesDTO.YearOfCreation,
-                Services = (ICollection<Service>)linkedVehiclesDTO.Services
+                Services = servicesEntities
             };
         }
 
