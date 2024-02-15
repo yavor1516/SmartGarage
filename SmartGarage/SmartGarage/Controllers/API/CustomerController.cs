@@ -103,13 +103,38 @@ namespace SmartGarage.Controllers.API
             }
         }
 
+        [HttpGet("{customerId}/linkedvehicles")]
+        public IActionResult GetLinkedVehicles(int customerId)
+        {
+            try
+            {
+                var customer = _customerDataService.GetCustomerById(customerId);
+
+                if (customer == null)
+                {
+                    return NotFound();
+                }
+
+                if (customer.LinkedVehicles == null || customer.LinkedVehicles.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return Ok(customer.LinkedVehicles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
         [HttpPut]
         public IActionResult UpdateCustomer([FromBody] CustomerDTO customerDTO)
         {
             try
             {
                 _customerDataService.UpdateCustomer(customerDTO);
-                return NoContent();
+                return Ok();
             }
             catch (ArgumentNullException ex)
             {
