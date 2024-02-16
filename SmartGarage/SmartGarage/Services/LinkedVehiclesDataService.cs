@@ -26,9 +26,9 @@ namespace SmartGarage.Services
             if (linkedVehiclesDTO == null) throw new ArgumentNullException(nameof(linkedVehiclesDTO));
 
             var linkedVehicleEntity = MapLinkedVehicleDTOToEntity(linkedVehiclesDTO);
+            linkedVehicleEntity.Services = _dbContext.Services.Where(s => linkedVehiclesDTO.ServiceIDs.Contains(s.ServiceID)).ToList();
             var createdLinkedVehicle = _linkedVehiclesRepository.CreateLinkedVehicle(linkedVehicleEntity);
 
-            _dbContext.Entry(createdLinkedVehicle).Collection(lv => lv.Services).Load();
 
             return MapLinkedVehicleEntityToDTO(createdLinkedVehicle);
         }
@@ -137,7 +137,7 @@ namespace SmartGarage.Services
                 LicensePlate = linkedVehiclesDTO.LicensePlate,
                 VIN = linkedVehiclesDTO.VIN,
                 YearOfCreation = linkedVehiclesDTO.YearOfCreation,
-                ServiceID = linkedVehiclesDTO.ServiceID
+               // ServiceID = linkedVehiclesDTO.ServiceID
             };
         }
 
@@ -148,7 +148,8 @@ namespace SmartGarage.Services
                 return null;
             }
 
-            var serviceName = _dbContext.Services.FirstOrDefault(s => s.ServiceID == linkedVehicleEntity.ServiceID)?.Name;
+            var serviceIDs = linkedVehicleEntity.Services?.Select(s => s.ServiceID).ToList();
+            var serviceNames = linkedVehicleEntity.Services?.Select(s => s.Name).ToList();
 
             return new LinkedVehiclesDTO
             {
@@ -160,8 +161,8 @@ namespace SmartGarage.Services
                 LicensePlate = linkedVehicleEntity.LicensePlate,
                 VIN = linkedVehicleEntity.VIN,
                 YearOfCreation = linkedVehicleEntity.YearOfCreation,
-                ServiceID=linkedVehicleEntity.ServiceID,
-                ServiceName = serviceName
+                ServiceIDs = serviceIDs,
+                ServiceNames=serviceNames
             };
         }
 

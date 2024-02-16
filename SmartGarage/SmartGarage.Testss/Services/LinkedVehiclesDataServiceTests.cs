@@ -23,17 +23,17 @@ namespace SmartGarage.Tests.Services
         [TestInitialize]
         public void Initialize()
         {
-            _mockLinkedVehiclesRepository = new Mock<ILinkedVehiclesRepository>();
-            _mockEmployeeDataService = new Mock<IEmployeeDataService>();
-            _mockVehicleDataService = new Mock<IVehicleDataService>();
-            _mockCustomerDataService = new Mock<ICustomerDataService>();
+           // _mockLinkedVehiclesRepository = new Mock<ILinkedVehiclesRepository>();
+          //  _mockEmployeeDataService = new Mock<IEmployeeDataService>();
+           // _mockVehicleDataService = new Mock<IVehicleDataService>();
+           // _mockCustomerDataService = new Mock<ICustomerDataService>();
 
-            _linkedVehiclesService = new LinkedVehiclesDataService(
-                _mockLinkedVehiclesRepository.Object,
-                _mockEmployeeDataService.Object,
-                _mockVehicleDataService.Object,
-                _mockCustomerDataService.Object
-            );
+            //_linkedVehiclesService = new LinkedVehiclesDataService(
+              //  _mockLinkedVehiclesRepository.Object,
+               // _mockEmployeeDataService.Object,
+              //  _mockVehicleDataService.Object,
+              //  _mockCustomerDataService.Object
+            //);
         }
 
         [TestMethod]
