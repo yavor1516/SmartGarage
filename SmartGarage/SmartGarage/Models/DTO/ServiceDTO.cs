@@ -5,6 +5,8 @@ namespace SmartGarage.Models.DTO
     public class ServiceDTO
     {
         public int ServiceID { get; set; }
+        public int EmployeeID { get; set; }
+        public bool Status { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
         public string Name { get; set; }

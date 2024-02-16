@@ -84,6 +84,7 @@ namespace SmartGarage.Services
             var service = new Service
             {
                 // Map properties from serviceDTO to service
+                EmployeeID = serviceDTO.EmployeeID,
                 Name = serviceDTO.Name,
                 Price = serviceDTO.Price
                 // Add any other properties that need to be mapped
@@ -109,9 +110,11 @@ namespace SmartGarage.Services
             var service = new Service
             {
                 ServiceID = serviceDTO.ServiceID,
+                EmployeeID = serviceDTO.EmployeeID,
+                Status = serviceDTO.Status,
                 Name = serviceDTO.Name,
                 Price = serviceDTO.Price
-                // Map other properties as needed
+                
             };
 
             var existingService = _serviceRepository.GetServiceByID(service.ServiceID);
@@ -129,6 +132,8 @@ namespace SmartGarage.Services
             return new ServiceDTO
             {
                 ServiceID = service.ServiceID,
+                EmployeeID = service.EmployeeID,
+                Status = service.Status,
                 Name = service.Name,
                 Price = service.Price
             };

@@ -30,7 +30,7 @@ namespace SmartGarage.Models.DTO
         [Required(ErrorMessage = "The {0} field is required!")]
         [Range(1887, int.MaxValue, ErrorMessage = "Year must be greater than or equal to 1887.")]
         public int YearOfCreation { get; set; }
-
-        public ICollection<ServiceDTO>? Services { get; set; }
+        public int? ServiceID { get; set; }
+        public string ServiceName { get; set; }
     }
 }

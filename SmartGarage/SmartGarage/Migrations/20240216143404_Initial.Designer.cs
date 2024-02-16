@@ -12,8 +12,8 @@ using SmartGarage;
 namespace SmartGarage.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20240131123211_fix")]
-    partial class fix
+    [Migration("20240216143404_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -134,6 +134,9 @@ namespace SmartGarage.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ServiceID")
+                        .HasColumnType("int");
+
                     b.Property<string>("VIN")
                         .IsRequired()
                         .HasMaxLength(17)
@@ -152,6 +155,8 @@ namespace SmartGarage.Migrations
                     b.HasIndex("EmployeeID");
 
                     b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ServiceID");
 
                     b.HasIndex("VehicleID");
 
@@ -177,11 +182,14 @@ namespace SmartGarage.Migrations
 
             modelBuilder.Entity("Service", b =>
                 {
-                    b.Property<int>("ServiceId")
+                    b.Property<int>("ServiceID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceID"), 1L, 1);
+
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("int");
 
                     b.Property<int?>("LinkedVehiclesLinkedVehiclelID")
                         .HasColumnType("int");
@@ -193,7 +201,12 @@ namespace SmartGarage.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ServiceId");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ServiceID");
+
+                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("LinkedVehiclesLinkedVehiclelID");
 
@@ -330,6 +343,10 @@ namespace SmartGarage.Migrations
                         .WithMany("LinkedVehicles")
                         .HasForeignKey("InvoiceId");
 
+                    b.HasOne("Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceID");
+
                     b.HasOne("Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleID");
@@ -338,14 +355,24 @@ namespace SmartGarage.Migrations
 
                     b.Navigation("Employee");
 
+                    b.Navigation("Service");
+
                     b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("Service", b =>
                 {
+                    b.HasOne("Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LinkedVehicles", null)
-                        .WithMany("Survices")
+                        .WithMany("Services")
                         .HasForeignKey("LinkedVehiclesLinkedVehiclelID");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Vehicle", b =>
@@ -388,7 +415,7 @@ namespace SmartGarage.Migrations
 
             modelBuilder.Entity("LinkedVehicles", b =>
                 {
-                    b.Navigation("Survices");
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Manufacturer", b =>
