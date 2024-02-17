@@ -96,6 +96,7 @@ namespace SmartGarage.Services
             var vehicles = _vehicleRepository.GetAllVehicles();
 
             return vehicles.Select(MapVehicleEntityToDTO).ToList();
+
         }
 
         public Vehicle MapVehicleDTOToEntity(VehicleDTO vehicleDTO)

@@ -15,5 +15,6 @@ export default {
 <style scoped>
 .body {
   padding: 20px;
+
 }
 </style>
