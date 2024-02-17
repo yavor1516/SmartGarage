@@ -1,5 +1,7 @@
 <script setup>
-import TheWelcome from '../components/HelloWorld.vue'
+
+    import TheWelcome from '../components/HelloWorld.vue'
+
 </script>
 
 <template>

@@ -20,11 +20,12 @@
 
 <style>
     .box {
-        position: fixed;
+        position: absolute;
         /* Align the element to the right border */
-        right: 0;
+
         top: 20vh;
+        left: 10%;
         transform: scale(2);
-        transform-origin: top right;
+        transform-origin: top left;
     }
 </style>

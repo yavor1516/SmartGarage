@@ -1,5 +1,6 @@
 @import './base.css';
-
+@import url("node_modules/@egjs/vue3-flicking/dist/flicking.css");
+@import url("node_modules/@egjs/vue3-flicking/dist/flicking-inline.css");
 #app {
   max-width: 1280px;
   margin: 0 auto;

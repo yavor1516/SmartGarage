@@ -18,8 +18,10 @@ export default {
         color: #fff;
         padding: 20px;
         text-align: center;
-        position:absolute;
-        bottom:0;
-
+        position: fixed;
+        left:0;       
+        bottom: 0;
+        width: 100%;
+     
     }
 </style>

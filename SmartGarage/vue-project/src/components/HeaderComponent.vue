@@ -1,12 +1,13 @@
 <template>
     <div class="header">
         <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
+        
         <!-- Add navigation links or other header content here -->
         <nav class="navi">
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
             <RouterLink to="/login">Login</RouterLink>
+            <RouterLink to="/profile">Profile</RouterLink>
         </nav>
     </div>
 </template>
