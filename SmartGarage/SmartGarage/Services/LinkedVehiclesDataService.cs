@@ -1,4 +1,5 @@
-﻿using SmartGarage.Models.DTO;
+﻿using SmartGarage.Models;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
 
@@ -26,39 +27,29 @@ namespace SmartGarage.Services
             if (linkedVehiclesDTO == null) throw new ArgumentNullException(nameof(linkedVehiclesDTO));
 
             var linkedVehicleEntity = MapLinkedVehicleDTOToEntity(linkedVehiclesDTO);
-            linkedVehicleEntity.Services = _dbContext.Services.Where(s => linkedVehiclesDTO.ServiceIDs.Contains(s.ServiceID)).ToList();
+            //linkedVehicleEntity. = _dbContext.Services.Where(s => linkedVehiclesDTO.ServiceIDs.Contains(s.ServiceID)).ToList();
             var createdLinkedVehicle = _linkedVehiclesRepository.CreateLinkedVehicle(linkedVehicleEntity);
 
 
             return MapLinkedVehicleEntityToDTO(createdLinkedVehicle);
         }
 
-        public LinkedVehiclesDTO GetLinkedVehicleByCustomerId(int customerId)
+        public ICollection<LinkedVehiclesDTO> GetLinkedVehicleByCustomerId(int customerId)
         {
             if (customerId <= 0) throw new ArgumentException("Customer ID must be greater than zero.", nameof(customerId));
 
             var linkedVehicleEntity = _linkedVehiclesRepository.GetLinkedVehiclesByCustomerId(customerId);
 
-            return MapLinkedVehicleEntityToDTO(linkedVehicleEntity);
+            return linkedVehicleEntity.Select(MapLinkedVehicleEntityToDTO).ToList();
         }
 
-        public LinkedVehiclesDTO GetLinkedVehicleByCustomerName(string customerName)
-        {
-            if (string.IsNullOrWhiteSpace(customerName))
-                throw new ArgumentException("Customer name cannot be null or whitespace.", nameof(customerName));
-
-            var linkedVehicleEntity = _linkedVehiclesRepository.GetLinkedVehiclesByCustomerName(customerName);
-
-            return MapLinkedVehicleEntityToDTO(linkedVehicleEntity);
-        }
-
-        public LinkedVehiclesDTO GetLinkedVehicleByEmployeeId(int employeeId)
+        public ICollection<LinkedVehiclesDTO> GetLinkedVehicleByEmployeeId(int employeeId)
         {
             if (employeeId <= 0) throw new ArgumentException("Employee ID must be greater than zero.", nameof(employeeId));
 
             var linkedVehicleEntity = _linkedVehiclesRepository.GetLinkedVehiclesByEmployeeId(employeeId);
 
-            return MapLinkedVehicleEntityToDTO(linkedVehicleEntity);
+            return linkedVehicleEntity.Select(MapLinkedVehicleEntityToDTO).ToList();
         }
 
         public LinkedVehiclesDTO GetLinkedVehicleByEmployeeName(string employeeName)
@@ -89,15 +80,23 @@ namespace SmartGarage.Services
 
             return MapLinkedVehicleEntityToDTO(linkedVehicleEntity);
         }
-
-        public LinkedVehiclesDTO GetLinkedVehicleByModelName(string model)
+        public LinkedVehiclesDTO GetLinkedVehicleByIdWithServices(int id)
         {
-            if (string.IsNullOrWhiteSpace(model))
-                throw new ArgumentException("Model name cannot be null or whitespace.", nameof(model));
+            if (id <= 0) throw new ArgumentException("ID must be greater than zero.", nameof(id));
 
-            var linkedVehicleEntity = _linkedVehiclesRepository.GetLinkedVehiclesByModelName(model);
+            var linkedVehicleEntity = _linkedVehiclesRepository.GetLinkedVehicleByIdWithServices(id);
 
             return MapLinkedVehicleEntityToDTO(linkedVehicleEntity);
+        }
+
+        public ICollection<LinkedVehiclesDTO> GetLinkedVehicleByModelID(int model)
+        {
+            if (model<0)
+                throw new ArgumentException("Model name cannot be null or whitespace.", nameof(model));
+
+            var linkedVehicleEntity = _linkedVehiclesRepository.GetLinkedVehiclesByModelID(model);
+
+            return linkedVehicleEntity.Select(MapLinkedVehicleEntityToDTO).ToList();
         }
 
         public ICollection<LinkedVehiclesDTO> GetAllLinkedVehiclesById(int id)
@@ -118,7 +117,6 @@ namespace SmartGarage.Services
             _linkedVehiclesRepository.UpdateLinkedVehicles(linkedVehicleEntity);
         }
 
-
         private LinkedVehicles MapLinkedVehicleDTOToEntity(LinkedVehiclesDTO linkedVehiclesDTO)
         {
             if (linkedVehiclesDTO == null)
@@ -129,15 +127,23 @@ namespace SmartGarage.Services
 
             return new LinkedVehicles
             {
-                LinkedVehiclelID = linkedVehiclesDTO.LinkedVehiclelID,
-                Model = linkedVehiclesDTO.Model,
-                VehicleID = linkedVehiclesDTO.VehicleID,
+                LinkedVehicleID = linkedVehiclesDTO.LinkedVehicleID,
+                ModelID = linkedVehiclesDTO.ModelID,
+                ManufacturerID = linkedVehiclesDTO.ManufacturerID,
                 EmployeeID = linkedVehiclesDTO.EmployeeID,
                 CustomerID = linkedVehiclesDTO.CustomerID,
                 LicensePlate = linkedVehiclesDTO.LicensePlate,
                 VIN = linkedVehiclesDTO.VIN,
                 YearOfCreation = linkedVehiclesDTO.YearOfCreation,
-               // ServiceID = linkedVehiclesDTO.ServiceID
+                InvoiceID = linkedVehiclesDTO.InvoiceID,
+                LinkedVehicleServices = linkedVehiclesDTO.LinkedVehicleServices
+                    ?.Select(s => new LinkedVehicleService
+                    {
+                        LinkedVehicleID = s.LinkedVehicleID,
+                        ServiceID = s.ServiceID
+                    })
+                    .ToList(),
+                // ServiceID = linkedVehiclesDTO.ServiceID
             };
         }
 
@@ -148,21 +154,27 @@ namespace SmartGarage.Services
                 return null;
             }
 
-            var serviceIDs = linkedVehicleEntity.Services?.Select(s => s.ServiceID).ToList();
-            var serviceNames = linkedVehicleEntity.Services?.Select(s => s.Name).ToList();
+           // var serviceIDs = linkedVehicleEntity.Services?.Select(s => s.ServiceID).ToList();
+            //var serviceNames = linkedVehicleEntity.Services?.Select(s => s.Name).ToList();
 
             return new LinkedVehiclesDTO
             {
-                LinkedVehiclelID = linkedVehicleEntity.LinkedVehiclelID,
-                Model = linkedVehicleEntity.Model,
-                VehicleID = (int)linkedVehicleEntity.VehicleID,
+                LinkedVehicleID = linkedVehicleEntity.LinkedVehicleID,
+                ModelID = linkedVehicleEntity.ModelID,
+                ManufacturerID = (int)linkedVehicleEntity.ManufacturerID,
                 EmployeeID = (int)linkedVehicleEntity.EmployeeID,
                 CustomerID = (int)linkedVehicleEntity.CustomerID,
                 LicensePlate = linkedVehicleEntity.LicensePlate,
                 VIN = linkedVehicleEntity.VIN,
                 YearOfCreation = linkedVehicleEntity.YearOfCreation,
-                ServiceIDs = serviceIDs,
-                ServiceNames=serviceNames
+                InvoiceID = linkedVehicleEntity.InvoiceID,
+                LinkedVehicleServices = linkedVehicleEntity.LinkedVehicleServices?
+                                   .Select(s => new LinkedVehicleServiceDTO
+                                   {
+                                       LinkedVehicleID = s.LinkedVehicleID,
+                                       ServiceID = s.ServiceID,
+                                   })
+                                   .ToList(),
             };
         }
 

@@ -4,13 +4,13 @@ namespace SmartGarage.Models.DTO
 {
     public class LinkedVehiclesDTO
     {
-        public int LinkedVehiclelID { get; set; }
+        public int LinkedVehicleID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public string? Model { get; set; }
+        public int ModelID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
-        public int VehicleID { get; set; }
+        public int ManufacturerID { get; set; }
 
         [Required(ErrorMessage = "The {0} field is required!")]
         public int EmployeeID { get; set; }
@@ -30,8 +30,8 @@ namespace SmartGarage.Models.DTO
         [Required(ErrorMessage = "The {0} field is required!")]
         [Range(1887, int.MaxValue, ErrorMessage = "Year must be greater than or equal to 1887.")]
         public int YearOfCreation { get; set; }
+        public int InvoiceID { get; set; }
+        public ICollection<LinkedVehicleServiceDTO> LinkedVehicleServices { get; set; }
         //public int? ServiceID { get; set; }
-        public ICollection<int> ServiceIDs { get; set; }
-        public ICollection<string> ServiceNames { get; set; }
     }
 }

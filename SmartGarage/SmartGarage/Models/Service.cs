@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SmartGarage.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
     public class Service
@@ -19,4 +20,5 @@ using System.ComponentModel.DataAnnotations.Schema;
         [Required]
         [Range(0, float.MaxValue)]
         public decimal Price { get; set; }
-    }
+        public ICollection<LinkedVehicleService> LinkedVehicleServices { get; set; }
+}

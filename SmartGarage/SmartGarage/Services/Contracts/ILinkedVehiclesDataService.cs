@@ -5,13 +5,12 @@ namespace SmartGarage.Services.Contracts
     public interface ILinkedVehiclesDataService
     {
         LinkedVehiclesDTO CreateLinkedVehicle(LinkedVehiclesDTO linkedVehiclesDTO);
-        LinkedVehiclesDTO GetLinkedVehicleByCustomerId(int customerId);
-        LinkedVehiclesDTO GetLinkedVehicleByCustomerName(string customerName);
-        LinkedVehiclesDTO GetLinkedVehicleByEmployeeId(int employeeId);
-        LinkedVehiclesDTO GetLinkedVehicleByEmployeeName(string employeeName);
+        ICollection<LinkedVehiclesDTO> GetLinkedVehicleByCustomerId(int customerId);
+        ICollection<LinkedVehiclesDTO> GetLinkedVehicleByEmployeeId(int employeeId);
         LinkedVehiclesDTO GetLinkedVehicleById(int id);
+        LinkedVehiclesDTO GetLinkedVehicleByIdWithServices(int id);
         LinkedVehiclesDTO GetLinkedVehicleByLicensePlate(string licensePlate);
-        LinkedVehiclesDTO GetLinkedVehicleByModelName(string model);
+        ICollection<LinkedVehiclesDTO> GetLinkedVehicleByModelID(int model);
         ICollection<LinkedVehiclesDTO> GetAllLinkedVehiclesById(int id);
         void UpdateLinkedVehicle(LinkedVehiclesDTO linkedVehiclesDTO);
     }

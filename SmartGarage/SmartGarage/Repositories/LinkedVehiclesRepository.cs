@@ -1,4 +1,5 @@
-﻿using SmartGarage.Repositories.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartGarage.Repositories.Contracts;
 using System.Collections.Specialized;
 
 namespace SmartGarage.Repositories
@@ -16,19 +17,25 @@ namespace SmartGarage.Repositories
             _dbcontext.SaveChanges();
             return linkedVehicles;
         }
-        public LinkedVehicles GetLinkedVehiclesByCustomerId(int customerId)
+        public ICollection<LinkedVehicles> GetLinkedVehiclesByCustomerId(int customerId)
         {
-            return _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.CustomerID ==customerId);
+            return _dbcontext.LinkedVehicles.Where(x => x.CustomerID == customerId).ToList();
         }
 
         public LinkedVehicles GetLinkedVehiclesByCustomerName(string customerName)
         {
             return _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.Customer.User.Username == customerName);
         }
-
-        public LinkedVehicles GetLinkedVehiclesByEmployeeId(int employeeId)
+        public LinkedVehicles GetLinkedVehicleByIdWithServices(int id)
         {
-            return _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.EmployeeID == employeeId);
+            return _dbcontext.LinkedVehicles
+                .Include(lv => lv.LinkedVehicleServices)
+                    .ThenInclude(lvs => lvs.Service)
+                .FirstOrDefault(lv => lv.LinkedVehicleID == id);
+        }
+        public ICollection<LinkedVehicles> GetLinkedVehiclesByEmployeeId(int employeeId)
+        {
+            return _dbcontext.LinkedVehicles.Where(x => x.EmployeeID == employeeId).ToList();
         }
 
         public LinkedVehicles GetLinkedVehiclesByEmployeeName(string employeeName)
@@ -38,7 +45,7 @@ namespace SmartGarage.Repositories
 
         public LinkedVehicles GetLinkedVehiclesById(int id)
         {
-           return _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.LinkedVehiclelID == id);
+           return _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.LinkedVehicleID == id);
         }
 
         public LinkedVehicles GetLinkedVehiclesByLicensePlate(string licensePlate)
@@ -46,14 +53,14 @@ namespace SmartGarage.Repositories
             return _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.LicensePlate == licensePlate);
         }
 
-        public LinkedVehicles GetLinkedVehiclesByModelName(string model)
+        public ICollection<LinkedVehicles> GetLinkedVehiclesByModelID(int model)
         {
-           return  _dbcontext.LinkedVehicles.FirstOrDefault(x=>x.Model == model);
+           return  _dbcontext.LinkedVehicles.Where(x => x.ModelID == model).ToList();
         }
 
         public ICollection<LinkedVehicles> GetAllLinkedVehiclesById(int id)
         {
-            return _dbcontext.LinkedVehicles.Where(x=>x.LinkedVehiclelID==id).ToList();
+            return _dbcontext.LinkedVehicles.Where(x=>x.LinkedVehicleID==id).ToList();
         }
 
         public void UpdateLinkedVehicles(LinkedVehicles linkedVehicles)

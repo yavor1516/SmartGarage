@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartGarage.Exceptions;
 using SmartGarage.Helpers;
+using SmartGarage.Models;
 using SmartGarage.Models.DTO;
 using SmartGarage.Responses;
 using SmartGarage.Services.Contracts;
@@ -31,19 +32,20 @@ namespace SmartGarage.Controllers
 
             var createdLinkedVehicle = _linkedVehiclesDataService.CreateLinkedVehicle(linkedVehiclesDTO);
 
-            return CreatedAtAction(nameof(GetLinkedVehicleById), new { id = createdLinkedVehicle.LinkedVehiclelID }
+            return CreatedAtAction(nameof(GetLinkedVehicleById), new { id = createdLinkedVehicle.LinkedVehicleID }
             , createdLinkedVehicle);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleById(int id)
+        public IActionResult GetLinkedVehicleById(int id)
         {
-            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleById(id);
-
-            if (linkedVehicleDTO == null)
-                return NotFound();
-
-            return Ok(linkedVehicleDTO);
+                var linkedVehicleDto = _linkedVehiclesDataService.GetLinkedVehicleByIdWithServices(id);
+                if (linkedVehicleDto == null)
+                {
+                    return NotFound();
+                }
+                return Ok(linkedVehicleDto);
+            
         }
 
         [HttpGet("customer/{customerId}")]
@@ -57,32 +59,11 @@ namespace SmartGarage.Controllers
             return Ok(linkedVehicleDTO);
         }
 
-        [HttpGet("customer/name/{customerName}")]
-        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByCustomerName(string customerName)
-        {
-            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByCustomerName(customerName);
-
-            if (linkedVehicleDTO == null)
-                return NotFound();
-
-            return Ok(linkedVehicleDTO);
-        }
 
         [HttpGet("employee/{employeeId}")]
         public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByEmployeeId(int employeeId)
         {
             var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByEmployeeId(employeeId);
-
-            if (linkedVehicleDTO == null)
-                return NotFound();
-
-            return Ok(linkedVehicleDTO);
-        }
-
-        [HttpGet("employee/name/{employeeName}")]
-        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByEmployeeName(string employeeName)
-        {
-            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByEmployeeName(employeeName);
 
             if (linkedVehicleDTO == null)
                 return NotFound();
@@ -102,9 +83,9 @@ namespace SmartGarage.Controllers
         }
 
         [HttpGet("model/{model}")]
-        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByModelName(string model)
+        public ActionResult<LinkedVehiclesDTO> GetLinkedVehicleByModelID(int model)
         {
-            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByModelName(model);
+            var linkedVehicleDTO = _linkedVehiclesDataService.GetLinkedVehicleByModelID(model);
 
             if (linkedVehicleDTO == null)
                 return NotFound();
@@ -139,7 +120,6 @@ namespace SmartGarage.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
         //[HttpDelete("{id}")]
         //public IActionResult DeleteLinkedVehicle(int id)
         //{

@@ -123,6 +123,28 @@ namespace SmartGarage.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    ServiceID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.ServiceID);
+                    table.ForeignKey(
+                        name: "FK_Services_Employees_EmployeeID",
+                        column: x => x.EmployeeID,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vehicles",
                 columns: table => new
                 {
@@ -156,69 +178,80 @@ namespace SmartGarage.Migrations
                 name: "LinkedVehicles",
                 columns: table => new
                 {
-                    LinkedVehiclelID = table.Column<int>(type: "int", nullable: false)
+                    LinkedVehicleID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VehicleID = table.Column<int>(type: "int", nullable: true),
-                    EmployeeID = table.Column<int>(type: "int", nullable: true),
-                    CustomerID = table.Column<int>(type: "int", nullable: true),
+                    ModelID = table.Column<int>(type: "int", nullable: false),
+                    ManufacturerID = table.Column<int>(type: "int", nullable: false),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
                     LicensePlate = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     VIN = table.Column<string>(type: "nvarchar(17)", maxLength: 17, nullable: false),
                     YearOfCreation = table.Column<int>(type: "int", nullable: false),
-                    ServiceID = table.Column<int>(type: "int", nullable: true),
-                    InvoiceId = table.Column<int>(type: "int", nullable: true)
+                    InvoiceID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LinkedVehicles", x => x.LinkedVehiclelID);
+                    table.PrimaryKey("PK_LinkedVehicles", x => x.LinkedVehicleID);
+                    table.ForeignKey(
+                        name: "FK_LinkedVehicles_CarModels_ModelID",
+                        column: x => x.ModelID,
+                        principalTable: "CarModels",
+                        principalColumn: "CarModelID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_LinkedVehicles_Customers_CustomerID",
                         column: x => x.CustomerID,
                         principalTable: "Customers",
-                        principalColumn: "CustomerID");
+                        principalColumn: "CustomerID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_LinkedVehicles_Employees_EmployeeID",
-                        column: x => x.EmployeeID,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeID");
-                    table.ForeignKey(
-                        name: "FK_LinkedVehicles_Invoices_InvoiceId",
-                        column: x => x.InvoiceId,
-                        principalTable: "Invoices",
-                        principalColumn: "InvoiceId");
-                    table.ForeignKey(
-                        name: "FK_LinkedVehicles_Vehicles_VehicleID",
-                        column: x => x.VehicleID,
-                        principalTable: "Vehicles",
-                        principalColumn: "VehicleID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Services",
-                columns: table => new
-                {
-                    ServiceID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeID = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    LinkedVehiclesLinkedVehiclelID = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Services", x => x.ServiceID);
-                    table.ForeignKey(
-                        name: "FK_Services_Employees_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Services_LinkedVehicles_LinkedVehiclesLinkedVehiclelID",
-                        column: x => x.LinkedVehiclesLinkedVehiclelID,
+                        name: "FK_LinkedVehicles_Invoices_InvoiceID",
+                        column: x => x.InvoiceID,
+                        principalTable: "Invoices",
+                        principalColumn: "InvoiceId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LinkedVehicles_Manufacturers_ManufacturerID",
+                        column: x => x.ManufacturerID,
+                        principalTable: "Manufacturers",
+                        principalColumn: "ManufacturerID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LinkedVehicleService",
+                columns: table => new
+                {
+                    LinkedVehicleID = table.Column<int>(type: "int", nullable: false),
+                    ServiceID = table.Column<int>(type: "int", nullable: false),
+                    ServiceID1 = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LinkedVehicleService", x => new { x.LinkedVehicleID, x.ServiceID });
+                    table.ForeignKey(
+                        name: "FK_LinkedVehicleService_LinkedVehicles_LinkedVehicleID",
+                        column: x => x.LinkedVehicleID,
                         principalTable: "LinkedVehicles",
-                        principalColumn: "LinkedVehiclelID");
+                        principalColumn: "LinkedVehicleID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LinkedVehicleService_Services_ServiceID",
+                        column: x => x.ServiceID,
+                        principalTable: "Services",
+                        principalColumn: "ServiceID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LinkedVehicleService_Services_ServiceID1",
+                        column: x => x.ServiceID1,
+                        principalTable: "Services",
+                        principalColumn: "ServiceID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -257,29 +290,34 @@ namespace SmartGarage.Migrations
                 column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LinkedVehicles_InvoiceId",
+                name: "IX_LinkedVehicles_InvoiceID",
                 table: "LinkedVehicles",
-                column: "InvoiceId");
+                column: "InvoiceID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LinkedVehicles_ServiceID",
+                name: "IX_LinkedVehicles_ManufacturerID",
                 table: "LinkedVehicles",
+                column: "ManufacturerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LinkedVehicles_ModelID",
+                table: "LinkedVehicles",
+                column: "ModelID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LinkedVehicleService_ServiceID",
+                table: "LinkedVehicleService",
                 column: "ServiceID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LinkedVehicles_VehicleID",
-                table: "LinkedVehicles",
-                column: "VehicleID");
+                name: "IX_LinkedVehicleService_ServiceID1",
+                table: "LinkedVehicleService",
+                column: "ServiceID1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_EmployeeID",
                 table: "Services",
                 column: "EmployeeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Services_LinkedVehiclesLinkedVehiclelID",
-                table: "Services",
-                column: "LinkedVehiclesLinkedVehiclelID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -302,73 +340,24 @@ namespace SmartGarage.Migrations
                 name: "IX_Vehicles_ManufacturerId",
                 table: "Vehicles",
                 column: "ManufacturerId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_LinkedVehicles_Services_ServiceID",
-                table: "LinkedVehicles",
-                column: "ServiceID",
-                principalTable: "Services",
-                principalColumn: "ServiceID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_CarModels_Manufacturers_ManufacturerID",
-                table: "CarModels");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Vehicles_Manufacturers_ManufacturerId",
-                table: "Vehicles");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Customers_Users_UserID",
-                table: "Customers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Employees_Users_UserID",
-                table: "Employees");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Invoices_Users_UserID",
-                table: "Invoices");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Invoices_Employees_EmployeeID",
-                table: "Invoices");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_LinkedVehicles_Employees_EmployeeID",
-                table: "LinkedVehicles");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Services_Employees_EmployeeID",
-                table: "Services");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Vehicles_Employees_EmployeeId",
-                table: "Vehicles");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_LinkedVehicles_Customers_CustomerID",
-                table: "LinkedVehicles");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_LinkedVehicles_Invoices_InvoiceId",
-                table: "LinkedVehicles");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_LinkedVehicles_Services_ServiceID",
-                table: "LinkedVehicles");
+            migrationBuilder.DropTable(
+                name: "LinkedVehicleService");
 
             migrationBuilder.DropTable(
-                name: "Manufacturers");
+                name: "Vehicles");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "LinkedVehicles");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Services");
+
+            migrationBuilder.DropTable(
+                name: "CarModels");
 
             migrationBuilder.DropTable(
                 name: "Customers");
@@ -377,16 +366,13 @@ namespace SmartGarage.Migrations
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "Services");
+                name: "Manufacturers");
 
             migrationBuilder.DropTable(
-                name: "LinkedVehicles");
+                name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "Vehicles");
-
-            migrationBuilder.DropTable(
-                name: "CarModels");
+                name: "Users");
         }
     }
 }

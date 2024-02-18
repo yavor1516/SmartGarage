@@ -1,50 +1,51 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SmartGarage.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-    public class LinkedVehicles
-    {
+public class LinkedVehicles
+{
+    [Key]
+    public int LinkedVehicleID { get; set; }
 
-        [Key]
+    [Required]
+    [ForeignKey("Model")]
+    public int ModelID { get; set; }
+    public CarModel Model { get; set; }
 
-        public int LinkedVehiclelID { get; set; }
+    [Required]
+    [ForeignKey("Manufacturer")]
+    public int ManufacturerID { get; set; }
+    public Manufacturer Manufacturer { get; set; }
 
-        [Required]
+    [Required]
+    [ForeignKey("Employee")]
+    public int EmployeeID { get; set; }
+    public Employee Employee { get; set; }
 
-        public string? Model { get; set; }
+    [Required]
+    [ForeignKey("Customer")]
+    public int CustomerID { get; set; }
+    public Customer Customer { get; set; }
 
-        [ForeignKey("VehicleID")]
+    [Required]
+    [MinLength(6)]
+    [MaxLength(8)] // Adjust according to the license plate 
+    public string LicensePlate { get; set; }
 
-        public int? VehicleID { get; set; } // Foreign Key
+    [Required]
+    [StringLength(17)]
+    public string VIN { get; set; }
 
-        public Vehicle Vehicle { get; set; }
+    [Required]
+    [Range(1887, int.MaxValue, ErrorMessage = "Year must be greater than or equal to 1887.")]
+    public int YearOfCreation { get; set; }
 
-        [ForeignKey("EmployeeID")]
+    [Required]
+    [ForeignKey("Invoice")]
+    public int InvoiceID { get; set; }
+    public Invoice Invoice { get; set; }
 
-        public int? EmployeeID { get; set; } // Foreign Key
-
-        public Employee Employee { get; set; }
-
-        [ForeignKey("CustomerID")]
-
-        public int? CustomerID { get; set; } // Foreign Key
-
-        public Customer Customer { get; set; }
-
-        [Required]
-        [MinLength(6)]
-        [MaxLength(8)] // Adjust according to the license plate 
-        public string LicensePlate { get; set; }
-        [Required]
-        [StringLength(17)]
-        public string VIN { get; set; }
-        [Required]
-        [Range(1887, int.MaxValue, ErrorMessage = "Year must be greater than or equal to 1887.")]
-        public int YearOfCreation { get; set; }
-
-        [ForeignKey("ServiceID")]
-        public int? ServiceID { get; set; }
-        public Service Service { get; set; }
-        public ICollection<Service>? Services { get; set; }
-
-
-    }
+    // Navigation property for services associated with this linked vehicle
+    public ICollection<LinkedVehicleService> LinkedVehicleServices { get; set; }
+}

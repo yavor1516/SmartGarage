@@ -108,19 +108,19 @@ namespace SmartGarage.Migrations
 
             modelBuilder.Entity("LinkedVehicles", b =>
                 {
-                    b.Property<int>("LinkedVehiclelID")
+                    b.Property<int>("LinkedVehicleID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LinkedVehiclelID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LinkedVehicleID"), 1L, 1);
 
-                    b.Property<int?>("CustomerID")
+                    b.Property<int>("CustomerID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeID")
+                    b.Property<int>("EmployeeID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InvoiceId")
+                    b.Property<int>("InvoiceID")
                         .HasColumnType("int");
 
                     b.Property<string>("LicensePlate")
@@ -128,11 +128,10 @@ namespace SmartGarage.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("nvarchar(8)");
 
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ManufacturerID")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ServiceID")
+                    b.Property<int>("ModelID")
                         .HasColumnType("int");
 
                     b.Property<string>("VIN")
@@ -140,23 +139,20 @@ namespace SmartGarage.Migrations
                         .HasMaxLength(17)
                         .HasColumnType("nvarchar(17)");
 
-                    b.Property<int?>("VehicleID")
-                        .HasColumnType("int");
-
                     b.Property<int>("YearOfCreation")
                         .HasColumnType("int");
 
-                    b.HasKey("LinkedVehiclelID");
+                    b.HasKey("LinkedVehicleID");
 
                     b.HasIndex("CustomerID");
 
                     b.HasIndex("EmployeeID");
 
-                    b.HasIndex("InvoiceId");
+                    b.HasIndex("InvoiceID");
 
-                    b.HasIndex("ServiceID");
+                    b.HasIndex("ManufacturerID");
 
-                    b.HasIndex("VehicleID");
+                    b.HasIndex("ModelID");
 
                     b.ToTable("LinkedVehicles");
                 });
@@ -189,9 +185,6 @@ namespace SmartGarage.Migrations
                     b.Property<int>("EmployeeID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LinkedVehiclesLinkedVehiclelID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -206,9 +199,29 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("EmployeeID");
 
-                    b.HasIndex("LinkedVehiclesLinkedVehiclelID");
-
                     b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("SmartGarage.Models.LinkedVehicleService", b =>
+                {
+                    b.Property<int>("LinkedVehicleID")
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("ServiceID")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<int?>("ServiceID1")
+                        .HasColumnType("int");
+
+                    b.HasKey("LinkedVehicleID", "ServiceID");
+
+                    b.HasIndex("ServiceID");
+
+                    b.HasIndex("ServiceID1");
+
+                    b.ToTable("LinkedVehicleService");
                 });
 
             modelBuilder.Entity("User", b =>
@@ -331,31 +344,43 @@ namespace SmartGarage.Migrations
                 {
                     b.HasOne("Customer", "Customer")
                         .WithMany("LinkedVehicles")
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Employee", "Employee")
                         .WithMany("LinkedVehiclesCreated")
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Invoice", null)
+                    b.HasOne("Invoice", "Invoice")
                         .WithMany("LinkedVehicles")
-                        .HasForeignKey("InvoiceId");
+                        .HasForeignKey("InvoiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Service", "Service")
+                    b.HasOne("Manufacturer", "Manufacturer")
                         .WithMany()
-                        .HasForeignKey("ServiceID");
+                        .HasForeignKey("ManufacturerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Vehicle", "Vehicle")
+                    b.HasOne("CarModel", "Model")
                         .WithMany()
-                        .HasForeignKey("VehicleID");
+                        .HasForeignKey("ModelID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Customer");
 
                     b.Navigation("Employee");
 
-                    b.Navigation("Service");
+                    b.Navigation("Invoice");
 
-                    b.Navigation("Vehicle");
+                    b.Navigation("Manufacturer");
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("Service", b =>
@@ -366,11 +391,30 @@ namespace SmartGarage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LinkedVehicles", null)
-                        .WithMany("Services")
-                        .HasForeignKey("LinkedVehiclesLinkedVehiclelID");
-
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("SmartGarage.Models.LinkedVehicleService", b =>
+                {
+                    b.HasOne("LinkedVehicles", "LinkedVehicle")
+                        .WithMany("LinkedVehicleServices")
+                        .HasForeignKey("LinkedVehicleID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Service", null)
+                        .WithMany("LinkedVehicleServices")
+                        .HasForeignKey("ServiceID1");
+
+                    b.Navigation("LinkedVehicle");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("Vehicle", b =>
@@ -413,12 +457,17 @@ namespace SmartGarage.Migrations
 
             modelBuilder.Entity("LinkedVehicles", b =>
                 {
-                    b.Navigation("Services");
+                    b.Navigation("LinkedVehicleServices");
                 });
 
             modelBuilder.Entity("Manufacturer", b =>
                 {
                     b.Navigation("CarModels");
+                });
+
+            modelBuilder.Entity("Service", b =>
+                {
+                    b.Navigation("LinkedVehicleServices");
                 });
 #pragma warning restore 612, 618
         }
