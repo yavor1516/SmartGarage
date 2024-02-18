@@ -14,6 +14,7 @@
         <button class="ToastrTest" @click="tost">
             ToastrTest
         </button>
+        <ol></ol>
         <span>You have account? <a href="/login">sign in</a> </span>
     </div>
 </template>
@@ -50,8 +51,14 @@
 
                     if (response.ok) {
                         console.log('Sign up successful');
-                        toast.success('email send successfully', { autoClose: 3000 });
-                        window.location.href = '/login';
+                        toast.success('Email sent successfully', {
+                            autoClose: 2000,
+                            onOpen: () => {
+                                setTimeout(() => {
+                                    window.location.href = '/login';
+                                }, 2000); // Redirect after 1 second (adjust as needed)
+                            }
+                        });
 
                     } else {
                         console.error('Sign up failed:', response.statusText);

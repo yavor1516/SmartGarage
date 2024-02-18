@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
@@ -6,6 +7,7 @@ namespace SmartGarage.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CarModelController : ControllerBase
     {
         private readonly ICarModelDataService _carModelService;
@@ -14,10 +16,11 @@ namespace SmartGarage.Controllers.API
         {
             _carModelService = carModelService ?? throw new ArgumentNullException(nameof(carModelService));
         }
-
+        
         [HttpGet]
         public ActionResult<IEnumerable<CarModel>> GetAllCarModels()
         {
+            
             var carModels = _carModelService.GetAllCarModels();
             return Ok(carModels);
         }

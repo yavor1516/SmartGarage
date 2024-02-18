@@ -1,5 +1,6 @@
 ﻿using ForumSystem.Exceptions;
 using ForumSystem.Responses;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Mvc;
 using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
@@ -59,6 +60,9 @@ namespace SmartGarage.Controllers.API
                 {
                     accessToken = _accountService.GenerateToken(user)
                 });
+
+          
+                
             }
             catch (DuplicateEntityException e)
             {
