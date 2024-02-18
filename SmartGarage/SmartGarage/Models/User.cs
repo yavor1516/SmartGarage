@@ -31,7 +31,7 @@ public class User
         public byte[] PasswordHash { get; set; }
 
         public bool isOnline { get; set; }
-
+        public bool isBlocked { get; set; }
         
         [StringLength(10)]
         [AllowNull]
