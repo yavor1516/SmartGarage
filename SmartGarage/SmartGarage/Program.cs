@@ -10,15 +10,20 @@ using SmartGarage.Services;
 using SmartGarage.Services.Contracts;
 using SmartGarage.Services.TokenGenerator;
 using System.Text;
+using freecurrencyapi;
+using SmartGarage.Services.FreeCurrencyApi;
 
 namespace SmartGarage
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
+        {        
             var builder = WebApplication.CreateBuilder(args);
+
             builder.Services.AddControllersWithViews();
+            builder.Services.Configure<FreeCurrencyApiSettings>(
+    builder.Configuration.GetSection("FreeCurrencyAPI"));
             builder.Services.AddDbContext<GarageContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -54,6 +59,7 @@ namespace SmartGarage
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             //Momcheta tuka registrirame Services
+            builder.Services.AddTransient<ICurrencyConversionDataService, CurrencyConversionDataService>();
             builder.Services.AddTransient<IEmployeeDataService, EmployeeDataService>();
             builder.Services.AddTransient<ILinkedVehiclesDataService, LinkedVehiclesDataService>();
             builder.Services.AddTransient<IInvoiceDataService, InvoiceDataService>();
