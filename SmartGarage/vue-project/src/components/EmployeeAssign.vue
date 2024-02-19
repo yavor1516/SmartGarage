@@ -8,112 +8,209 @@
 
         <main>
             <BodyComponent />
-            <!-- Your additional content here -->
-            <div>
-                <!-- Input field with dropdown for Manufacturer -->
-                <div class="input-field">
-                    <label for="manufacturer">Manufacturer:</label>
-                    <ol></ol>
-                    <div class="dropdown">
-                        <input type="text" id="manufacturer" v-model="selectedManufacturer" @input="filterManufacturers" placeholder="Select or type">
-                        <div class="dropdown-content">
-                            <div v-for="manufacturer in filteredManufacturers" :key="manufacturer.id" @click="selectManufacturer(manufacturer)">
-                                {{ manufacturer.name }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="LinkedVehicleAssignment">
+                <!-- Button to toggle visibility -->
+                <button type="button" class="btn btn-primary" @click="listOfCars">List of all cars</button>
 
-                <!-- Input field with dropdown for Model -->
-                <div class="input-field">
-                    <label for="model">Model:</label>
-                    <ol></ol>
-                    <div class="dropdown">
-                        <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
-                        <div class="dropdown-content">
-                            <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                {{ model.name }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-field">
-
-                    <label for="model">Employee:</label>
-                    <ol></ol>
-                    <div class="dropdown">
-                        <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
-                        <div class="dropdown-content">
-                            <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                {{ model.name }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-field">
-
-                    <label for="model">Customer:</label>
-                    <ol></ol>
-                    <div class="dropdown">
-                        <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
-                        <div class="dropdown-content">
-                            <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                {{ model.name }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-field">
-                    <label for="input4">Registration Plate:</label>
-                    <input type="text" id="input4" v-model="input4Value" placeholder="Enter valid Bulgarian registration plate">
-                </div>
-                <div class="input-field">
-                    <label for="input4">Win number:</label>
-                    <input type="text" id="input4" v-model="input4Value" placeholder="Enter car Win number">
-                </div>
                 <ol></ol>
-                <button type="button" class="btn btn-primary">Primary</button>
-                <!-- Additional input fields here -->
-            </div>
-            <div class="services">
-                <div class="input-field">
+                <button type="button" class="btn btn-primary" @click="toggleAssignVehicle">Create new car</button>
 
-                    <label for="model">Services:</label>
-                    <ol></ol>
-                    <div class="dropdown">
-                        <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
-                        <div class="dropdown-content">
-                            <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                {{ model.name }}
+            </div>
+
+            <!-- Your additional content here -->
+            <div class="AssignVehicle" v-if="showAssignVehicle">
+
+
+                <div>
+                    <!-- Input field with dropdown for Manufacturer -->
+                    <div class="input-field">
+                        <label for="manufacturer">Manufacturer:</label>
+                        <ol></ol>
+                        <div class="dropdown">
+                            <input type="text" id="manufacturer" v-model="selectedManufacturer" @input="filterManufacturers" placeholder="Select or type">
+                            <div class="dropdown-content">
+                                <div v-for="manufacturer in filteredManufacturers" :key="manufacturer.id" @click="selectManufacturer(manufacturer)">
+                                    {{ manufacturer.name }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Service</th>
-                                <th scope="col">Employee</th>
-                                <th scope="col">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Oil change</td>
-                                <td>Mike Chobanov</td>
-                                <td>200$</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Engine filter change</td>
-                                <td>Thornton Tristan</td>
-                                <td>60$</td>
-                            </tr>
-                         
-                        </tbody>
-                    </table>
+
+                    <!-- Input field with dropdown for Model -->
+                    <div class="input-field">
+                        <label for="model">Model:</label>
+                        <ol></ol>
+                        <div class="dropdown">
+                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <div class="dropdown-content">
+                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
+                                    {{ model.name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field">
+
+                        <label for="model">Employee:</label>
+                        <ol></ol>
+                        <div class="dropdown">
+                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <div class="dropdown-content">
+                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
+                                    {{ model.name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field">
+
+                        <label for="model">Customer:</label>
+                        <ol></ol>
+                        <div class="dropdown">
+                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <div class="dropdown-content">
+                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
+                                    {{ model.name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label for="input4">Registration Plate:</label>
+                        <input type="text" id="input4" v-model="input4Value" placeholder="Enter valid Bulgarian registration plate">
+                    </div>
+                    <div class="input-field">
+                        <label for="input4">Win number:</label>
+                        <input type="text" id="input4" v-model="input4Value" placeholder="Enter car Win number">
+                    </div>
+                    <ol></ol>
+                    <button type="button" class="btn btn-success" @click="assignVehicle">Assign</button>
+                    <!-- Additional input fields here -->
+                </div>
+                <div class="services">
+                    <div class="input-field">
+
+                        <label for="model">Services:</label>
+                        <ol></ol>
+                        <div class="dropdown">
+                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <div class="dropdown-content">
+                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
+                                    {{ model.name }}
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Employee</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Oil change</td>
+                                    <td>Mike Chobanov</td>
+                                    <td>200$</td>
+
+
+                                    <td>
+                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Engine filter change</td>
+                                    <td>Thornton Tristan</td>
+                                    <td>60$</td>
+
+                                    <td>
+                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="ListOfCars" v-if="carList">
+                <div class="Vehicles">
+                    <div class="input-field">
+
+                        <label for="model">Vehicles:</label>
+                        <ol></ol>
+                        <div class="dropdown">
+                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or search">
+                            <div class="dropdown-content">
+                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
+                                    {{ model.name }}
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Car</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Progress</th>
+                                    <th scope="col">Employee</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Edit</th>
+                                    <th scope="col">Delete</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Toyota Corola</td>
+                                    <td>Mike Chobanov</td>
+                                    <td>50%</td>
+                                    <td>Stephan Tomson</td>
+                                    <td>200$</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" @click="">Edit</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Bmw X5</td>
+                                    <td>Stephan Chobanov</td>
+                                    <td>100%</td>
+                                    <td>Stephan Tomson</td>
+                                    <td>2000$</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" @click="">Edit</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <!-- End of additional content -->
@@ -138,6 +235,7 @@
             FooterComponent
         },
         data() {
+
             return {
                 // Selected manufacturer and model
                 selectedManufacturer: "",
@@ -152,7 +250,9 @@
                     { id: 1, name: "Model X" },
                     { id: 2, name: "Model Y" },
                     { id: 3, name: "Model Z" }
-                ]
+                ],
+                showAssignVehicle: false,
+                carList:true
             };
         },
         computed: {
@@ -167,7 +267,26 @@
                 );
             }
         },
+
         methods: {
+            toggleAssignVehicle() {
+              
+                this.showAssignVehicle = !this.showAssignVehicle;
+                if (this.showAssignVehicle && this.carList) {
+                    this.carList = !this.carList;
+                }
+              
+
+            },
+            listOfCars() {
+               
+                this.carList = !this.carList;  
+                if (this.carList && this.showAssignVehicle) {
+                    this.showAssignVehicle = !this.showAssignVehicle;
+                }
+               
+
+            },
             filterManufacturers() {
                 // Show the dropdown content when typing
                 this.$nextTick(() => {
@@ -195,11 +314,21 @@
 </script>
 
 <style scoped>
-    .services{
-        position:absolute;
-        right:40vh;
-        width:600px;
-        top:12%;
+    .ListOfCars{
+          left: 23.5%;
+        top: 12%;
+        position: absolute;
+    }
+    .LinkedVehicleAssignment {
+        left: 5%;
+        top: 15%;
+        position: absolute;
+    }
+    .services {
+        position: absolute;
+        right: 20vh;
+        width: 600px;
+        top: 12%;
     }
 
     label {

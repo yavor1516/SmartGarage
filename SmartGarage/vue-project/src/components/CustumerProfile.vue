@@ -105,6 +105,56 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="cardEdit" v-if="!isCardEditVisible">
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Full Name</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control" value="John Doe">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Email</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control" value="john@example.com">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Phone</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control" value="(239) 816-9029">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Mobile</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control" value="(320) 380-4539">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3">
+                                                <h6 class="mb-0">Address</h6>
+                                            </div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="text" class="form-control" value="Bay Area, San Francisco, CA">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-9 text-secondary">
+                                                <input type="button" class="btn btn-primary px-4" value="Save Changes">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- End of Profile information card -->
                                 <div class="Table" v-if="!isCardVisible">
@@ -112,28 +162,39 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Car</th>
+                            <th scope="col">Progress</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Info</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                            <td>Bmw E46 328 ci</td>
+                            <td>50%</td>
+                            <td>500$</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" @click="">Show</button>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
+                            <td>Mercedes E320 2010</td>
+                            <td>90%</td>
+                            <td>2000$</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" @click="">Show</button>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
+                            <td>Audi RS6 3.0 D</td>
+                            <td>20%</td>
+                            <td>12000$</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" @click="">Show</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -174,6 +235,7 @@
 </template>
 
 <script>
+     import 'bootstrap/dist/css/bootstrap.min.css';
     import HeaderComponent from "@/components/HeaderComponent.vue";
     import BodyComponent from "@/components/BodyComponent.vue";
     import FooterComponent from "@/components/FooterComponent.vue";
@@ -181,7 +243,7 @@
 
 
 
-    import 'bootstrap/dist/css/bootstrap.min.css';
+   
     export default {
         components: {
             HeaderComponent,
@@ -199,11 +261,14 @@
         methods: {
             toggleCardVisibility() {
                 this.isCardVisible = !this.isCardVisible;
+            },
+              toggleCardEditVisibility() {
+                this.isCardVisible = !this.isCardVisible;
             }
         }
     };
 </script>
-<style>
+<style scoped>
 
     body {
         margin-top: 20px;
@@ -273,5 +338,4 @@
         left: 0;
         top: 10%;
     }
-  
 </style>

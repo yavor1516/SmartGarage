@@ -13,8 +13,8 @@ export default {
 </script>
 
 <style scoped>
-.body {
-  padding: 20px;
+    .body {
+        padding: 20px;
 
-}
+    }
 </style>

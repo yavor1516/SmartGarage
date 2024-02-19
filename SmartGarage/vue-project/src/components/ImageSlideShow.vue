@@ -6,6 +6,9 @@
 
         <main>
             <BodyComponent />
+
+            <div class="elfsight" data-elfsight-app-lazy></div>
+
             <!-- Your additional content here -->
 
             <div class="images">
@@ -79,5 +82,9 @@
         z-index: -1;
         width: 400px;
         transform-origin: center right;
+    }
+    .elfsight {
+        position: absolute;
+        height:200px;
     }
 </style>
