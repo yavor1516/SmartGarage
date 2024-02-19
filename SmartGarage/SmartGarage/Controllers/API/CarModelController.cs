@@ -7,7 +7,6 @@ namespace SmartGarage.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CarModelController : ControllerBase
     {
         private readonly ICarModelDataService _carModelService;
