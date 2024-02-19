@@ -12,8 +12,8 @@ using SmartGarage;
 namespace SmartGarage.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20240219131434_StatusNull")]
-    partial class StatusNull
+    [Migration("20240219162540_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
