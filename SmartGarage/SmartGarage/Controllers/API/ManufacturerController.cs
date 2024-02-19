@@ -60,6 +60,10 @@ namespace SmartGarage.Controllers.API
         {
             try
             {
+                if (id <= 0)
+                {
+                    return NotFound("Invalid Manufacturer ID");
+                }
                 manufacturerDTO.ManufacturerID = id;
                 _manufacturerService.UpdateManufacturer(manufacturerDTO);
                 return Ok(manufacturerDTO);

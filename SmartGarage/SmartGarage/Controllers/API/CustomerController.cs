@@ -20,6 +20,10 @@ namespace SmartGarage.Controllers.API
         {
             try                                //UserID TODO
             {
+                if (customerDTO == null)
+                {
+                    return BadRequest("Invalid customer data provided.");
+                }
                 var createdCustomer = _customerDataService.CreateCustomer(customerDTO);
                 return CreatedAtAction(nameof(GetCustomerById), new { id = createdCustomer.CustomerID }, createdCustomer);
             }
@@ -131,6 +135,10 @@ namespace SmartGarage.Controllers.API
         [HttpPut]
         public IActionResult UpdateCustomer([FromBody] CustomerDTO customerDTO)
         {
+            if (customerDTO == null)
+            {
+                return BadRequest("CustomerDTO cannot be null");
+            }
             try
             {
                 _customerDataService.UpdateCustomer(customerDTO);

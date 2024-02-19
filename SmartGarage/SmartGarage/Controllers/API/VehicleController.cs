@@ -28,6 +28,10 @@ namespace SmartGarage.Controllers.API
         {
             try
             {
+                if (vehicleDTO == null)
+                {
+                    return BadRequest("Vehicle DTO is null.");
+                }
                 var createdVehicle = _vehicleDataService.CreateVehicle(vehicleDTO);
                 return CreatedAtRoute("GetVehicleById", new { id = createdVehicle.VehicleID }, createdVehicle);
             }
