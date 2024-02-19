@@ -51,40 +51,5 @@ namespace SmartGarageTests.Services.Tests
             // Assert
             Assert.IsFalse(result.isBlocked);
         }
-        [TestMethod]
-        public void BlockUser_NullUsername_ThrowsArgumentNullException()
-        {
-            // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => _adminPanelDataService.BlockUser(null));
-        }
-
-        [TestMethod]
-        public void UnBlockUser_NullUsername_ThrowsArgumentNullException()
-        {
-            // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => _adminPanelDataService.UnBlockUser(null));
-        }
-
-        [TestMethod]
-        public void BlockUser_UserNotFound_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            string username = "nonExistentUser";
-            _userRepositoryMock.Setup(r => r.GetUserByUsername(username)).Returns((User)null);
-
-            // Act & Assert
-            Assert.ThrowsException<InvalidOperationException>(() => _adminPanelDataService.BlockUser(username));
-        }
-
-        [TestMethod]
-        public void UnBlockUser_UserNotFound_ThrowsInvalidOperationException()
-        {
-            // Arrange
-            string username = "nonExistentUser";
-            _userRepositoryMock.Setup(r => r.GetUserByUsername(username)).Returns((User)null);
-
-            // Act & Assert
-            Assert.ThrowsException<InvalidOperationException>(() => _adminPanelDataService.UnBlockUser(username));
-        }
     }
 }

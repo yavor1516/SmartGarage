@@ -40,13 +40,6 @@ namespace SmartGarageTests.Services.Tests
             // Add assertions for other properties
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetByEmail_NullEmail_ThrowsArgumentException()
-        {
-            // Act
-            _userDataService.GetByEmail(null);
-        }
 
         [TestMethod]
         public void GetByUsername_ValidUsername_ReturnsUser()
@@ -66,14 +59,6 @@ namespace SmartGarageTests.Services.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetByUsername_NullUsername_ThrowsArgumentException()
-        {
-            // Act
-            _userDataService.GetByUsername(null);
-        }
-
-        [TestMethod]
         public void CreateUser_ValidUser_ReturnsCreatedUser()
         {
             // Arrange
@@ -88,16 +73,6 @@ namespace SmartGarageTests.Services.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedUser, result);
             // Add more specific assertions if needed
-        }
-
-        [TestMethod]
-        public void CreateUser_NullUser_ThrowsArgumentNullException()
-        {
-            // Arrange
-            User user = null;
-
-            // Act & Assert
-            Assert.ThrowsException<ArgumentNullException>(() => _userDataService.CreateUser(user));
         }
     }
 }

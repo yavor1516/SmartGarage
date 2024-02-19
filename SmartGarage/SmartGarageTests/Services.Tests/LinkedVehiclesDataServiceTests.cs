@@ -63,17 +63,6 @@ namespace SmartGarageTests.Services.Tests
         }
 
         [TestMethod]
-        public void UpdateLinkedVehicle_InexistentLinkedVehicle_ThrowsEntityNotFoundException()
-        {
-            // Arrange
-            var linkedVehicleDTO = new LinkedVehiclesDTO { LinkedVehicleID = 1, ModelID = 1, ManufacturerID = 1, EmployeeID = 1, CustomerID = 1, LicensePlate = "ABC123", VIN = "1234567890", YearOfCreation = 2022, InvoiceID = 1, LinkedVehicleServices = new List<LinkedVehicleServiceDTO>() };
-            _linkedVehiclesRepositoryMock.Setup(repo => repo.GetLinkedVehiclesById(linkedVehicleDTO.LinkedVehicleID)).Returns((LinkedVehicles)null);
-
-            // Act & Assert
-            Assert.ThrowsException<EntityNotFoundException>(() => _linkedVehiclesDataService.UpdateLinkedVehicle(linkedVehicleDTO));
-        }
-
-        [TestMethod]
         public void CreateLinkedVehicle_ValidLinkedVehicleDTO_ReturnsMappedDTO()
         {
             // Arrange

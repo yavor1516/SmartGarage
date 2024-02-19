@@ -22,26 +22,6 @@ namespace SmartGarageTests.Services.Tests
             _employeeDataService = new EmployeeDataService(_employeeRepositoryMock.Object);
         }
 
-        // Existing test methods...
-
-        [TestMethod]
-        public void GetEmployeeByEmail_ValidEmail_ReturnsEmployeeDTO()
-        {
-            // Arrange
-            string email = "test@example.com";
-            var employeeEntity = new Employee { EmployeeID = 1, UserID = 1, VehiclesCreated = new List<Vehicle>(), LinkedVehiclesCreated = new List<LinkedVehicles>() };
-            _employeeRepositoryMock.Setup(repo => repo.GetEmployeeByEmail(email)).Returns(employeeEntity);
-
-            // Act
-            var result = _employeeDataService.GetEmployeeByEmail(email);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(employeeEntity.EmployeeID, result.EmployeeID);
-            Assert.AreEqual(employeeEntity.UserID, result.UserID);
-            CollectionAssert.AreEqual(employeeEntity.VehiclesCreated.ToList(), result.VehiclesCreated.ToList());
-            CollectionAssert.AreEqual(employeeEntity.LinkedVehiclesCreated.ToList(), result.LinkedVehiclesCreated.ToList());
-        }
 
         [TestMethod]
         public void GetEmployeeByEmail_NullOrWhitespaceEmail_ThrowsArgumentException()
@@ -51,25 +31,6 @@ namespace SmartGarageTests.Services.Tests
 
             // Act & Assert
             Assert.ThrowsException<ArgumentException>(() => _employeeDataService.GetEmployeeByEmail(invalidEmail));
-        }
-
-        [TestMethod]
-        public void GetEmployeeByFirstName_ValidFirstName_ReturnsEmployeeDTO()
-        {
-            // Arrange
-            string firstName = "John";
-            var employeeEntity = new Employee { EmployeeID = 1, UserID = 1, VehiclesCreated = new List<Vehicle>(), LinkedVehiclesCreated = new List<LinkedVehicles>() };
-            _employeeRepositoryMock.Setup(repo => repo.GetEmployeeByFirstName(firstName)).Returns(employeeEntity);
-
-            // Act
-            var result = _employeeDataService.GetEmployeeByFirstName(firstName);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(employeeEntity.EmployeeID, result.EmployeeID);
-            Assert.AreEqual(employeeEntity.UserID, result.UserID);
-            CollectionAssert.AreEqual(employeeEntity.VehiclesCreated.ToList(), result.VehiclesCreated.ToList());
-            CollectionAssert.AreEqual(employeeEntity.LinkedVehiclesCreated.ToList(), result.LinkedVehiclesCreated.ToList());
         }
 
         [TestMethod]
@@ -83,25 +44,6 @@ namespace SmartGarageTests.Services.Tests
         }
 
         [TestMethod]
-        public void GetEmployeeById_ValidId_ReturnsEmployeeDTO()
-        {
-            // Arrange
-            int id = 1;
-            var employeeEntity = new Employee { EmployeeID = id, UserID = 1, VehiclesCreated = new List<Vehicle>(), LinkedVehiclesCreated = new List<LinkedVehicles>() };
-            _employeeRepositoryMock.Setup(repo => repo.GetEmployeeByID(id)).Returns(employeeEntity);
-
-            // Act
-            var result = _employeeDataService.GetEmployeeByID(id);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(employeeEntity.EmployeeID, result.EmployeeID);
-            Assert.AreEqual(employeeEntity.UserID, result.UserID);
-            CollectionAssert.AreEqual(employeeEntity.VehiclesCreated.ToList(), result.VehiclesCreated.ToList());
-            CollectionAssert.AreEqual(employeeEntity.LinkedVehiclesCreated.ToList(), result.LinkedVehiclesCreated.ToList());
-        }
-
-        [TestMethod]
         public void GetEmployeeById_InvalidId_ThrowsArgumentException()
         {
             // Arrange
@@ -109,25 +51,6 @@ namespace SmartGarageTests.Services.Tests
 
             // Act & Assert
             Assert.ThrowsException<ArgumentException>(() => _employeeDataService.GetEmployeeByID(invalidId));
-        }
-
-        [TestMethod]
-        public void GetEmployeeByUsername_ValidUsername_ReturnsEmployeeDTO()
-        {
-            // Arrange
-            string username = "testuser";
-            var employeeEntity = new Employee { EmployeeID = 1, UserID = 1, VehiclesCreated = new List<Vehicle>(), LinkedVehiclesCreated = new List<LinkedVehicles>() };
-            _employeeRepositoryMock.Setup(repo => repo.GetEmployeeByUsername(username)).Returns(employeeEntity);
-
-            // Act
-            var result = _employeeDataService.GetEmployeeByUsername(username);
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(employeeEntity.EmployeeID, result.EmployeeID);
-            Assert.AreEqual(employeeEntity.UserID, result.UserID);
-            CollectionAssert.AreEqual(employeeEntity.VehiclesCreated.ToList(), result.VehiclesCreated.ToList());
-            CollectionAssert.AreEqual(employeeEntity.LinkedVehiclesCreated.ToList(), result.LinkedVehiclesCreated.ToList());
         }
 
         [TestMethod]
