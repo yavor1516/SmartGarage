@@ -111,7 +111,6 @@ namespace SmartGarage.Services
             {
                 ServiceID = serviceDTO.ServiceID,
                 EmployeeID = serviceDTO.EmployeeID,
-                Status = serviceDTO.Status,
                 Name = serviceDTO.Name,
                 Price = serviceDTO.Price
                 
@@ -133,7 +132,6 @@ namespace SmartGarage.Services
             {
                 ServiceID = service.ServiceID,
                 EmployeeID = service.EmployeeID,
-                Status = service.Status,
                 Name = service.Name,
                 Price = service.Price
             };

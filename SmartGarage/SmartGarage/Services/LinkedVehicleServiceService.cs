@@ -1,10 +1,11 @@
 ﻿using SmartGarage.Models;
 using SmartGarage.Repositories;
 using SmartGarage.Repositories.Contracts;
+using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Services
 {
-    public class LinkedVehicleServiceService
+    public class LinkedVehicleServiceService:ILinkedVehicleServiceService
     {
         private readonly ILinkedVehicleServiceRepository _repository;
 
@@ -32,6 +33,11 @@ namespace SmartGarage.Services
         {
             await _repository.UpdateAsync(linkedVehicleService);
         }
+        public async Task<IEnumerable<LinkedVehicleService>> GetAllLinkedVehicleServicesByLinkedVehicleIdAsync(int linkedVehicleId)
+        {
+            return await _repository.GetAllByLinkedVehicleIdAsync(linkedVehicleId);
+        }
+
         public async Task RemoveLinkedVehicleServiceAsync(int linkedVehicleId, int serviceId)
         {
             var linkedVehicleService = await _repository.GetByIdAsync(linkedVehicleId, serviceId);

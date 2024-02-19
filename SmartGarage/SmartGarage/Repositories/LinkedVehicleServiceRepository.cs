@@ -35,6 +35,12 @@ namespace SmartGarage.Repositories
             _context.LinkedVehicleService.Update(linkedVehicleService);
             await _context.SaveChangesAsync();
         }
+        public async Task<IEnumerable<LinkedVehicleService>> GetAllByLinkedVehicleIdAsync(int linkedVehicleId)
+        {
+            return await _context.LinkedVehicleService
+                .Where(lvs => lvs.LinkedVehicleID == linkedVehicleId)
+                .ToListAsync();
+        }
 
         public async Task RemoveAsync(LinkedVehicleService linkedVehicleService)
         {

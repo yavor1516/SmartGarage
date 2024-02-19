@@ -8,6 +8,7 @@ namespace SmartGarage.Repositories.Contracts
         Task<IEnumerable<LinkedVehicleService>> GetAllAsync();
         Task AddAsync(LinkedVehicleService linkedVehicleService);
         Task UpdateAsync(LinkedVehicleService linkedVehicleService);
+        Task<IEnumerable<LinkedVehicleService>> GetAllByLinkedVehicleIdAsync(int linkedVehicleId);
         Task RemoveAsync(LinkedVehicleService linkedVehicleService);
     }
 }

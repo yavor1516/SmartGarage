@@ -12,8 +12,6 @@ using System.ComponentModel.DataAnnotations.Schema;
         public int EmployeeID { get; set; }
         public Employee Employee { get; set; }
 
-        public bool Status { get; set; } //notStarted=null , inProgress=false, Ready=true
-
         [Required]
         public string Name { get; set; }
 
