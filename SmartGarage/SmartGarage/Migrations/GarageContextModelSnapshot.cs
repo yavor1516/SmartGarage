@@ -41,7 +41,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("ManufacturerID");
 
-                    b.ToTable("CarModels");
+                    b.ToTable("CarModels", (string)null);
                 });
 
             modelBuilder.Entity("Customer", b =>
@@ -59,7 +59,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Employee", b =>
@@ -80,7 +80,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Invoice", b =>
@@ -103,7 +103,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("LinkedVehicles", b =>
@@ -154,7 +154,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("ModelID");
 
-                    b.ToTable("LinkedVehicles");
+                    b.ToTable("LinkedVehicles", (string)null);
                 });
 
             modelBuilder.Entity("Manufacturer", b =>
@@ -171,7 +171,7 @@ namespace SmartGarage.Migrations
 
                     b.HasKey("ManufacturerID");
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", (string)null);
                 });
 
             modelBuilder.Entity("Service", b =>
@@ -196,7 +196,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("EmployeeID");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("SmartGarage.Models.LinkedVehicleService", b =>
@@ -221,7 +221,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("ServiceID1");
 
-                    b.ToTable("LinkedVehicleService");
+                    b.ToTable("LinkedVehicleService", (string)null);
                 });
 
             modelBuilder.Entity("User", b =>
@@ -270,7 +270,7 @@ namespace SmartGarage.Migrations
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Vehicle", b =>
@@ -298,7 +298,7 @@ namespace SmartGarage.Migrations
 
                     b.HasIndex("ManufacturerId");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Vehicles", (string)null);
                 });
 
             modelBuilder.Entity("CarModel", b =>

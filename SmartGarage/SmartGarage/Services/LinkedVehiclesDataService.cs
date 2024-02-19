@@ -140,7 +140,8 @@ namespace SmartGarage.Services
                     ?.Select(s => new LinkedVehicleService
                     {
                         LinkedVehicleID = s.LinkedVehicleID,
-                        ServiceID = s.ServiceID
+                        ServiceID = s.ServiceID,
+                        Status = s.Status,
                     })
                     .ToList(),
                 // ServiceID = linkedVehiclesDTO.ServiceID
@@ -173,6 +174,7 @@ namespace SmartGarage.Services
                                    {
                                        LinkedVehicleID = s.LinkedVehicleID,
                                        ServiceID = s.ServiceID,
+                                       Status = (bool)s.Status
                                    })
                                    .ToList(),
             };
