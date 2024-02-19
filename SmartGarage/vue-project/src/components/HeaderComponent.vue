@@ -9,13 +9,19 @@
             <RouterLink to="/login">Login</RouterLink>
             <RouterLink to="/profile">Profile</RouterLink>
             <RouterLink to="/dashboard">Dashboard</RouterLink>
+            <a href="/profile">1 </a>
+            <a href="/">2 </a>
         </nav>
     </div>
 </template>
 
 <script>
+
     export default {
+
         name: 'HeaderComponent',
+
+        
         // Add component logic here if needed
     }
 </script>
