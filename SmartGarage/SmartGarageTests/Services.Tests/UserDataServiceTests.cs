@@ -64,10 +64,10 @@ namespace SmartGarageTests.Services.Tests
             // Arrange
             var user = new User { /* fill with test data */ };
             var expectedUser = new User { /* fill with expected data */ };
-            _repositoryMock.Setup(repo => repo.CreateUser(user)).Returns(expectedUser);
+            _repositoryMock.Setup(repo => repo.CreateUser(user , true)).Returns(expectedUser);
 
             // Act
-            var result = _userDataService.CreateUser(user);
+            var result = _userDataService.CreateUser(user , true);
 
             // Assert
             Assert.IsNotNull(result);

@@ -21,7 +21,7 @@ namespace SmartGarageTests.Controllers.Tests
         public void Setup()
         {
             _mockLinkedVehiclesService = new Mock<ILinkedVehiclesDataService>();
-            _controller = new LinkedVehiclesController(_mockLinkedVehiclesService.Object);
+            //_controller = new LinkedVehiclesController(_mockLinkedVehiclesService.Object);
         }
 
         [TestMethod]
