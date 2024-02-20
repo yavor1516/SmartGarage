@@ -5,6 +5,6 @@
         public User GetByEmail(string email);
         public User GetByUsername(string username);
 
-        public User CreateUser(User user);
+        public User CreateUser(User user, bool isCustomer);
     }
 }

@@ -1,8 +1,7 @@
-﻿using SmartGarage.Exceptions;
+﻿
 using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 using SmartGarage.Services.Contracts;
-using System.Text.RegularExpressions;
 
 namespace SmartGarage.Services
 {
@@ -123,7 +122,7 @@ namespace SmartGarage.Services
             {
                 CustomerID = customerEntity.CustomerID,
                 UserID = customerEntity.UserID,
-                LinkedVehicles = (ICollection<LinkedVehiclesDTO>)customerEntity.LinkedVehicles 
+                LinkedVehicles = customerEntity.LinkedVehicles 
             };
         }
     }

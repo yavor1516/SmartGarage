@@ -1,4 +1,5 @@
-﻿using SmartGarage.Repositories.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartGarage.Repositories.Contracts;
 
 namespace SmartGarage.Repositories
 {
@@ -19,7 +20,7 @@ namespace SmartGarage.Repositories
 
         public ICollection<Customer> GetAllCustomers()
         {
-            return _dbcontext.Customers.ToList();
+            return _dbcontext.Customers.Include(x => x.LinkedVehicles).Include(c=>c.User).ToList(); ;
         }
 
         public Customer GetCustomerByEmail(string email)

@@ -7,6 +7,7 @@ using SmartGarage.Helpers;
 using SmartGarage.Models;
 using SmartGarage.Models.DTO;
 using SmartGarage.Responses;
+using SmartGarage.Services;
 using SmartGarage.Services.Contracts;
 using System.Security.Claims;
 using System.Text;
@@ -18,18 +19,26 @@ namespace SmartGarage.Controllers
     public class LinkedVehiclesController : ControllerBase
     {
         private readonly ILinkedVehiclesDataService _linkedVehiclesDataService;
+        private readonly EmployeeDataService _employeeDataService;
 
-        public LinkedVehiclesController(ILinkedVehiclesDataService linkedVehiclesDataService)
+        public LinkedVehiclesController(ILinkedVehiclesDataService linkedVehiclesDataService, EmployeeDataService employeeDataService)
         {
             _linkedVehiclesDataService = linkedVehiclesDataService ?? throw new ArgumentNullException(nameof(linkedVehiclesDataService));
+            _employeeDataService = employeeDataService;
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult<LinkedVehiclesDTO> CreateLinkedVehicle([FromBody] LinkedVehiclesDTO linkedVehiclesDTO)
         {
             if (linkedVehiclesDTO == null)
                 return BadRequest();
 
+            var user = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (_employeeDataService.GetEmployeeByFirstName(user) == null)
+            {
+                return Unauthorized();
+            }
             var createdLinkedVehicle = _linkedVehiclesDataService.CreateLinkedVehicle(linkedVehiclesDTO);
 
             return CreatedAtAction(nameof(GetLinkedVehicleById), new { id = createdLinkedVehicle.LinkedVehicleID }

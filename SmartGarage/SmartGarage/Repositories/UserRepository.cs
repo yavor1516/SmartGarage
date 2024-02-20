@@ -12,9 +12,21 @@ namespace SmartGarage.Repositories
         {
             _dbcontext = dbContext;
         }
-        public User CreateUser(User user)
+        public User CreateUser(User user, bool isCustomer)
         {
             _dbcontext.Users.Add(user);
+            if(isCustomer == true)
+            {
+                Customer custumer = new Customer()
+                {
+                    User = user,
+                    UserID = user.UserID
+                };
+                _dbcontext.Customers.Add(custumer);
+            }
+          
+
+         
             _dbcontext.SaveChanges();
             return user;
         }

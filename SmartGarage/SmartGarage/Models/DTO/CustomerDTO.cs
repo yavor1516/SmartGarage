@@ -6,6 +6,6 @@
 
         public int? UserID { get; set; }
 
-        public ICollection<LinkedVehiclesDTO>? LinkedVehicles { get; set; }
+        public ICollection<LinkedVehicles>? LinkedVehicles { get; set; }
     }
 }

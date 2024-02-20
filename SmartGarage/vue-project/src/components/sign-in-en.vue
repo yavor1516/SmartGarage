@@ -71,6 +71,7 @@
                         console.log('Sign in successful');
                         const data = await response.json();
                         localStorage.setItem("JwtAcessToken", 'Bearer ' + data.accessToken)
+
                         window.location.href = '/';
                         // Redirect to another page or perform other actions
                     } else {

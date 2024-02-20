@@ -74,7 +74,7 @@ namespace SmartGarage.Services
             EmailSender emailSender = new EmailSender();
             emailSender.SendEmail(registerUser.Email, password);
 
-            _userDataService.CreateUser(registerUser);
+            _userDataService.CreateUser(registerUser , true);
 
             return registerUser;
         }
