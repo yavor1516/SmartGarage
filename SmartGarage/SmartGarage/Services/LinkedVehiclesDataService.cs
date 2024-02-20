@@ -11,14 +11,16 @@ namespace SmartGarage.Services
         private readonly IEmployeeDataService _employeeDataService;
         private readonly IVehicleDataService _vehicleDataService;
         private readonly ICustomerDataService _customerDataService;
+        private readonly IServiceDataService _serviceDataService;
         private readonly GarageContext _dbContext;
 
-        public LinkedVehiclesDataService(ILinkedVehiclesRepository linkedVehiclesRepository, IEmployeeDataService employeeDataService, IVehicleDataService vehicleDataService, ICustomerDataService customerDataService, GarageContext dbContext)
+        public LinkedVehiclesDataService(ILinkedVehiclesRepository linkedVehiclesRepository, IEmployeeDataService employeeDataService, IVehicleDataService vehicleDataService, ICustomerDataService customerDataService, IServiceDataService serviceDataService, GarageContext dbContext)
         {
             _linkedVehiclesRepository = linkedVehiclesRepository ?? throw new ArgumentNullException(nameof(linkedVehiclesRepository));
             _employeeDataService = employeeDataService;
             _vehicleDataService = vehicleDataService;
             _customerDataService = customerDataService;
+            _serviceDataService = serviceDataService;
             _dbContext = dbContext;
         }
 
@@ -169,7 +171,16 @@ namespace SmartGarage.Services
                 VIN = linkedVehicleEntity.VIN,
                 YearOfCreation = linkedVehicleEntity.YearOfCreation,
                 InvoiceID = linkedVehicleEntity.InvoiceID,
-             
+                LinkedVehicleServices = linkedVehicleEntity.LinkedVehicleServices
+                        ?.Select(s => new LinkedVehicleServiceDTO
+                        {
+                            LinkedVehicleID = (int)s.LinkedVehicleID,
+                            ServiceID = (int)s.ServiceID,
+                            ServiceName = _serviceDataService.GetServiceByID((int)s.ServiceID)?.Name,
+                            Status = (bool)s.Status
+                        })
+                        .ToList(),
+
             };
         }
 
