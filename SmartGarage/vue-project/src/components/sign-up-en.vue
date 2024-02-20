@@ -39,7 +39,7 @@
             },
             async signUp() {
                 try {
-                    const response = await fetch('https://smartgarageproject.com/Register', {
+                    const response = await fetch('https://backend.smartgarageproject.com/register', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

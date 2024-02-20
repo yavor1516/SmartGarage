@@ -7,13 +7,14 @@ namespace SmartGarage.Models
     public class LinkedVehicleService
     {
         [Key]
-        public int LVServiceID { get; set; }
+        public int ID { get; set; }
 
-
+        [Required]
         [ForeignKey("LinkedVehicleID")]
         public int? LinkedVehicleID { get; set; } // Foreign Key
         public LinkedVehicles LinkedVehicle { get; set; }
 
+        [Required]
         [ForeignKey("ServiceID")]
         public int? ServiceID { get; set; } // Foreign Key
         public Service Service { get; set; }

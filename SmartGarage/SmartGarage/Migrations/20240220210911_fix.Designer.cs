@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartGarage;
 
@@ -11,9 +12,10 @@ using SmartGarage;
 namespace SmartGarage.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    partial class GarageContextModelSnapshot : ModelSnapshot
+    [Migration("20240220210911_fix")]
+    partial class fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,11 +203,11 @@ namespace SmartGarage.Migrations
 
             modelBuilder.Entity("SmartGarage.Models.LinkedVehicleService", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("LinkedVehicleServiceID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LinkedVehicleServiceID"), 1L, 1);
 
                     b.Property<int?>("LinkedVehicleID")
                         .IsRequired()
@@ -218,7 +220,7 @@ namespace SmartGarage.Migrations
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("ID");
+                    b.HasKey("LinkedVehicleServiceID");
 
                     b.HasIndex("LinkedVehicleID");
 
@@ -405,13 +407,13 @@ namespace SmartGarage.Migrations
                     b.HasOne("LinkedVehicles", "LinkedVehicle")
                         .WithMany("LinkedVehicleServices")
                         .HasForeignKey("LinkedVehicleID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Service", "Service")
                         .WithMany("LinkedVehicleServices")
                         .HasForeignKey("ServiceID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("LinkedVehicle");

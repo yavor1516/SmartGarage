@@ -82,7 +82,7 @@ namespace SmartGarage
                 options.AddPolicy("AllowSpecificOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("https://brave-sand-0cf191d03.4.azurestaticapps.net")
+                        builder.WithOrigins("https://brave-sand-0cf191d03.4.azurestaticapps.net", "http://localhost:5173")
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                     });

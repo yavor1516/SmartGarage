@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartGarage;
 
@@ -11,9 +12,10 @@ using SmartGarage;
 namespace SmartGarage.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    partial class GarageContextModelSnapshot : ModelSnapshot
+    [Migration("20240220212404_fixFixFix")]
+    partial class fixFixFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,13 +407,13 @@ namespace SmartGarage.Migrations
                     b.HasOne("LinkedVehicles", "LinkedVehicle")
                         .WithMany("LinkedVehicleServices")
                         .HasForeignKey("LinkedVehicleID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Service", "Service")
-                        .WithMany("LinkedVehicleServices")
+                        .WithMany()
                         .HasForeignKey("ServiceID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("LinkedVehicle");
@@ -465,11 +467,6 @@ namespace SmartGarage.Migrations
             modelBuilder.Entity("Manufacturer", b =>
                 {
                     b.Navigation("CarModels");
-                });
-
-            modelBuilder.Entity("Service", b =>
-                {
-                    b.Navigation("LinkedVehicleServices");
                 });
 #pragma warning restore 612, 618
         }

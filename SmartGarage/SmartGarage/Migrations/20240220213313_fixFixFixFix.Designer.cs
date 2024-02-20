@@ -12,8 +12,8 @@ using SmartGarage;
 namespace SmartGarage.Migrations
 {
     [DbContext(typeof(GarageContext))]
-    [Migration("20240220204954_fixServices")]
-    partial class fixServices
+    [Migration("20240220213313_fixFixFixFix")]
+    partial class fixFixFixFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -203,26 +203,28 @@ namespace SmartGarage.Migrations
 
             modelBuilder.Entity("SmartGarage.Models.LinkedVehicleService", b =>
                 {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
                     b.Property<int?>("LinkedVehicleID")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("ServiceID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LVServiceID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ServiceID1")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<bool?>("Status")
                         .HasColumnType("bit");
 
-                    b.HasKey("LinkedVehicleID", "ServiceID");
+                    b.HasKey("ID");
+
+                    b.HasIndex("LinkedVehicleID");
 
                     b.HasIndex("ServiceID");
-
-                    b.HasIndex("ServiceID1");
 
                     b.ToTable("LinkedVehicleService");
                 });
@@ -409,14 +411,10 @@ namespace SmartGarage.Migrations
                         .IsRequired();
 
                     b.HasOne("Service", "Service")
-                        .WithMany()
+                        .WithMany("LinkedVehicleServices")
                         .HasForeignKey("ServiceID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Service", null)
-                        .WithMany("LinkedVehicleServices")
-                        .HasForeignKey("ServiceID1");
 
                     b.Navigation("LinkedVehicle");
 

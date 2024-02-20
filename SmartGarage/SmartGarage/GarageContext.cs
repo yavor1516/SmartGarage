@@ -31,23 +31,18 @@ namespace SmartGarage
                 .HasIndex(b => b.Email)
                 .IsUnique();
 
-            // Configure LinkedVehicleService entity
             modelBuilder.Entity<LinkedVehicleService>()
-                .HasKey(lvs => new { lvs.LinkedVehicleID, lvs.ServiceID }); // Composite key
-
-            modelBuilder.Entity<LinkedVehicleService>()
-                .HasOne(lvs => lvs.LinkedVehicle)
-                .WithMany(lv => lv.LinkedVehicleServices)
-                .HasForeignKey(lvs => lvs.LinkedVehicleID)
-                .OnDelete(DeleteBehavior.Restrict); // No cascade delete for LinkedVehicleService -> LinkedVehicles relationship
+            .HasOne(lvs => lvs.LinkedVehicle)
+            .WithMany(lv => lv.LinkedVehicleServices)
+            .HasForeignKey(lvs => lvs.LinkedVehicleID)
+            .OnDelete(DeleteBehavior.Restrict); // Set the delete behavior to Restrict
 
             modelBuilder.Entity<LinkedVehicleService>()
                 .HasOne(lvs => lvs.Service)
-                .WithMany()
+                .WithMany(s => s.LinkedVehicleServices)
                 .HasForeignKey(lvs => lvs.ServiceID)
-                .OnDelete(DeleteBehavior.Restrict); // No cascade delete for LinkedVehicleService -> Service relationship
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Other configurations...
         }
     }
 }
