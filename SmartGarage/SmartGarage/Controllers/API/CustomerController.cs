@@ -7,7 +7,7 @@ namespace SmartGarage.Controllers.API
 {
     [Route("api/customers")]
     [ApiController]
-    [Authorize]
+
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerDataService _customerDataService;
@@ -122,12 +122,12 @@ namespace SmartGarage.Controllers.API
                     return NotFound();
                 }
 
-                if (customer.LinkedVehicles == null || customer.LinkedVehicles.Count == 0)
+                if (customer.LinkedVehicleIDs == null || customer.LinkedVehicleIDs.Count == 0)
                 {
                     return NoContent();
                 }
 
-                return Ok(customer.LinkedVehicles);
+                return Ok(customer.LinkedVehicleIDs);
             }
             catch (Exception ex)
             {

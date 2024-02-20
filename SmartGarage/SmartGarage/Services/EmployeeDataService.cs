@@ -125,7 +125,8 @@ namespace SmartGarage.Services
                 EmployeeID = employeeDTO.EmployeeID,
                 UserID = employeeDTO.UserID,
                 VehiclesCreated = (ICollection<Vehicle>)employeeDTO.VehiclesCreated,
-                LinkedVehiclesCreated = (ICollection<LinkedVehicles>)employeeDTO.LinkedVehiclesCreated
+                LinkedVehiclesCreated = (ICollection<LinkedVehicles>)employeeDTO.LinkedVehiclesCreated,
+                IsAdmin = employeeDTO.IsAdmin
             };
         }
         public EmployeeDTO MapEmployeeEntityToDTO(Employee employeeEntity)

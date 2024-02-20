@@ -19,26 +19,26 @@ namespace SmartGarage.Controllers
     public class LinkedVehiclesController : ControllerBase
     {
         private readonly ILinkedVehiclesDataService _linkedVehiclesDataService;
-        private readonly EmployeeDataService _employeeDataService;
+        //private readonly EmployeeDataService _employeeDataService;
 
-        public LinkedVehiclesController(ILinkedVehiclesDataService linkedVehiclesDataService, EmployeeDataService employeeDataService)
+        public LinkedVehiclesController(ILinkedVehiclesDataService linkedVehiclesDataService)
         {
             _linkedVehiclesDataService = linkedVehiclesDataService ?? throw new ArgumentNullException(nameof(linkedVehiclesDataService));
-            _employeeDataService = employeeDataService;
+           // _employeeDataService = employeeDataService;
         }
 
         [HttpPost]
-        [Authorize]
+
         public ActionResult<LinkedVehiclesDTO> CreateLinkedVehicle([FromBody] LinkedVehiclesDTO linkedVehiclesDTO)
         {
             if (linkedVehiclesDTO == null)
                 return BadRequest();
 
-            var user = User.FindFirst(ClaimTypes.Name)?.Value;
+          /*  var user = User.FindFirst(ClaimTypes.Name)?.Value;
             if (_employeeDataService.GetEmployeeByFirstName(user) == null)
             {
                 return Unauthorized();
-            }
+            }*/
             var createdLinkedVehicle = _linkedVehiclesDataService.CreateLinkedVehicle(linkedVehiclesDTO);
 
             return CreatedAtAction(nameof(GetLinkedVehicleById), new { id = createdLinkedVehicle.LinkedVehicleID }

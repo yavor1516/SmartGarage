@@ -8,10 +8,12 @@ namespace SmartGarage.Services
     public class CustomerDataService :ICustomerDataService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly GarageContext _garageContext;
 
-        public CustomerDataService(ICustomerRepository customerRepository)
+        public CustomerDataService(ICustomerRepository customerRepository, GarageContext garageContext)
         {
             _customerRepository = customerRepository;
+            _garageContext = garageContext;
         }
 
         public CustomerDTO CreateCustomer(CustomerDTO customerDTO)
@@ -107,7 +109,7 @@ namespace SmartGarage.Services
             {
                 CustomerID = customerDTO.CustomerID,
                 UserID = customerDTO.UserID,
-                LinkedVehicles = (ICollection<LinkedVehicles>)customerDTO.LinkedVehicles
+                LinkedVehicles = (ICollection<LinkedVehicles>)customerDTO.LinkedVehicleIDs
             };
         }
 
@@ -119,12 +121,23 @@ namespace SmartGarage.Services
                 return null;
             }
 
-            return new CustomerDTO
+            _garageContext.Entry(customerEntity).Collection(c => c.LinkedVehicles).Load();
+
+            // Filter and extract LinkedVehicleIDs for the customer
+            var linkedVehicleIDs = customerEntity.LinkedVehicles
+                                                .Where(lv => lv.CustomerID == customerEntity.CustomerID)
+                                                .Select(lv => lv.LinkedVehicleID)
+                                                .ToList();
+
+            // Map Customer entity to DTO
+            var customerDTO = new CustomerDTO
             {
                 CustomerID = customerEntity.CustomerID,
                 UserID = customerEntity.UserID,
-                LinkedVehicles = customerEntity.LinkedVehicles 
+                LinkedVehicleIDs = linkedVehicleIDs
             };
+
+            return customerDTO;
         }
     }
 }
