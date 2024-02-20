@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
 
@@ -6,6 +7,7 @@ namespace SmartGarage.Controllers.API
 {
     [Route("api/customers")]
     [ApiController]
+    [Authorize]
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerDataService _customerDataService;
