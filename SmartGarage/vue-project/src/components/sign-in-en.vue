@@ -56,7 +56,7 @@
         methods: {
             async signIn() {
                 try {
-                    const response = await fetch('https://localhost:7156/Login', {
+                    const response = await fetch('https://smartgarageproject.com/Login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -69,6 +69,7 @@
 
                     if (response.ok) {
                         console.log('Sign in successful');
+
                         const data = await response.json();
                         localStorage.setItem("JwtAcessToken", 'Bearer ' + data.accessToken)
 

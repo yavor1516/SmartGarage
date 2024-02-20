@@ -262,8 +262,22 @@
                 this.isCardVisible = !this.isCardVisible;
             },
             fetchCustomerData() {
-                this.loading = true; // Set loading flag to true
-                fetch('https://smartgarageproject.com/adminPanel/unblock/3') // Replace '/api/customers/' with the actual endpoint URL
+                this.loading = true;
+                const jwtToken = localStorage.getItem('JwtAcessToken');
+                if (!jwtToken) {
+                    // If token doesn't exist, handle the error (e.g., redirect to login)
+                    console.error('JWT token not found');
+                    this.$router.push('/login');
+                    return;
+                }
+                const requestOptions = {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': jwtToken, // Set the Authorization header with the token
+                        'Content-Type': 'application/json' // Set the Content-Type header if needed
+                    }
+                };
+                fetch('https://smartgarageproject.com/api/customers/', requestOptions) // Replace '/api/customers/' with the actual endpoint URL
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Unauthorized');

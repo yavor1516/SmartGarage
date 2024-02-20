@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SmartGarage.Models.DTO;
 using SmartGarage.Repositories.Contracts;
 
 namespace SmartGarage.Repositories
@@ -41,10 +42,20 @@ namespace SmartGarage.Repositories
             return customer;
         }
 
-        public Customer GetCustomerByUsername(string username)
+        public CustomerProfileDTO GetCustomerByUsername(string username)
         {
             Customer customer = _dbcontext.Customers.FirstOrDefault(x => x.User.Username == username);
-            return customer;
+            User user = _dbcontext.Users.FirstOrDefault(x => x.Username == username);
+            CustomerProfileDTO Profile = new CustomerProfileDTO()
+            {
+                Username = user.Username,
+                FirstName= user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.phoneNumber,
+                Vehicles = customer.LinkedVehicles
+            };
+            return Profile;
         }
 
         public void UpdateCustomer(Customer customer)

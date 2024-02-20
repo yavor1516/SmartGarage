@@ -60,6 +60,7 @@ namespace SmartGarage
             builder.Services.AddScoped<ILinkedVehicleServiceRepository, LinkedVehicleServiceRepository>();
 
             //Momcheta tuka registrirame Services
+            builder.Services.AddTransient<ICustomerProfileService, CustomerProfileService>();
             builder.Services.AddTransient<ILinkedVehicleServiceService, LinkedVehicleServiceService>();
             builder.Services.AddTransient<ICurrencyConversionDataService, CurrencyConversionDataService>();
             builder.Services.AddTransient<IEmployeeDataService, EmployeeDataService>();

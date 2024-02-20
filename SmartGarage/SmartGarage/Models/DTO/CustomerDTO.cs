@@ -2,6 +2,7 @@
 {
     public class CustomerDTO
     {
+
         public int CustomerID { get; set; }
 
         public int? UserID { get; set; }

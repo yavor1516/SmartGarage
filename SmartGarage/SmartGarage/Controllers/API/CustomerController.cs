@@ -11,10 +11,11 @@ namespace SmartGarage.Controllers.API
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerDataService _customerDataService;
-
-        public CustomersController(ICustomerDataService customerDataService)
+        private readonly ICustomerProfileService _customerProfileService;
+        public CustomersController(ICustomerDataService customerDataService, ICustomerProfileService customerProfileService)
         {
             _customerDataService = customerDataService;
+            _customerProfileService = customerProfileService;
         }
 
         [HttpPost]
@@ -97,7 +98,7 @@ namespace SmartGarage.Controllers.API
         {
             try
             {
-                var customer = _customerDataService.GetCustomerByUsername(username);
+                var customer = _customerProfileService.GetUserByUsername(username);
                 if (customer == null)
                     return NotFound();
 

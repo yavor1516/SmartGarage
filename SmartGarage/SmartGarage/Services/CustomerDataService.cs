@@ -73,14 +73,15 @@ namespace SmartGarage.Services
 
         public CustomerDTO GetCustomerByUsername(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                throw new ArgumentException("Username cannot be null or whitespace.", nameof(username));
-            }
+            //if (string.IsNullOrWhiteSpace(username))
+            //{
+            //    throw new ArgumentException("Username cannot be null or whitespace.", nameof(username));
+            //}
 
-            var customerEntity = _customerRepository.GetCustomerByUsername(username);
+            //var customerEntity = _customerRepository.GetCustomerByUsername(username);
 
-            return MapCustomerEntityToDTO(customerEntity);
+            //return MapCustomerEntityToDTO(customerEntity);
+            return null;
         }
 
         public void UpdateCustomer(CustomerDTO customerDTO)
