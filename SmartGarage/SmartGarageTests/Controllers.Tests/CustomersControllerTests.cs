@@ -21,7 +21,7 @@ namespace SmartGarageTests.Controllers.Tests
         public void Setup()
         {
             _mockCustomerDataService = new Mock<ICustomerDataService>();
-            _controller = new CustomersController(_mockCustomerDataService.Object);
+            //_controller = new CustomersController(_mockCustomerDataService.Object);
         }
 
         [TestMethod]
