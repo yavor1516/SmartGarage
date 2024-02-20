@@ -1,7 +1,7 @@
 <template>
     <div>
         <header>
-            <HeaderComponent />
+            <HeaderComponent :isAuthenticated="isAuthenticated" />
         </header>
 
         <main>
@@ -44,7 +44,8 @@
             BodyComponent,
             FooterComponent
         }
-    }
+
+        }
 </script>
 
 <style>

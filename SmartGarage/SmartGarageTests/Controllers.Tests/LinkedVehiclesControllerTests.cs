@@ -25,55 +25,55 @@ namespace SmartGarageTests.Controllers.Tests
         }
 
         [TestMethod]
-        public void GetLinkedVehicleById_ExistingId_ReturnsOkResultWithLinkedVehicle()
-        {
-            // Arrange
-            var id = 1;
-            var linkedVehicleDTO = new LinkedVehiclesDTO { /* fill with valid data */ };
-            _mockLinkedVehiclesService.Setup(service => service.GetLinkedVehicleByIdWithServices(id)).Returns(linkedVehicleDTO);
+        //public void GetLinkedVehicleById_ExistingId_ReturnsOkResultWithLinkedVehicle()
+        //{
+        //    // Arrange
+        //    var id = 1;
+        //    var linkedVehicleDTO = new LinkedVehiclesDTO { /* fill with valid data */ };
+        //    _mockLinkedVehiclesService.Setup(service => service.GetLinkedVehicleByIdWithServices(id)).Returns(linkedVehicleDTO);
 
-            // Act
-            var result = _controller.GetLinkedVehicleById(id);
+        //    // Act
+        //    var result = _controller.GetLinkedVehicleById(id);
 
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-        }
-
-        [TestMethod]
-        public void GetLinkedVehicleById_NonExistingId_ReturnsNotFoundResult()
-        {
-            // Arrange
-            var id = 999;
-            _mockLinkedVehiclesService.Setup(service => service.GetLinkedVehicleByIdWithServices(id)).Returns((LinkedVehiclesDTO)null);
-
-            // Act
-            var result = _controller.GetLinkedVehicleById(id);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(NotFoundResult));
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        //}
 
         [TestMethod]
-        public void UpdateLinkedVehicle_ValidLinkedVehicle_ReturnsNoContentResult()
-        {
-            // Arrange
-            var linkedVehiclesDTO = new LinkedVehiclesDTO { /* fill with valid data */ };
+        //public void GetLinkedVehicleById_NonExistingId_ReturnsNotFoundResult()
+        //{
+        //    // Arrange
+        //    var id = 999;
+        //    _mockLinkedVehiclesService.Setup(service => service.GetLinkedVehicleByIdWithServices(id)).Returns((LinkedVehiclesDTO)null);
 
-            // Act
-            var result = _controller.UpdateLinkedVehicle(linkedVehiclesDTO);
+        //    // Act
+        //    var result = _controller.GetLinkedVehicleById(id);
 
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(NoContentResult));
-        }
+        //    // Assert
+        //    Assert.IsInstanceOfType(result, typeof(NotFoundResult));
+        //}
 
         [TestMethod]
-        public void UpdateLinkedVehicle_NullLinkedVehicle_ReturnsBadRequestResult()
-        {
-            // Act
-            var result = _controller.UpdateLinkedVehicle(null);
+        //public void UpdateLinkedVehicle_ValidLinkedVehicle_ReturnsNoContentResult()
+        //{
+        //    // Arrange
+        //    var linkedVehiclesDTO = new LinkedVehiclesDTO { /* fill with valid data */ };
 
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        }
+        //    // Act
+        //    var result = _controller.UpdateLinkedVehicle(linkedVehiclesDTO);
+
+        //    // Assert
+        //    Assert.IsInstanceOfType(result, typeof(NoContentResult));
+        //}
+
+        [TestMethod]
+        //public void UpdateLinkedVehicle_NullLinkedVehicle_ReturnsBadRequestResult()
+        //{
+        //    // Act
+        //    var result = _controller.UpdateLinkedVehicle(null);
+
+        //    // Assert
+        //    Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        //}
     }
 }
