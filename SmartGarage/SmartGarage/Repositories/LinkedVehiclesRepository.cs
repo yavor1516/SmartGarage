@@ -30,7 +30,10 @@ namespace SmartGarage.Repositories
         {
             return _dbcontext.LinkedVehicles
                 .Include(lv => lv.LinkedVehicleServices)
-                    .ThenInclude(lvs => lvs.Service)
+                .ThenInclude(lvs => lvs.Service)
+                .Include(man=>man.Manufacturer)
+                .ThenInclude(x=>x.CarModels)
+                   
                 .FirstOrDefault(lv => lv.LinkedVehicleID == id);
         }
         public ICollection<LinkedVehicles> GetLinkedVehiclesByEmployeeId(int employeeId)

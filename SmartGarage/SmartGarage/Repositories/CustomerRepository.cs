@@ -44,16 +44,35 @@ namespace SmartGarage.Repositories
 
         public CustomerProfileDTO GetCustomerByUsername(string username)
         {
-            Customer customer = _dbcontext.Customers.FirstOrDefault(x => x.User.Username == username);
+            Customer customer = _dbcontext.Customers
+                               .Include(c => c.LinkedVehicles)
+                               .ThenInclude(m=>m.Manufacturer)
+                               .ThenInclude(mod=>mod.CarModels)
+                               .Include(c => c.LinkedVehicles)
+                               .ThenInclude(e=>e.Employee)
+                               .ThenInclude(u=>u.User)
+                                .Include(c => c.LinkedVehicles)
+                               .ThenInclude(i=>i.Invoice)
+                                .Include(c => c.LinkedVehicles)
+                                    .ThenInclude(s => s.LinkedVehicleServices)
+                               .FirstOrDefault(x => x.User.Username == username);
+
             User user = _dbcontext.Users.FirstOrDefault(x => x.Username == username);
             CustomerProfileDTO Profile = new CustomerProfileDTO()
             {
                 Username = user.Username,
-                FirstName= user.FirstName,
+                FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.phoneNumber,
-                Vehicles = customer.LinkedVehicles
+                Vehicles = customer.LinkedVehicles.Select(v => new AssignedVehiclesDTO
+                {
+                    Manufacturer = v.Manufacturer.BrandName,
+                    Model = v.Model.Model,
+                    EmployeeName = v.Employee.User.Username,
+
+                 
+                }).ToList()
             };
             return Profile;
         }

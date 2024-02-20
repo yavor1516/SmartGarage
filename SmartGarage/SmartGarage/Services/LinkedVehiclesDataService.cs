@@ -169,14 +169,7 @@ namespace SmartGarage.Services
                 VIN = linkedVehicleEntity.VIN,
                 YearOfCreation = linkedVehicleEntity.YearOfCreation,
                 InvoiceID = linkedVehicleEntity.InvoiceID,
-                LinkedVehicleServices = linkedVehicleEntity.LinkedVehicleServices?
-                                   .Select(s => new LinkedVehicleServiceDTO
-                                   {
-                                       LinkedVehicleID = s.LinkedVehicleID,
-                                       ServiceID = s.ServiceID,
-                                       Status = (bool)s.Status
-                                   })
-                                   .ToList(),
+             
             };
         }
 
