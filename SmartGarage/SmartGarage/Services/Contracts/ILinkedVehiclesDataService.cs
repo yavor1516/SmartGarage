@@ -13,5 +13,6 @@ namespace SmartGarage.Services.Contracts
         ICollection<LinkedVehiclesDTO> GetLinkedVehicleByModelID(int model);
         ICollection<LinkedVehiclesDTO> GetAllLinkedVehiclesById(int id);
         void UpdateLinkedVehicle(LinkedVehiclesDTO linkedVehiclesDTO);
+        void DeleteLinkedVehicle(int linkedVehicleId);
     }
 }

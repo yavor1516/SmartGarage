@@ -70,6 +70,10 @@ namespace SmartGarage.Repositories
         {
             _dbcontext.SaveChanges();
         }
-       
+        public void DeleteLinkedVehicle(LinkedVehicles linkedVehicle)
+        {
+            _dbcontext.LinkedVehicles.Remove(linkedVehicle);
+            _dbcontext.SaveChanges();
+        }
     }
 }

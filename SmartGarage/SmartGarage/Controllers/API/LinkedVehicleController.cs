@@ -129,21 +129,21 @@ namespace SmartGarage.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteLinkedVehicle(int id)
-        //{
-        //    if (id <= 0)
-        //        return BadRequest("Invalid ID");
+        [HttpDelete("{id}")]
+        public IActionResult DeleteLinkedVehicle(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Invalid ID");
 
-        //    try
-        //    {
-        //        _linkedVehiclesDataService.DeleteLinkedVehicle(id);
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+            try
+          {
+               _linkedVehiclesDataService.DeleteLinkedVehicle(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
