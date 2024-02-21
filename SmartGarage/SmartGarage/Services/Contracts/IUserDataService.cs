@@ -6,5 +6,7 @@
         public User GetByUsername(string username);
 
         public User CreateUser(User user, bool isCustomer);
+        public User GetUserById(int id);
+        public void UpdateUser(User user);
     }
 }

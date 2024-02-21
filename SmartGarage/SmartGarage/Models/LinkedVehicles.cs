@@ -30,7 +30,8 @@ public class LinkedVehicles
 
     [Required]
     [MinLength(6)]
-    [MaxLength(8)] // Adjust according to the license plate 
+    [MaxLength(8)] //supports only bulgarian license plates
+    [RegularExpression(@"^(A|B|BH|BP|BT|E|EB|EH|K|KH|M|H|OB|P|PA|PB|PK|PP|C|CA|CB|CH|CM|CO|CC|CT|T|TX|Y|X|EA) \d{1,4} (А|В|Е|К|М|Н|О|Р|С|Т|У|Х){1,2}$", ErrorMessage = "Invalid license plate format.")]
     public string LicensePlate { get; set; }
 
     [Required]

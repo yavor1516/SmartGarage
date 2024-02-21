@@ -19,11 +19,19 @@ namespace SmartGarage.Services
         {
             return _userRepository.GetUserByUsername(username);
         }
+        public User GetUserById(int id)
+        {
+
+            return _userRepository.GetUserById(id);
+        }
         public User CreateUser(User user , bool isCustomer)
         {
            
             return _userRepository.CreateUser(user , isCustomer);
         }
-
+        public void UpdateUser(User user)
+        {
+            _userRepository.UpdateUser(user);
+        }
     }
 }
