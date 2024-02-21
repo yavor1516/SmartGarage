@@ -37,7 +37,7 @@
         <ol></ol>
         <span>You dont have account? <a href="/signup">Sing up</a> </span>
     </div>
-    <img alt="car logo" class="car" src="@/assets/Images/Car.png" width="125" height="125" />
+
 
 </template>
 <script setup>

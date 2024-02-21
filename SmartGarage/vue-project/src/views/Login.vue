@@ -29,13 +29,7 @@
         transform: scale(2);
         transform-origin: top left;
     }
-    .car {
-        transform: scale(8);
-        z-index: -1;
-        position: absolute;
-        right: 0;
-        transform-origin: center right;
-    }
+  
    
 
 </style>

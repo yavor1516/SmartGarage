@@ -261,7 +261,7 @@
         methods: {
             async fetchManufacturers() {
                 try {
-                    const response = await fetch("https://localhost:7156/api/Manufacturer");
+                    const response = await fetch("https://backend.smartgarageproject.com/api/Manufacturer");
                     const data = await response.json();
                     this.manufacturers = data;
                 } catch (error) {
@@ -270,7 +270,7 @@
             },
             async fetchEmployees() {
                 try {
-                    const response = await fetch("https://localhost:7156/api/Employee");
+                    const response = await fetch("https://backend.smartgarageproject.com/api/Employee");
                     const data = await response.json();
                     this.employees = data;
                 } catch (error) {
@@ -279,7 +279,7 @@
             },
             async fetchCustomers() {
                 try {
-                    const response = await fetch("https://localhost:7156/api/customers");
+                    const response = await fetch("https://backend.smartgarageproject.com/api/customers");
                     const data = await response.json();
                     this.customers = data;
                 } catch (error) {
@@ -288,7 +288,7 @@
             },
             async fetchServices() {
                 try {
-                    const response = await fetch("https://localhost:7156/api/Service");
+                    const response = await fetch("https://backend.smartgarageproject.com/api/Service");
                     const data = await response.json();
                     this.services = data;
                 } catch (error) {
@@ -298,7 +298,7 @@
             async assignVehicle() {
                 const requestBody = this.generateRequestBody();
                 try {
-                    const response = await fetch("https://localhost:7156/api/LinkedVehicles", {
+                    const response = await fetch("https://backend.smartgarageproject.com/api/LinkedVehicles", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"

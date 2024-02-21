@@ -278,7 +278,7 @@
                         'Content-Type': 'application/json' // Set the Content-Type header if needed
                     }
                 };
-                fetch('https://localhost:7156/username', requestOptions) // Replace '/api/customers/' with the actual endpoint URL
+                fetch('https://backend.smartgarageproject.com/username', requestOptions) // Replace '/api/customers/' with the actual endpoint URL
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Unauthorized');

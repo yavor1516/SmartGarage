@@ -1,82 +1,66 @@
 <template>
     <div>
-        <header>
-            <HeaderComponent />
-        </header>
+        <!-- Header Component -->
+        <HeaderComponent />
 
-        <main>
-            <BodyComponent />
-            <!-- Your additional content here -->
-
-            <div class="images">
-
-                <Flicking :options="{ circular: false }" :plugins="plugins">
-                    <div class="card-panel">
-                        <img alt="car logo" class="car" src="@/assets/Images/Home1.jpg" width="400" height="600" />
+        <!-- Main Content Section -->
+        <section class="about-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="section-heading">About Smart Garage</h2>
+                        <p class="about-text">
+                            Smart Garage is a premier automotive care center dedicated to providing top-notch services to our customers. With years of experience in the industry, our team of skilled technicians is committed to delivering exceptional results and ensuring the satisfaction of every client.
+                        </p>
+                        <p class="about-text">
+                            Our state-of-the-art facility is equipped with the latest tools and technology to handle a wide range of automotive issues. Whether you need routine maintenance, repairs, or custom modifications, you can trust Smart Garage to get the job done right.
+                        </p>
+                        <router-link to="/contact" class="btn btn-primary">Contact Us</router-link>
                     </div>
-                    <div class="card-panel">
-                        <img alt="car logo" class="car" src="@/assets/Images/Home2.jpg" width="400" height="600" />
+                    <div class="col-md-6">
+               
                     </div>
-                    <div class="card-panel">
-                        <img alt="car logo" class="car" src="@/assets/Images/Home3.jpg" width="400" height="600" />
-                    </div>
-                    <template #viewport>
-                        <span class="flicking-arrow-prev is-thin"></span>
-                        <span class="flicking-arrow-next is-thin"></span>
-                    </template>
-
-
-                </Flicking>
-                <!-- End of additional content -->
+                </div>
             </div>
-            <div class="background">
-                <img alt="car logo" class="background" src="@/assets/Images/background1.jpg" />
+        </section>
 
-            </div>
-
-        </main>
-
-        <footer>
-            <FooterComponent />
-        </footer>
+        <!-- Footer Component -->
+        <FooterComponent />
     </div>
 </template>
 
 <script>
     import HeaderComponent from "@/components/HeaderComponent.vue";
     import FooterComponent from "@/components/FooterComponent.vue";
-    import BodyComponent from "@/components/BodyComponent.vue";
-    import Flicking from "@egjs/vue3-flicking";
-    import { Arrow } from "@egjs/flicking-plugins";
-    import "@egjs/flicking-plugins/dist/arrow.css";
+
     export default {
         components: {
             HeaderComponent,
             FooterComponent,
-            BodyComponent,
-            Flicking,
-        },
-        data() {
-            return {
-                plugins: [new Arrow()],
-            };
         },
     };
 </script>
+
 <style>
-    .background {
-        position: absolute;
-        width: 160vh;
-        height: 600px;
-        left: 0;
-        z-index: -30;
+    /* Add your CSS styling here */
+    .about-section {
+        padding: 80px 0;
     }
 
-    .images {
-        right: 0;
-        position: absolute;
-        z-index: -1;
-        width: 400px;
-        transform-origin: center right;
+    .section-heading {
+        font-size: 36px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .about-text {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .about-image {
+        border-radius: 10px;
     }
 </style>
