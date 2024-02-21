@@ -2,23 +2,25 @@
 
 ## Overview
 
-SmartGarage is a project designed to streamline garage operations for both service providers and customers. It allows users to manage vehicle visits, track service status, and perform various administrative tasks. Service providers can efficiently assign services to vehicles, while customers can monitor their vehicle's status and scheduled services.
+SmartGarage [smartgarageproject.com](https://smartgarageproject.com) is a project designed to streamline garage operations for both service providers and customers. It allows users to manage vehicle visits, track service status, and perform various administrative tasks. Service providers can efficiently assign services to vehicles, while customers can monitor their vehicle's status and scheduled services.
 
 ## Features
 
 - User authentication and authorization.
-- Manage visits to the garage: add, remove, and update visit details.
+- Manage visits to the garage: add, remove, and update.
 - Register vehicles to specific customers.
-- Convert between different currencies (e.g., EUR to BGN, USD, etc.).
+- Convert between over 170 currencies (e.g., EUR to BGN, USD, etc.) using an external API - [freecurencyapi.com](https://freecurrencyapi.com/).
 
 ## Technologies Used
 
-- Vue.js for the frontend interface.
+- [Vue.js](https://vuejs.org/) for the frontend interface.
 - Entity Framework Core for data access and management.
-- SQL Database for storing application data.
-- Azure for hosting the application.
+- [SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16) for storing application data.
+- [Azure](https://azure.microsoft.com/en-us) for hosting the application.
+- Back-end hosted on [backend.smartgarageproject.com](https://backend.smartgarageproject.com)
+- Custom domain purchased from [namecheap.com](https://www.namecheap.com/)
 - User authentication and authorization mechanisms.
-- JavaScript, HTML, and CSS for frontend development.
+- JavaScript, HTML, and CSS for Front-end development.
 
 ## Installation Instructions
 
@@ -38,7 +40,7 @@ Update-Database
 ```
 2. Update the connection string in the project configuration to point to your database.
 
-Run the application:
+How to run the application:
 
 1. Open the project in your preferred development environment.
 2. Set up the necessary environment variables.
