@@ -19,8 +19,6 @@
 
             <!-- Your additional content here -->
             <div class="AssignVehicle" v-if="showAssignVehicle">
-
-
                 <div>
                     <!-- Input field with dropdown for Manufacturer -->
                     <div class="input-field">
@@ -35,7 +33,6 @@
                             </div>
                         </div>
                     </div>
-                    <ol></ol>
 
                     <!-- Input field with dropdown for Model -->
                     <div class="input-field">
@@ -49,6 +46,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Input field with dropdown for Employee -->
                     <div class="input-field">
                         <label for="employee">Employee:</label>
                         <div class="dropdown">
@@ -60,6 +59,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Input field with dropdown for Customer -->
                     <div class="input-field">
                         <label for="customer">Customer:</label>
                         <div class="dropdown">
@@ -72,22 +73,26 @@
                         </div>
                     </div>
 
+                    <!-- Input field for Registration Plate -->
                     <div class="input-field">
                         <label for="input4">Registration Plate:</label>
-                        <input type="text" id="input4" v-model="input4Value" placeholder="Enter valid Bulgarian registration plate">
+                        <input type="text" id="registrationPlate" v-model="registrationPlate" placeholder="Enter valid Bulgarian registration plate">
                     </div>
+
+                    <!-- Input field for VIN -->
                     <div class="input-field">
-                        <label for="input4">Win number:</label>
-                        <input type="text" id="input4" v-model="input4Value" placeholder="Enter car Win number">
+                        <label for="input4">VIN:</label>
+                        <input type="text" id="vin" v-model="vin" placeholder="Enter car VIN number">
                     </div>
-                    <ol></ol>
+
+                    <!-- Button to assign vehicle -->
                     <button type="button" class="btn btn-success" @click="assignVehicle">Assign</button>
-                    <!-- Additional input fields here -->
                 </div>
+
+                <!-- Services section -->
                 <div class="services">
                     <div class="input-field">
-
-                        <label for="model">Services:</label>
+                        <label for="service">Services:</label>
                         <ol></ol>
                         <div class="dropdown">
                             <input type="text" id="service" v-model="selectedService" @input="filterServices" placeholder="Select or type">
@@ -122,20 +127,22 @@
                     </div>
                 </div>
             </div>
+
+            <!-- List of Cars section -->
             <div class="ListOfCars" v-if="carList">
                 <div class="Vehicles">
                     <div class="input-field">
-
                         <label for="model">Vehicles:</label>
                         <ol></ol>
                         <div class="dropdown">
-                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or search">
+                            <input type="text" id="vehicleModel" v-model="selectedVehicleModel" @input="filterVehicleModels" placeholder="Select or search">
                             <div class="dropdown-content">
-                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
+                                <div v-for="model in filteredVehicleModels" :key="model.id" @click="selectVehicleModel(model)">
                                     {{ model.name }}
                                 </div>
                             </div>
                         </div>
+                        <!-- Table for displaying vehicles -->
                         <table class="table table-hover">
                             <thead>
                                 <tr>
@@ -147,44 +154,27 @@
                                     <th scope="col">Price</th>
                                     <th scope="col">Edit</th>
                                     <th scope="col">Delete</th>
-
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Toyota Corola</td>
-                                    <td>Mike Chobanov</td>
-                                    <td>50%</td>
-                                    <td>Stephan Tomson</td>
-                                    <td>200$</td>
+                                <tr v-for="(vehicle, index) in filteredVehicles" :key="vehicle.id">
+                                    <th scope="row">{{ index + 1 }}</th>
+                                    <td>{{ vehicle.name }}</td>
+                                    <td>{{ vehicle.customer }}</td>
+                                    <td>{{ vehicle.progress }}</td>
+                                    <td>{{ vehicle.employee }}</td>
+                                    <td>{{ vehicle.price }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" @click="">Edit</button>
+                                        <button type="button" class="btn btn-primary" @click="editVehicle(vehicle)">Edit</button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Bmw X5</td>
-                                    <td>Stephan Chobanov</td>
-                                    <td>100%</td>
-                                    <td>Stephan Tomson</td>
-                                    <td>2000$</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" @click="">Edit</button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
+                                        <button type="button" class="btn btn-primary" @click="deleteVehicle(vehicle)">Delete</button>
                                     </td>
                                 </tr>
-
                             </tbody>
                         </table>
                     </div>
+                    <!-- Pagination -->
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item"><a class="page-link" href="#">Previous</a></li>
@@ -196,7 +186,7 @@
                     </nav>
                 </div>
             </div>
-            <!-- End of additional content -->
+            <!-- End of List of Cars section -->
         </main>
 
         <footer>
@@ -230,10 +220,13 @@
                 customers: [],
                 selectedService: "",
                 services: [],
-                selectedServices: [] // Array to store selected services
+                selectedServices: [], // Array to store selected services
+                vin: "",
+                registrationPlate: ""
             };
         },
         computed: {
+            // Computed properties for filtering dropdown options
             filteredManufacturers() {
                 return this.manufacturers.filter(manufacturer =>
                     manufacturer.brandName.toLowerCase().includes(this.selectedManufacturer.toLowerCase())
@@ -284,6 +277,15 @@
                     console.error("Error fetching employees:", error);
                 }
             },
+            async fetchCustomers() {
+                try {
+                    const response = await fetch("https://localhost:7156/api/customers");
+                    const data = await response.json();
+                    this.customers = data;
+                } catch (error) {
+                    console.error("Error fetching customers:", error);
+                }
+            },
             async fetchServices() {
                 try {
                     const response = await fetch("https://localhost:7156/api/Service");
@@ -293,11 +295,44 @@
                     console.error("Error fetching services:", error);
                 }
             },
+            async assignVehicle() {
+                const requestBody = this.generateRequestBody();
+                try {
+                    const response = await fetch("https://localhost:7156/api/LinkedVehicles", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                    const data = await response.json();
+                    console.log(data); // Handle response as needed
+                } catch (error) {
+                    console.error("Error assigning vehicle:", error);
+                }
+            },
             toggleAssignVehicle() {
                 this.showAssignVehicle = !this.showAssignVehicle;
                 if (this.showAssignVehicle && this.carList) {
                     this.carList = !this.carList;
                 }
+            },
+            generateRequestBody() {
+                return {
+                    VIN: this.vin,
+                    modelid: this.selectedModel,
+                    ManufacturerID: this.selectedManufacturer,
+                    customerid: this.selectedCustomer,
+                    employeeid: this.selectedEmployee,
+                    LicensePlate: this.registrationPlate,
+                    YearOfCreation: 2023,
+                    InvoiceID: 1,
+                    LinkedVehicleServices: this.selectedServices.map(service => ({
+                        serviceName: service.name,
+                        "ServiceID": 1
+
+                    }))
+                };
             },
             listOfCars() {
                 this.carList = !this.carList;
@@ -333,15 +368,6 @@
                     document.querySelector("#employee .dropdown-content").style.display = "block";
                 });
             },
-            async fetchCustomers() {
-                try {
-                    const response = await fetch("https://localhost:7156/api/customers");
-                    const data = await response.json();
-                    this.customers = data;
-                } catch (error) {
-                    console.error("Error fetching customers:", error);
-                }
-            },
             filterCustomers() {
                 this.$nextTick(() => {
                     document.querySelector("#customer .dropdown-content").style.display = "block";
@@ -363,7 +389,7 @@
             // Method to add selected service to the table
             addServiceToTable(service) {
                 this.selectedServices.push({
-                    serviceID: service.serviceID,
+                    id: service.serviceID,
                     name: service.name,
                     employee: service.employee,
                     price: service.price
@@ -374,19 +400,22 @@
             deleteService(index) {
                 this.selectedServices.splice(index, 1);
             },
-            assignVehicle() {
-                // Your logic to assign the vehicle
+            // Other methods for editing and deleting vehicles
+            editVehicle(vehicle) {
+                // Implement logic for editing vehicles
+            },
+            deleteVehicle(vehicle) {
+                // Implement logic for deleting vehicles
             }
         },
         mounted() {
             this.fetchManufacturers();
             this.fetchEmployees();
             this.fetchCustomers();
-            this.fetchServices();// Fetch employees when the component is mounted
+            this.fetchServices();
         }
     };
 </script>
-
 
 <style scoped>
     .AssignVehicle {
