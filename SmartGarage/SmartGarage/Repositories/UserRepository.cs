@@ -15,7 +15,7 @@ namespace SmartGarage.Repositories
         public User CreateUser(User user, bool isCustomer)
         {
             _dbcontext.Users.Add(user);
-            if(isCustomer == true)
+            if (isCustomer == true)
             {
                 Customer custumer = new Customer()
                 {
@@ -24,9 +24,9 @@ namespace SmartGarage.Repositories
                 };
                 _dbcontext.Customers.Add(custumer);
             }
-          
 
-         
+
+
             _dbcontext.SaveChanges();
             return user;
         }
@@ -62,7 +62,16 @@ namespace SmartGarage.Repositories
 
         public void UpdateUser(User user)
         {
-            _dbcontext.SaveChanges();
+            var existingUser = _dbcontext.Users.Find(user.UserID);
+            if (existingUser != null)
+            {
+                existingUser.FirstName = user.FirstName;
+                existingUser.LastName = user.LastName;
+                existingUser.Username = user.Username;
+                existingUser.phoneNumber = user.phoneNumber;
+
+                _dbcontext.SaveChanges();
+            }
         }
     }
 }

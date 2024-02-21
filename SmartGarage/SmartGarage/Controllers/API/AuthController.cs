@@ -3,6 +3,7 @@ using ForumSystem.Responses;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Mvc;
 using SmartGarage.Models.DTO;
+using SmartGarage.Services;
 using SmartGarage.Services.Contracts;
 
 namespace SmartGarage.Controllers.API
@@ -11,10 +12,12 @@ namespace SmartGarage.Controllers.API
     public class AuthController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IUserDataService _userDataService;
 
-        public AuthController(IAccountService accountService)
+        public AuthController(IAccountService accountService, IUserDataService userDataService)
         {
             _accountService = accountService;
+            _userDataService = userDataService;
         }
 
         [HttpPost("Register")]
@@ -72,6 +75,36 @@ namespace SmartGarage.Controllers.API
             {
                 // Handle unexpected exceptions here
                 return StatusCode(500, new ErrorResponse("An unexpected error occurred."));
+            }
+        }
+        [HttpPut("/user/{id}")]
+        public IActionResult UpdateUser(int id, [FromBody] UserDTO userDto)
+        {
+            if (userDto == null || id != userDto.UserID)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var existingUser = _userDataService.GetUserById(id);
+                if (existingUser == null)
+                {
+                    return NotFound();
+                }
+
+                existingUser.FirstName = userDto.FirstName;
+                existingUser.LastName = userDto.LastName;
+                existingUser.phoneNumber = userDto.PhoneNumber;
+
+                _userDataService.UpdateUser(existingUser);
+
+                return Ok(existingUser);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                return StatusCode(500, "Internal server error");
             }
         }
     }
