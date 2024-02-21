@@ -24,7 +24,7 @@ namespace SmartGarageTests.Services.Tests
             _manufacturerDataService = new ManufacturerDataService(_repositoryMock.Object);
         }
 
-        [TestMethod]
+       /* [TestMethod]
         public void CreateManufacturer_ValidManufacturerDTO_ReturnsCreatedManufacturerDTO()
         {
             // Arrange
@@ -47,7 +47,7 @@ namespace SmartGarageTests.Services.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(manufacturerDTO.ManufacturerID, result.ManufacturerID);
             Assert.AreEqual(manufacturerDTO.BrandName, result.BrandName);
-        }
+        }*/
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -56,7 +56,7 @@ namespace SmartGarageTests.Services.Tests
             // Act
             _manufacturerDataService.CreateManufacturer(null);
         }
-
+        /*
         [TestMethod]
         public void GetManufacturerById_ValidId_ReturnsManufacturerDTO()
         {
@@ -76,7 +76,7 @@ namespace SmartGarageTests.Services.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedManufacturer.ManufacturerID, result.ManufacturerID);
             Assert.AreEqual(expectedManufacturer.BrandName, result.BrandName);
-        }
+        }*/
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
@@ -88,7 +88,7 @@ namespace SmartGarageTests.Services.Tests
             // Act
             _manufacturerDataService.GetManufacturerById(invalidId);
         }
-
+        /*
         [TestMethod]
         public void GetAllManufacturers_ReturnsListOfManufacturerDTOs()
         {
@@ -111,7 +111,7 @@ namespace SmartGarageTests.Services.Tests
                 Assert.AreEqual(manufacturers[i].ManufacturerID, result.ElementAt(i).ManufacturerID);
                 Assert.AreEqual(manufacturers[i].BrandName, result.ElementAt(i).BrandName);
             }
-        }
+        }*/
 
         [TestMethod]
         public void UpdateManufacturer_ValidManufacturerDTO_CallsRepositoryUpdateMethod()

@@ -183,7 +183,16 @@ namespace SmartGarage.Services
 
             };
         }
+        public void DeleteLinkedVehicle(int linkedVehicleId)
+        {
+            var linkedVehicle = _linkedVehiclesRepository.GetLinkedVehiclesById(linkedVehicleId);
+            if (linkedVehicle == null)
+            {
+                throw new ArgumentException("Linked vehicle not found.", nameof(linkedVehicleId));
+            }
 
+            _linkedVehiclesRepository.DeleteLinkedVehicle(linkedVehicle);
+        }
         private Service MapServiceDTOToEntity(ServiceDTO serviceDTO)
         {
             return new Service

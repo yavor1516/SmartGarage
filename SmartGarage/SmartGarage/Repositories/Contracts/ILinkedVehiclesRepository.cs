@@ -13,5 +13,6 @@
         public LinkedVehicles GetLinkedVehiclesByLicensePlate(string licensePlate);
         public ICollection<LinkedVehicles> GetAllLinkedVehiclesById(int id);
         public void UpdateLinkedVehicles(LinkedVehicles linkedVehicles);
+        void DeleteLinkedVehicle(LinkedVehicles linkedVehicle);
     }
 }
