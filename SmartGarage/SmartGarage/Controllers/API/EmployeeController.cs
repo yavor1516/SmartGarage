@@ -17,7 +17,7 @@ namespace SmartGarage.Controllers.API
 
         // api/Employee
         [HttpGet]
-        public ActionResult<IEnumerable<Employee>> GetAllEmployees()
+        public ActionResult<IEnumerable<EmployeeDTO>> GetAllEmployees()
         {
             var employees = _employeeService.GetAllEmployees();
             return Ok(employees);

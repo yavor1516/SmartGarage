@@ -26,7 +26,8 @@ namespace SmartGarage.Repositories
         }
         public ICollection<Manufacturer> GetAllManufacturers()
         {
-            return _dbcontext.Manufacturers.ToList();
+            return _dbcontext.Manufacturers.Include(x=>x.CarModels).ToList();
+            //
         }
         public void UpdateManufacturer(Manufacturer manufacturer)
         {

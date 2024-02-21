@@ -140,6 +140,11 @@ namespace SmartGarage.Services
             {
                 EmployeeID = employeeEntity.EmployeeID,
                 UserID = employeeEntity.UserID,
+               Email = employeeEntity.User.Email,
+               firstName = employeeEntity.User.FirstName,
+               lastName = employeeEntity.User.LastName,
+               username = employeeEntity.User.Username,
+               phonenumber = employeeEntity.User.phoneNumber,
                 VehiclesCreated = (ICollection<VehicleDTO>)employeeEntity.VehiclesCreated,
                 LinkedVehiclesCreated = (ICollection<LinkedVehiclesDTO>)employeeEntity.LinkedVehiclesCreated,
                 IsAdmin = employeeEntity.IsAdmin

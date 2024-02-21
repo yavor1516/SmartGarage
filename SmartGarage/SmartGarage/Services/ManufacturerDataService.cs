@@ -84,7 +84,14 @@ namespace SmartGarage.Services
             return new ManufacturerDTO
             {
                 ManufacturerID = manufacturer.ManufacturerID,
-                BrandName = manufacturer.BrandName
+                BrandName = manufacturer.BrandName,
+                CarModels = manufacturer.CarModels.Select(cm => new CarModelDTO
+                {
+                    CarModelID = cm.CarModelID,
+                    Model = cm.Model,
+                    ManufacturerID = cm.ManufacturerID
+                }).ToList()
+
             };
         }
         private Manufacturer MapManufacturerDTOToEntity(ManufacturerDTO manufacturerDTO)

@@ -77,8 +77,9 @@ namespace SmartGarage.Repositories
                    services = v.LinkedVehicleServices.Select(s=>new LinkedVehicleServiceDTO
                    {
                         ServiceName = s.Service.Name,
-                        Status = (bool)s.Status
-                    }).ToList()
+
+                       Status = s.Status == null ? "Not Started" : (s.Status == false ? "In Progress" : "Finished")
+                   }).ToList()
                     }).ToList()
                 
             };

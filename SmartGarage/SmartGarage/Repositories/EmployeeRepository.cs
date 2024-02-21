@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Resource;
+using Microsoft.EntityFrameworkCore;
 using SmartGarage.Repositories.Contracts;
 
 namespace SmartGarage.Repositories
@@ -20,7 +21,7 @@ namespace SmartGarage.Repositories
 
         public ICollection<Employee> GetAllEmployees()
         {
-            return _dbcontext.Employees.ToList();
+            return _dbcontext.Employees.Include(x=>x.User).ToList();
         }
 
         public Employee GetEmployeeByEmail(string email)

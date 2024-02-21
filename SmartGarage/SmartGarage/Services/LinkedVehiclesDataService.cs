@@ -143,7 +143,7 @@ namespace SmartGarage.Services
                     {
                         LinkedVehicleID = s.LinkedVehicleID,
                         ServiceID = s.ServiceID,
-                        Status = s.Status,
+                        Status = false
                     })
                     .ToList(),
                 // ServiceID = linkedVehiclesDTO.ServiceID
@@ -177,7 +177,7 @@ namespace SmartGarage.Services
                             LinkedVehicleID = (int)s.LinkedVehicleID,
                             ServiceID = (int)s.ServiceID,
                             ServiceName = _serviceDataService.GetServiceByID((int)s.ServiceID)?.Name,
-                            Status = (bool)s.Status
+                            Status = s.Status == null ? "Not Started" : (s.Status == false ? "In Progress" : "Finished")
                         })
                         .ToList(),
 

@@ -29,35 +29,33 @@
                         <div class="dropdown">
                             <input type="text" id="manufacturer" v-model="selectedManufacturer" @input="filterManufacturers" placeholder="Select or type">
                             <div class="dropdown-content">
-                                <div v-for="manufacturer in filteredManufacturers" :key="manufacturer.id" @click="selectManufacturer(manufacturer)">
-                                    {{ manufacturer.name }}
+                                <div v-for="manufacturer in filteredManufacturers" :key="manufacturer.manufacturerID" @click="selectManufacturer(manufacturer)">
+                                    {{ manufacturer.brandName }}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <ol></ol>
 
                     <!-- Input field with dropdown for Model -->
                     <div class="input-field">
                         <label for="model">Model:</label>
-                        <ol></ol>
                         <div class="dropdown">
                             <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
                             <div class="dropdown-content">
-                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                    {{ model.name }}
+                                <div v-for="model in filteredModels" :key="model.carModelID" @click="selectModel(model)">
+                                    {{ model.model }}
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="input-field">
-
-                        <label for="model">Employee:</label>
-                        <ol></ol>
+                        <label for="employee">Employee:</label>
                         <div class="dropdown">
-                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <input type="text" id="employee" v-model="selectedEmployee" @input="filterEmployees" placeholder="Select or type">
                             <div class="dropdown-content">
-                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                    {{ model.name }}
+                                <div v-for="employee in filteredEmployees" :key="employee.employeeID" @click="selectEmployee(employee)">
+                                    {{ employee.username }}
                                 </div>
                             </div>
                         </div>
@@ -223,7 +221,6 @@
 </template>
 
 <script>
-
     import HeaderComponent from "@/components/HeaderComponent.vue";
     import BodyComponent from "@/components/BodyComponent.vue";
     import FooterComponent from "@/components/FooterComponent.vue";
@@ -235,84 +232,105 @@
             FooterComponent
         },
         data() {
-
             return {
-                // Selected manufacturer and model
                 selectedManufacturer: "",
                 selectedModel: "",
-                // Dummy data for manufacturers and models (replace with your actual data)
-                manufacturers: [
-                    { id: 1, name: "Manufacturer A" },
-                    { id: 2, name: "Manufacturer B" },
-                    { id: 3, name: "Manufacturer C" }
-                ],
-                models: [
-                    { id: 1, name: "Model X" },
-                    { id: 2, name: "Model Y" },
-                    { id: 3, name: "Model Z" }
-                ],
+                manufacturers: [],
+                models: [],
                 showAssignVehicle: false,
-                carList:true
+                carList: true,
+                selectedEmployee: "",
+                employees: [],
             };
         },
         computed: {
             filteredManufacturers() {
                 return this.manufacturers.filter(manufacturer =>
-                    manufacturer.name.toLowerCase().includes(this.selectedManufacturer.toLowerCase())
+                    manufacturer.brandName.toLowerCase().includes(this.selectedManufacturer.toLowerCase())
                 );
             },
             filteredModels() {
-                return this.models.filter(model =>
-                    model.name.toLowerCase().includes(this.selectedModel.toLowerCase())
+                if (!this.selectedManufacturer) {
+                    return [];
+                }
+                const selectedManufacturer = this.manufacturers.find(manufacturer => manufacturer.brandName === this.selectedManufacturer);
+                if (!selectedManufacturer) {
+                    return [];
+                }
+                return selectedManufacturer.carModels;
+            },
+            filteredEmployees() {
+                return this.employees.filter(employee =>
+                    employee.username.toLowerCase().includes(this.selectedEmployee.toLowerCase())
                 );
             }
         },
-
         methods: {
+            async fetchManufacturers() {
+                try {
+                    const response = await fetch("https://localhost:7156/api/Manufacturer");
+                    const data = await response.json();
+                    this.manufacturers = data;
+                } catch (error) {
+                    console.error("Error fetching manufacturers:", error);
+                }
+            },
+            async fetchEmployees() {
+                try {
+                    const response = await fetch("https://localhost:7156/api/Employee");
+                    const data = await response.json();
+                    this.employees = data;
+                } catch (error) {
+                    console.error("Error fetching employees:", error);
+                }
+            },
             toggleAssignVehicle() {
-              
                 this.showAssignVehicle = !this.showAssignVehicle;
                 if (this.showAssignVehicle && this.carList) {
                     this.carList = !this.carList;
                 }
-              
-
             },
             listOfCars() {
-               
-                this.carList = !this.carList;  
+                this.carList = !this.carList;
                 if (this.carList && this.showAssignVehicle) {
                     this.showAssignVehicle = !this.showAssignVehicle;
                 }
-               
-
             },
             filterManufacturers() {
-                // Show the dropdown content when typing
                 this.$nextTick(() => {
                     document.querySelector("#manufacturer .dropdown-content").style.display = "block";
                 });
             },
             filterModels() {
-                // Show the dropdown content when typing
                 this.$nextTick(() => {
                     document.querySelector("#model .dropdown-content").style.display = "block";
                 });
             },
             selectManufacturer(manufacturer) {
-                this.selectedManufacturer = manufacturer.name;
-                // Hide the dropdown content after selecting an option
+                this.selectedManufacturer = manufacturer.brandName;
+                this.models = manufacturer.carModels;
                 document.querySelector("#manufacturer .dropdown-content").style.display = "none";
             },
             selectModel(model) {
-                this.selectedModel = model.name;
-                // Hide the dropdown content after selecting an option
+                this.selectedModel = model.model;
                 document.querySelector("#model .dropdown-content").style.display = "none";
+            },
+            selectEmployee(employee) {
+                this.selectedEmployee = employee.username;
+                document.querySelector("#employee .dropdown-content").style.display = "none";
+            },
+            filterEmployees() {
+                this.$nextTick(() => {
+                    document.querySelector("#employee .dropdown-content").style.display = "block";
+                });
             }
+        },
+        mounted() {
+            this.fetchManufacturers();
+            this.fetchEmployees(); // Fetch employees when the component is mounted
         }
     };
 </script>
-
 <style scoped>
     .AssignVehicle {
         left: 23.5%;
@@ -372,12 +390,15 @@
         max-height: 150px; /* Adjust the max height of the dropdown menu */
     }
 
-        .dropdown-content div {
-            padding: 8px;
-            cursor: pointer;
-        }
+   .dropdown-content div {
+    padding: 8px;
+    cursor: pointer;
+    color: black; /* Set the text color to black */
+    font-size: 14px; /* Set the font size to 14px */
+}
 
     .dropdown:hover .dropdown-content {
         display: block;
+
     }
 </style>
