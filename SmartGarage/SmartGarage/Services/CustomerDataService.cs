@@ -134,7 +134,12 @@ namespace SmartGarage.Services
             {
                 CustomerID = customerEntity.CustomerID,
                 UserID = customerEntity.UserID,
-                LinkedVehicleIDs = linkedVehicleIDs
+                LinkedVehicleIDs = linkedVehicleIDs,
+                email = customerEntity.User.Email,
+                firstName = customerEntity.User.FirstName,
+                lastName = customerEntity.User.LastName,
+                phoneNumber = customerEntity.User.phoneNumber,
+                username = customerEntity.User.Username
             };
 
             return customerDTO;

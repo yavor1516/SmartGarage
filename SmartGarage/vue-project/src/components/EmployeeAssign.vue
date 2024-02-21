@@ -61,14 +61,12 @@
                         </div>
                     </div>
                     <div class="input-field">
-
-                        <label for="model">Customer:</label>
-                        <ol></ol>
+                        <label for="customer">Customer:</label>
                         <div class="dropdown">
-                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <input type="text" id="customer" v-model="selectedCustomer" @input="filterCustomers" placeholder="Select or type">
                             <div class="dropdown-content">
-                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                    {{ model.name }}
+                                <div v-for="customer in filteredCustomers" :key="customer.customerID" @click="selectCustomer(customer)">
+                                    {{ customer.username }}
                                 </div>
                             </div>
                         </div>
@@ -92,10 +90,10 @@
                         <label for="model">Services:</label>
                         <ol></ol>
                         <div class="dropdown">
-                            <input type="text" id="model" v-model="selectedModel" @input="filterModels" placeholder="Select or type">
+                            <input type="text" id="service" v-model="selectedService" @input="filterServices" placeholder="Select or type">
                             <div class="dropdown-content">
-                                <div v-for="model in filteredModels" :key="model.id" @click="selectModel(model)">
-                                    {{ model.name }}
+                                <div v-for="service in filteredServices" :key="service.serviceID" @click="addServiceToTable(service)">
+                                    {{ service.name }}
                                 </div>
                             </div>
                         </div>
@@ -110,28 +108,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Oil change</td>
-                                    <td>Mike Chobanov</td>
-                                    <td>200$</td>
-
-
+                                <tr v-for="(service, index) in selectedServices" :key="service.serviceID">
+                                    <th scope="row">{{ index + 1 }}</th>
+                                    <td>{{ service.name }}</td>
+                                    <td>{{ service.employee }}</td>
+                                    <td>{{ service.price }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
+                                        <button type="button" class="btn btn-primary" @click="deleteService(index)">Delete</button>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Engine filter change</td>
-                                    <td>Thornton Tristan</td>
-                                    <td>60$</td>
-
-                                    <td>
-                                        <button type="button" class="btn btn-primary" @click="">Delete</button>
-                                    </td>
-                                </tr>
-
                             </tbody>
                         </table>
                     </div>
@@ -241,6 +226,11 @@
                 carList: true,
                 selectedEmployee: "",
                 employees: [],
+                selectedCustomer: "",
+                customers: [],
+                selectedService: "",
+                services: [],
+                selectedServices: [] // Array to store selected services
             };
         },
         computed: {
@@ -263,6 +253,16 @@
                 return this.employees.filter(employee =>
                     employee.username.toLowerCase().includes(this.selectedEmployee.toLowerCase())
                 );
+            },
+            filteredCustomers() {
+                return this.customers.filter(customer =>
+                    customer.username.toLowerCase().includes(this.selectedCustomer.toLowerCase())
+                );
+            },
+            filteredServices() {
+                return this.services.filter(service =>
+                    service.name.toLowerCase().includes(this.selectedService.toLowerCase())
+                );
             }
         },
         methods: {
@@ -282,6 +282,15 @@
                     this.employees = data;
                 } catch (error) {
                     console.error("Error fetching employees:", error);
+                }
+            },
+            async fetchServices() {
+                try {
+                    const response = await fetch("https://localhost:7156/api/Service");
+                    const data = await response.json();
+                    this.services = data;
+                } catch (error) {
+                    console.error("Error fetching services:", error);
                 }
             },
             toggleAssignVehicle() {
@@ -323,35 +332,87 @@
                 this.$nextTick(() => {
                     document.querySelector("#employee .dropdown-content").style.display = "block";
                 });
+            },
+            async fetchCustomers() {
+                try {
+                    const response = await fetch("https://localhost:7156/api/customers");
+                    const data = await response.json();
+                    this.customers = data;
+                } catch (error) {
+                    console.error("Error fetching customers:", error);
+                }
+            },
+            filterCustomers() {
+                this.$nextTick(() => {
+                    document.querySelector("#customer .dropdown-content").style.display = "block";
+                });
+            },
+            selectCustomer(customer) {
+                this.selectedCustomer = customer.username;
+                document.querySelector("#customer .dropdown-content").style.display = "none";
+            },
+            selectService(service) {
+                this.selectedService = service.name;
+                document.querySelector("#service .dropdown-content").style.display = "none";
+            },
+            filterServices() {
+                this.$nextTick(() => {
+                    document.querySelector("#service .dropdown-content").style.display = "block";
+                });
+            },
+            // Method to add selected service to the table
+            addServiceToTable(service) {
+                this.selectedServices.push({
+                    serviceID: service.serviceID,
+                    name: service.name,
+                    employee: service.employee,
+                    price: service.price
+                });
+            },
+
+            // Method to delete service from the table
+            deleteService(index) {
+                this.selectedServices.splice(index, 1);
+            },
+            assignVehicle() {
+                // Your logic to assign the vehicle
             }
         },
         mounted() {
             this.fetchManufacturers();
-            this.fetchEmployees(); // Fetch employees when the component is mounted
+            this.fetchEmployees();
+            this.fetchCustomers();
+            this.fetchServices();// Fetch employees when the component is mounted
         }
     };
 </script>
+
+
 <style scoped>
     .AssignVehicle {
         left: 23.5%;
         top: 12%;
         position: absolute;
     }
+
     .services {
         left: 95%;
-        top:0;
+        top: 0;
         position: absolute;
     }
+
     .ListOfCars {
         left: 23.5%;
         top: 12%;
         position: absolute;
     }
+
     .LinkedVehicleAssignment {
         left: 5%;
         top: 15%;
         position: absolute;
     }
+
     .services {
         position: absolute;
         right: 20vh;
@@ -369,7 +430,7 @@
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
-        color:black;
+        color: black;
     }
 
     .dropdown {
@@ -381,7 +442,7 @@
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        color:black;
+        color: black;
         min-width: 100%;
         z-index: 1;
         border: 1px solid #ddd;
@@ -390,15 +451,14 @@
         max-height: 150px; /* Adjust the max height of the dropdown menu */
     }
 
-   .dropdown-content div {
-    padding: 8px;
-    cursor: pointer;
-    color: black; /* Set the text color to black */
-    font-size: 14px; /* Set the font size to 14px */
-}
+        .dropdown-content div {
+            padding: 8px;
+            cursor: pointer;
+            color: black; /* Set the text color to black */
+            font-size: 14px; /* Set the font size to 14px */
+        }
 
     .dropdown:hover .dropdown-content {
         display: block;
-
     }
 </style>
