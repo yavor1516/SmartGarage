@@ -1,10 +1,17 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/Login.vue'
-import SignUpView from '../views/SignUp.vue'
-import AboutView from '../views/About.vue'
-import ProfileView from '../views/Profile.vue'
-import DashboardView from '../views/Dashboard.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+
+import HomeView from '../views/HomeView.vue';
+import LoginView from '../views/Login.vue';
+import SignUpView from '../views/SignUp.vue';
+import AboutView from '../views/About.vue';
+import ProfileView from '../views/Profile.vue';
+import DashboardView from '../views/Dashboard.vue';
+
+// Function to check authentication status
+function checkAuth() {
+    const token = localStorage.getItem('JwtAcessToken');
+    return !!token;
+}
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,42 +25,41 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: LoginView,
-            meta: { requiresAuth: false } // Indicates that this route does not require authentication
+            meta: { requiresAuth: false }
         },
         {
             path: '/signUp',
             name: 'signUp',
             component: SignUpView,
-            meta: { requiresAuth: false } // Indicates that this route does not require authentication
+            meta: { requiresAuth: false }
         },
         {
             path: '/about',
             name: 'about',
             component: AboutView,
-            meta: { requiresAuth: false } // Indicates that this route does not require authentication
+            meta: { requiresAuth: false }
         },
         {
             path: '/profile',
             name: 'profile',
             component: ProfileView,
-            meta: { requiresAuth: true } // Indicates that this route requires authentication
+            meta: { requiresAuth: true }
         },
         {
             path: '/dashboard',
             name: 'dashboard',
             component: DashboardView,
-            meta: { requiresAuth: true } // Indicates that this route requires authentication
+            meta: { requiresAuth: true }
         }
     ]
-})
+});
 
 // Check authentication status before each route navigation
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = checkAuth(); // Implement your authentication check logic here
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
-    if (requiresAuth && !isAuthenticated) {
-        // If route requires authentication and user is not authenticated, redirect to login
+    if (requiresAuth && !checkAuth()) {
+        // If the route requires authentication and the user is not authenticated, redirect to the login page
         next('/login');
     } else {
         // Otherwise, proceed with the navigation
@@ -61,11 +67,7 @@ router.beforeEach((to, from, next) => {
     }
 });
 
-function checkAuth() {
-    // Implement your authentication check logic here
-    // For example, you can check if the user is logged in by checking if there is a token in local storage
-    const token = localStorage.getItem('JwtAcessToken');
-    return !!token; // Return true if token exists, indicating the user is authenticated
-}
 
-export default router
+
+
+export default router;
