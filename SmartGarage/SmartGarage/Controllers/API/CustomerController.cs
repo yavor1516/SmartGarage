@@ -95,7 +95,8 @@ namespace SmartGarage.Controllers.API
             }
         }
 
-        [HttpGet("/username")]
+        [Route("/username")]
+        [HttpGet]
         public ActionResult<CustomerDTO> GetCustomerByUsername(string username)
         {
             try

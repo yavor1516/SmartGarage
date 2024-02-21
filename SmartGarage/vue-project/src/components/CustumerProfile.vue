@@ -21,7 +21,7 @@
                                     <div class="d-flex flex-column align-items-center text-center">
                                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                                         <div class="mt-3">
-                                            <h4>John Doe</h4>
+                                            <h4>{{ customerData.username }}</h4>
                                             <p class="text-secondary mb-1">Full Stack Developer</p>
                                             <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                                             <button class="btn btn-primary" @click="toggleCardVisibility">{{ isCardVisible ? 'Show Cars Information' : 'Show Profile Information' }}</button>
@@ -38,11 +38,11 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                         <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" /></svg> Phone number</h6>
-                                        <span class="text-secondary">+359877344349</span>
+                                        <span class="text-secondary">{{customerData.phoneNumber}}</span>
                                     </li>
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                         <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z" /></svg> Email</h6>
-                                        <span class="text-secondary">milen316@gmail.com</span>
+                                        <span class="text-secondary">{{ customerData.email }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -58,7 +58,7 @@
                                             <h6 class="mb-0">Full Name</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            Kenneth Valdez
+                                            {{ customerData.firstName }}   {{ customerData.lastName }}
                                         </div>
                                     </div>
                                     <hr>
@@ -67,7 +67,7 @@
                                             <h6 class="mb-0">Email</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            fip@jukmuh.al
+                                            {{ customerData.email }}
                                         </div>
                                     </div>
                                     <hr>
@@ -76,27 +76,11 @@
                                             <h6 class="mb-0">Phone</h6>
                                         </div>
                                         <div class="col-sm-9 text-secondary">
-                                            (239) 816-9029
+                                            {{ customerData.phoneNumber }}
                                         </div>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Mobile</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            (320) 380-4539
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <h6 class="mb-0">Address</h6>
-                                        </div>
-                                        <div class="col-sm-9 text-secondary">
-                                            Bay Area, San Francisco, CA
-                                        </div>
-                                    </div>
+
+
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -161,38 +145,28 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Car</th>
-                                            <th scope="col">Progress</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Info</th>
+                                            <th scope="col">Manufacturer</th>
+                                            <th scope="col">Model</th>
+                                            <th scope="col">Employee Name</th>
+                                            <th scope="col">License Plate</th>
+                                            <th scope="col">VIN Number</th>
+                                            <th scope="col">Year of Creation</th>
+                                            <th scope="col">Services</th> <!-- Added this header -->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Bmw E46 328 ci</td>
-                                            <td>50%</td>
-                                            <td>500$</td>
+                                        <tr v-for="(vehicle, index) in customerData.vehicles" :key="index">
+                                            <th scope="row">{{ index + 1 }}</th>
+                                            <td>{{ vehicle.manufacturer }}</td>
+                                            <td>{{ vehicle.model }}</td>
+                                            <td>{{ vehicle.employeeName }}</td>
+                                            <td>{{ vehicle.licensePlate }}</td>
+                                            <td>{{ vehicle.winNumber }}</td>
+                                            <td>{{ vehicle.yearOfCreation }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" @click="">Show</button>
+                                            <td>
+                                                <button type="button" class="btn btn-primary" @click="showServicesModal(vehicle.services)">Show Services</button>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Mercedes E320 2010</td>
-                                            <td>90%</td>
-                                            <td>2000$</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" @click="">Show</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Audi RS6 3.0 D</td>
-                                            <td>20%</td>
-                                            <td>12000$</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" @click="">Show</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -225,6 +199,11 @@
 
                 </div>
             </div>
+            <b-modal ref="servicesModal" title="Services">
+                <ul>
+                    <li v-for="(service, index) in modalServices" :key="index">{{ service.serviceName }}</li>
+                </ul>
+            </b-modal>
         </main>
         <!-- Footer Component -->
         <footer>
@@ -239,22 +218,31 @@
     import BodyComponent from "@/components/BodyComponent.vue";
     import FooterComponent from "@/components/FooterComponent.vue";
     import Vuetable from "vuetable-2";
-
+    import { BModal } from 'bootstrap-vue';
     export default {
         components: {
             HeaderComponent,
             BodyComponent,
             FooterComponent,
             Vuetable,
+            BModal,
         },
         data() {
             return {
                 isCardVisible: false,
                 loading: false, // Flag to track whether data is loading
-                customerData: [], // Initialize an empty array to store the fetched customer data
+                customerData: [],
+                modalServices: [],// Initialize an empty array to store the fetched customer data
             };
         },
         methods: {
+            showServicesModal(services) {
+                // Set the services to be displayed in the modal
+                this.modalServices = services;
+
+                // Open the modal
+                this.$refs.servicesModal.show();
+            },
             toggleCardVisibility() {
                 this.isCardVisible = !this.isCardVisible;
             },
@@ -277,7 +265,7 @@
                         'Content-Type': 'application/json' // Set the Content-Type header if needed
                     }
                 };
-                fetch('https://smartgarageproject.com/api/customers/', requestOptions) // Replace '/api/customers/' with the actual endpoint URL
+                fetch('https://localhost:7156/username', requestOptions) // Replace '/api/customers/' with the actual endpoint URL
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Unauthorized');

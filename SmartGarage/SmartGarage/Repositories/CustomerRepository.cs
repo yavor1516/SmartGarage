@@ -55,6 +55,7 @@ namespace SmartGarage.Repositories
                                .ThenInclude(i=>i.Invoice)
                                 .Include(c => c.LinkedVehicles)
                                     .ThenInclude(s => s.LinkedVehicleServices)
+                                    .ThenInclude(c=>c.Service)
                                .FirstOrDefault(x => x.User.Username == username);
 
             User user = _dbcontext.Users.FirstOrDefault(x => x.Username == username);
@@ -70,9 +71,16 @@ namespace SmartGarage.Repositories
                     Manufacturer = v.Manufacturer.BrandName,
                     Model = v.Model.Model,
                     EmployeeName = v.Employee.User.Username,
-
-                 
-                }).ToList()
+                    LicensePlate = v.LicensePlate,
+                    WinNumber = v.VIN,
+                    yearOfCreation = v.YearOfCreation,
+                   services = v.LinkedVehicleServices.Select(s=>new LinkedVehicleServiceDTO
+                   {
+                        ServiceName = s.Service.Name,
+                        Status = (bool)s.Status
+                    }).ToList()
+                    }).ToList()
+                
             };
             return Profile;
         }

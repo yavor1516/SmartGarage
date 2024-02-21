@@ -15,6 +15,12 @@
 
         public string EmployeeName { get; set; }
 
+        public string LicensePlate { get; set; }
+        public string WinNumber { get; set; }
+
+        public int yearOfCreation { get; set; }
+
+        public ICollection<LinkedVehicleServiceDTO> services { get; set; }
 
 
 
