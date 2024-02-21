@@ -6,12 +6,11 @@
         <nav class="navi">
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
-            <RouterLink v-if="!isAuthenticated" to="/login">Login</RouterLink>
-            <a v-if="isAuthenticated" href="/" @click="logout">Logout</a>
+
             <RouterLink v-if="isAuthenticated" to="/profile">Profile</RouterLink>
             <RouterLink v-if="isAuthenticated" to="/dashboard">Dashboard</RouterLink>
-
-            <a href="/">2</a>
+            <RouterLink v-if="!isAuthenticated" to="/login">Login</RouterLink>
+            <a v-if="isAuthenticated" href="/" @click="logout">Logout</a>
         </nav>
     </div>
 </template>

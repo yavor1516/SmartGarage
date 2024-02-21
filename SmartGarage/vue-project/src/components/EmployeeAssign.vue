@@ -314,8 +314,18 @@
 </script>
 
 <style scoped>
-    .ListOfCars{
-          left: 23.5%;
+    .AssignVehicle {
+        left: 23.5%;
+        top: 12%;
+        position: absolute;
+    }
+    .services {
+        left: 95%;
+        top:0;
+        position: absolute;
+    }
+    .ListOfCars {
+        left: 23.5%;
         top: 12%;
         position: absolute;
     }

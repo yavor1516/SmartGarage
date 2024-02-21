@@ -6,9 +6,6 @@
 
         <main>
             <BodyComponent />
-
-            <div class="elfsight" data-elfsight-app-lazy></div>
-
             <!-- Your additional content here -->
 
             <div class="images">
@@ -52,7 +49,6 @@
     import Flicking from "@egjs/vue3-flicking";
     import { Arrow } from "@egjs/flicking-plugins";
     import "@egjs/flicking-plugins/dist/arrow.css";
-
     export default {
         components: {
             HeaderComponent,
@@ -67,24 +63,20 @@
         },
     };
 </script>
-
 <style>
-    .background{
-        position:absolute;
-        width:160vh;
-        height:600px;
-        left:0;
-        z-index:-30;
+    .background {
+        position: absolute;
+        width: 160vh;
+        height: 600px;
+        left: 0;
+        z-index: -30;
     }
+
     .images {
         right: 0;
         position: absolute;
         z-index: -1;
         width: 400px;
         transform-origin: center right;
-    }
-    .elfsight {
-        position: absolute;
-        height:200px;
     }
 </style>
