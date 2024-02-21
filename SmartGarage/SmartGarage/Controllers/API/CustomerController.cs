@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SmartGarage.Models.DTO;
 using SmartGarage.Services.Contracts;
+using System.Security.Claims;
 
 namespace SmartGarage.Controllers.API
 {
@@ -93,12 +95,13 @@ namespace SmartGarage.Controllers.API
             }
         }
 
-        [HttpGet("{username}/username")]
+        [HttpGet("/username")]
         public ActionResult<CustomerDTO> GetCustomerByUsername(string username)
         {
             try
             {
-                var customer = _customerProfileService.GetUserByUsername(username);
+                var user = User.FindFirst(ClaimTypes.Name)?.Value;
+                var customer = _customerProfileService.GetUserByUsername(user);
                 if (customer == null)
                     return NotFound();
 
